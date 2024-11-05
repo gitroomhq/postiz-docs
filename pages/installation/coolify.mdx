@@ -47,6 +47,9 @@ services:
       STORAGE_PROVIDER: "local"
       UPLOAD_DIRECTORY: "/uploads"
       NEXT_PUBLIC_UPLOAD_DIRECTORY: "/uploads"
+
+      # If you are using Docker Compose based deployments and you want to use environment variable editable
+      # in Coolify UI, you need to pass these variables to the container here, ie: LINKEDIN_CLIENT_ID: ${LINKEDIN_CLIENT_ID}
     volumes:
       - postiz-config:/config/
       - postiz-uploads:/uploads/

@@ -1,0 +1,30 @@
+---
+title: LinkedIn Page
+description: How to add a LinkedIn Page to your system
+---
+
+import OAuth2Redirect from "../../components/snippets/oauth2redirect.tsx";
+
+Head over to [LinkedIn developers](https://www.linkedin.com/developers/apps) and create a new app.
+![Linkedin](/images/providers/linkedin/linkedin-001.png)
+
+Verify your app with LinkedIn
+![Linkedin](/images/providers/linkedin/linkedin-004.png)
+
+You will need to follow the verification process to request the necessary permissions listed below. 
+
+Fill in all the details, once created head over to Products and make sure you add all the required products.
+![Linkedin](/images/providers/linkedin/linkedin-003.png)
+
+It is important to request the Advertising API permissions and fill up the request form, or you will not have the ability to refresh your tokens.
+
+<OAuth2Redirect provider = "linkedin-page" />
+
+
+Copy the created `Client ID` and `Client Secret` and add them to your `.env` file.
+
+```env
+LINKEDIN_CLIENT_ID=""
+LINKEDIN_CLIENT_SECRET=""
+```
+You can find those under the Auth Tab of your LinkedIn App in the developer portal.

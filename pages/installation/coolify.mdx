@@ -29,10 +29,10 @@ services:
     container_name: postiz
     restart: always
     environment:
-      # You must change these. `yourServerAddress` is what your web browser uses.
-      MAIN_URL: "https://postiz.your-server.com"
-      FRONTEND_URL: "https://postiz.your-server.com"
-      NEXT_PUBLIC_BACKEND_URL: "https://postiz.your-server.com/api"
+      # You must change these. `[YOUR_DOMAIN_NAME]` with your domain name.
+      MAIN_URL: "https://[YOUR_DOMAIN_NAME]"
+      FRONTEND_URL: "https://[YOUR_DOMAIN_NAME]"
+      NEXT_PUBLIC_BACKEND_URL: "https://[YOUR_DOMAIN_NAME]/api"
       JWT_SECRET: "random string that is unique to every install - just type random characters here!"
 
       # These defaults are probably fine, but if you change your user/password, update it in the 
@@ -54,10 +54,13 @@ services:
       - 5000:5000
     networks:
       - postiz-network
+      - coolify
     labels:
-      - "traefik.enable=true"
-      - "traefik.https.routers.<unique_router_name>.rule=Host(`coolify.io`) && PathPrefix(`/`)"
-      - "traefik.https.routers.<unique_router_name>.entryPoints=https"
+      - traefik.enable=true
+      - traefik.https.routers.<unique_router_name>.rule=Host(`YOUR_DOMAIN_NAME_HERE`) && PathPrefix(`/`) #Replace YOUR_DOMAIN_NAME_HERE with your domain name.
+      - traefik.https.routers.<unique_router_name>.entryPoints=https
+      - traefik.http.routers.<unique_router_name>.tls.certresolver=letsencrypt
+      - traefik.http.services.<unique_router_name>.loadbalancer.server.port=5000
     depends_on:
       postiz-postgres:
         condition: service_healthy
@@ -111,6 +114,8 @@ volumes:
     external: false
 
 networks:
+  coolify:
+    external: true
   postiz-network:
     external: false
 ```

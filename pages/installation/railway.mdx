@@ -1,0 +1,62 @@
+---
+title: Railway
+description: How to install Postiz on Railway
+---
+
+import EarlyDoc from '../../components/snippets/earlydoc.mdx';
+import { Steps, Callout } from 'nextra/components';
+import Prereqs from '../../components/snippets/installation-pre-reqs.mdx';
+
+<EarlyDoc />
+
+<Prereqs />
+
+{/* <Steps> */}
+
+<br />
+
+# Create new Railway Project
+
+Just click the button below and use the default settings to get started.
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/template/xWx2v4?referralCode=chad)
+
+<br />
+<br />
+
+<b>Environment Variables</b>
+
+You will need to set the following environment variables:
+
+```env
+# This file is just as an example of the required environment variables for railway.
+# The template should have copied these into the railway postiz-app variables section, only listing here for reference.
+
+PORT="5000" # instructs railway to connect the public domain to port 5000
+BACK_END_PORT="3000"
+IS_GENERAL="true"
+SKIP_CONFIG_CHECK="true"
+DATABASE_URL="${{Postgres.DATABASE_URL}}"
+REDIS_URL="${{Redis.REDIS_URL}}?family=0" # the ?family=0 is to necessary for bullqueue to connect to redis via ipv6
+JWT_SECRET="replace me with a long random string"
+NODE_ENV="production"
+BACKEND_INTERNAL_URL="http://localhost:3000"
+
+NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY="/uploads"
+NEXT_PUBLIC_UPLOAD_DIRECTORY="/uploads"
+UPLOAD_DIRECTORY="/uploads"
+STORAGE_PROVIDER="local"
+
+NEXT_PUBLIC_BACKEND_URL="https://${{RAILWAY_PUBLIC_DOMAIN}}/api"
+# use this if you have a custom domain
+# NEXT_PUBLIC_BACKEND_URL="https://postiz.example.com/api"
+
+FRONTEND_URL="https://${{RAILWAY_PUBLIC_DOMAIN}}"
+# use this if you have a custom domain
+# FRONTEND_URL="https://postiz.example.com"
+
+MAIN_URL="https://${{RAILWAY_PUBLIC_DOMAIN}}"
+# use this if you have a custom domain
+# MAIN_URL="https://postiz.example.com"
+
+```

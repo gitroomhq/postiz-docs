@@ -3,5 +3,7 @@ export default {
   "docker": "Docker (standalone)",
   "kubernetes-helm": "Kubernetes with Helm",
   "development": "Development Environment",
-  "devcontainer": "Devcontainer"
+  "devcontainer": "Devcontainer",
+  "coolify": "Coolify",
+  "railway": "Railway"
 };

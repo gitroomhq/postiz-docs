@@ -2,19 +2,19 @@
 title: Configuration Reference
 ---
 
-At the moment, Postiz is entirely configured by environment variables. It is 
+At the moment, Publica is entirely configured by environment variables. It is 
 important to understand that any configuration change to environment variables
 will require an application restart.
 
-An example file of the most used configuration settings can be found here; [example postiz.env file](https://raw.githubusercontent.com/gitroomhq/postiz-app/main/.env.example)
+An example file of the most used configuration settings can be found here; [example Publica.env file](https://raw.githubusercontent.com/gitroomhq/Publica-app/main/.env.example)
 
 ## Required Settings
 
 ### `DATABASE_URL`
 
-eg: `postgresql://postiz-user:postiz-password@localhost:5432/postiz-db-local`
+eg: `postgresql://Publica-user:Publica-password@localhost:5432/Publica-db-local`
 
-Postgres is not strictly necessary, Postiz uses Prisma to connect to the database, so technically mariadb or other databases could be used.
+Postgres is not strictly necessary, Publica uses Prisma to connect to the database, so technically mariadb or other databases could be used.
 
 ### `REDIS_URL`
 
@@ -26,11 +26,11 @@ A random string that should be unique for every installation, this is used to se
 
 ### `FRONTEND_URL`
 
-eg: `http://postiz.example.lan:4200`
+eg: `http://Publica.example.lan:4200`
 
 ### `NEXT_PUBLIC_BACKEND_URL`
 
-eg: `http://postiz.example.lan:3000`
+eg: `http://Publica.example.lan:3000`
 
 ### `BACKEND_INTERNAL_URL`
 

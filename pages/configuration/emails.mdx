@@ -3,7 +3,7 @@ title: Email Notifications
 description: How to send notifications to users
 ---
 
-Postiz supports two email providers: Resend and NodeMailer (SMTP).
+Publica supports two email providers: Resend and NodeMailer (SMTP).
 
 If you have an email provider configured, then new users will require activation.
 
@@ -14,13 +14,13 @@ EMAIL_PROVIDER: "resend|nodemailer"
 You must also set the sender name and email address for all providers as follows;
 
 ```env
-EMAIL_FROM_NAME: "Postiz Emailer"
-EMAIL_FROM_ADDRESS: "postiz@example.com"
+EMAIL_FROM_NAME: "Publica Emailer"
+EMAIL_FROM_ADDRESS: "Publica@example.com"
 ```
 
 ## Resend
 
-Postiz uses Resend to send email notifications to users. If this key is set, users
+Publica uses Resend to send email notifications to users. If this key is set, users
 will also require activation.
 
 * Register to [Resend](https://resend.com), and connect your domain.

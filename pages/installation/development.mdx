@@ -5,7 +5,7 @@ title: Development Environment
 import { Cards, Steps } from 'nextra/components';
 import Prereqs from '../../components/snippets/installation-pre-reqs.mdx';
 
-This is currently the recommended option to install Postiz in a supportable configuration. The docker images are in active and heavy development for now.
+This is currently the recommended option to install Publica in a supportable configuration. The docker images are in active and heavy development for now.
 
 ## Tested configurations
 
@@ -49,20 +49,20 @@ docker run --name redis -p 6379:6379 -d redis
 
 #### Option B) Postgres and Redis as docker-compose
 
-Download the [docker-compose.yaml file here](https://raw.githubusercontent.com/gitroomhq/postiz-app/main/docker-compose.dev.yaml), 
+Download the [docker-compose.yaml file here](https://raw.githubusercontent.com/gitroomhq/Publica-app/main/docker-compose.dev.yaml), 
 or grab it from the repository in the next step.
 
 ```bash Terminal
 docker compose -f "docker-compose.dev.yaml" up
 ```
 
-## Build Postiz
+## Build Publica
 
 <Steps>
 ### Clone the repository
 
 ```bash Terminal
-git clone https://github.com/gitroomhq/postiz-app.git
+git clone https://github.com/gitroomhq/Publica-app.git
 ```
 
 ### Set environment variables
@@ -70,7 +70,7 @@ Copy the `.env.example` file to `.env` and fill in the values
 
 ```bash .env
 # Required Settings
-DATABASE_URL="postgresql://postiz-user:postiz-password@localhost:5432/postiz-db-local"
+DATABASE_URL="postgresql://Publica-user:Publica-password@localhost:5432/Publica-db-local"
 REDIS_URL="redis://localhost:6379"
 JWT_SECRET="random string for your JWT secret, make it long"
 FRONTEND_URL="http://localhost:4200"
@@ -78,7 +78,7 @@ NEXT_PUBLIC_BACKEND_URL="http://localhost:3000"
 BACKEND_INTERNAL_URL="http://localhost:3000"
 
 # Optional. Your upload directory path if you host your files locally.
-UPLOAD_DIRECTORY="/opt/postiz/uploads/"
+UPLOAD_DIRECTORY="/opt/Publica/uploads/"
 
 # Optional: your upload directory slug if you host your files locally.
 NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY=""
@@ -97,7 +97,7 @@ EMAIL_PASS="pass" # smtp pass if you choose nodemailer
 CLOUDFLARE_ACCOUNT_ID="QhcMSXQyPuMCRpSQcSYdEuTYgHeCXHbu"
 CLOUDFLARE_ACCESS_KEY="dcfCMSuFEeCNfvByUureMZEfxWJmDqZe"
 CLOUDFLARE_SECRET_ACCESS_KEY="zTTMXBmtyLPwHEdpACGHgDgzRTNpTJewiNriLnUS"
-CLOUDFLARE_BUCKETNAME="postiz"
+CLOUDFLARE_BUCKETNAME="Publica"
 CLOUDFLARE_BUCKET_URL="https://QhcMSXQyPuMCRpSQcSYdEuTYgHeCXHbu.r2.cloudflarestorage.com/"
 CLOUDFLARE_REGION="auto"
 

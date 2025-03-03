@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: "https://docs.postiz.com",
+  siteUrl: "https://docs.Publica.com",
   generateRobotsTxt: true, // (optional)
   exclude: ["*/_meta.json"]
 }

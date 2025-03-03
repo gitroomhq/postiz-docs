@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://docs.postiz.com
+Host: https://docs.Publica.com
 
 # Sitemaps
-Sitemap: https://docs.postiz.com/sitemap.xml
+Sitemap: https://docs.Publica.com/sitemap.xml

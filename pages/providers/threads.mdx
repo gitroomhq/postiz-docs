@@ -9,7 +9,7 @@ import OAuth2Redirect from "../../components/snippets/oauth2redirect.tsx";
 <Callout>
 This integration requires that you have setup a Facebook developer account already. You can start by going to the [Meta/Facebook Developer Portal](https://developers.facebook.com/apps).
 
-This is a very complex integration, and it may take some time to get it right. If you have any issues, please reach out to us on the Postiz Discord. This documentation is not yet complete sadly, because at the time of writing the Threads API seems like it's having issues. This page was written to get something up to get you started.
+This is a very complex integration, and it may take some time to get it right. If you have any issues, please reach out to us on the Publica Discord. This documentation is not yet complete sadly, because at the time of writing the Threads API seems like it's having issues. This page was written to get something up to get you started.
 </Callout>
 
 <Steps>
@@ -48,23 +48,23 @@ Add the "threads_content_publish" and "threads_basic" (automatically selected) t
 
 ### Set threads API settings
 
-* Copy your "Threads App ID", and set the postiz environment variables `THREADS_APP_ID` to this value.
-* Click the "Show" button next to the Threads App Secret, and set the postiz environment variable `THREADS_APP_SECRET` to this value. Note that the next box is quite small, make sure you scroll across the copy the full value. It should be 32 characters long.
+* Copy your "Threads App ID", and set the Publica environment variables `THREADS_APP_ID` to this value.
+* Click the "Show" button next to the Threads App Secret, and set the Publica environment variable `THREADS_APP_SECRET` to this value. Note that the next box is quite small, make sure you scroll across the copy the full value. It should be 32 characters long.
 
 <OAuth2Redirect provider = "threads" />
 
 ** Note that you have to "click" the URL to make it active, otherwise the form will not save.
-** You can use the same value for the **Uninstall Callback URL** and **Delete Callback URL**, but note that Postiz does not support either at this time. The form will not save unless you enter something.
+** You can use the same value for the **Uninstall Callback URL** and **Delete Callback URL**, but note that Publica does not support either at this time. The form will not save unless you enter something.
 
 ![Set threads API settings](./threads_api_settings.png)
 
 On the dashboard view of the Facebook developers portal, make sure you click through the setup wizard to finish the step "Yes I am finished creating the app" to complete the setup. The AP may not work until you've done this.
 
-### Restart Postiz
+### Restart Publica
 
-Stop Postiz if it is running, and then start it again to pick up the new environment variables.
+Stop Publica if it is running, and then start it again to pick up the new environment variables.
 
-You should not try to add a Threads account to Postiz at this time.
+You should not try to add a Threads account to Publica at this time.
 
 ### Add the Threads account as a tester 
 
@@ -94,7 +94,7 @@ You should not try to add a Threads account to Postiz at this time.
 
 This documentation is not yet complete sadly, because at the time of writing the Threads API seems like it's having issues. This page was written to get something up to get you started.
 
-This is a very complex integration, and it may take some time to get it right. If you have any issues, please reach out to us on the Postiz Discord.
+This is a very complex integration, and it may take some time to get it right. If you have any issues, please reach out to us on the Publica Discord.
 
 </Steps>
 

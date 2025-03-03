@@ -10,7 +10,7 @@ import OAuth2Redirect from "../../components/snippets/oauth2redirect.tsx";
 <Callout>
 This integration requires that you have a TikTok developer account. It also requires that you have a public website, with https, and can upload files to that site to verify ownership.
 
-TikTok will also not allow http:// for your app redirect URI, so you will need to be accessing Postiz from HTTPS.
+TikTok will also not allow http:// for your app redirect URI, so you will need to be accessing Publica from HTTPS.
 </Callout>
 
 <Steps>
@@ -21,7 +21,7 @@ Go here: https://developers.tiktok.com/apps
 
 ![Create a new app](./tiktok_create_app.png)
 
-* **App Name:** `MyPostiz`
+* **App Name:** `MyPublica`
 * **Redirect URI:** (see below)
 
 <OAuth2Redirect provider = "tiktok" />
@@ -58,13 +58,13 @@ TIKTOK_CLIENT_ID=1234567890123456
 TIKTOK_CLIENT_SECRET=12345678901234567890123456789012
 ```
 
-Restart Postiz with the updated environment variables
+Restart Publica with the updated environment variables
 
 
 
-### Add a TikTok channel in the Postiz web interface
+### Add a TikTok channel in the Publica web interface
 
-Go to the Postiz web interface, and click on the "Add Channel" button. Select "TikTok" from the list of available channels. You should be redirected to TikTok to authorize the application.
+Go to the Publica web interface, and click on the "Add Channel" button. Select "TikTok" from the list of available channels. You should be redirected to TikTok to authorize the application.
 
 </Steps>
 

@@ -7,7 +7,7 @@ import {Steps, Callout} from "nextra/components";
 import OAuth2Redirect from "../../components/snippets/oauth2redirect.tsx";
 
 <Callout type="warning">
-	**NOTE:** Postiz is currently hard-coded to use mastodon.social only. This will become more flexible to support other servers in a future release.
+	**NOTE:** Publica is currently hard-coded to use mastodon.social only. This will become more flexible to support other servers in a future release.
 </Callout>
 
 Mastodon client registration is not done via ther web interface, but by talking to the API directly. In the example below, we use `curl` to register a new client.
@@ -43,4 +43,4 @@ MASTODON_CLIENT_ID="shown in the output from the above command"
 MASTODON_CLIENT_SECRET="shown in the output from the above command"
 ```
 
-Stop Postiz if it is running, and then start it using the .env file with the Mastodon details. Click through the new channel setup and you should be asked to login on Mastodon.
+Stop Publica if it is running, and then start it using the .env file with the Mastodon details. Click through the new channel setup and you should be asked to login on Mastodon.

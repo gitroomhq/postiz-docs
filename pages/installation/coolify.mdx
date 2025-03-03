@@ -1,6 +1,6 @@
 ---
 title: Coolify
-description: How to install Postiz on Coolify
+description: How to install Publica on Coolify
 ---
 
 import EarlyDoc from "../../components/snippets/earlydoc.mdx";
@@ -19,30 +19,30 @@ import Prereqs from '../../components/snippets/installation-pre-reqs.mdx';
 
 ### Create a new project
 
-- **Name**: Postiz
+- **Name**: Publica
 - Select the "production" environment.
 
-### Add Postiz as a "Docker Compose" resource.
+### Add Publica as a "Docker Compose" resource.
 
 Copy the Coolify docker-compose file here - and be careful to read the comments about variables you must change!;
 
 ```yaml
 services:
-  postiz:
-    image: ghcr.io/gitroomhq/postiz-app:latest
-    container_name: postiz
+  Publica:
+    image: ghcr.io/gitroomhq/Publica-app:latest
+    container_name: Publica
     restart: always
     environment:
-      # You must change these. `yourServerAddress` this needs to be exactly the URL you're accessing Postiz on.
-      MAIN_URL: "https://postiz.your-server.com"
-      FRONTEND_URL: "https://postiz.your-server.com"
-      NEXT_PUBLIC_BACKEND_URL: "https://postiz.your-server.com/api"
+      # You must change these. `yourServerAddress` this needs to be exactly the URL you're accessing Publica on.
+      MAIN_URL: "https://Publica.your-server.com"
+      FRONTEND_URL: "https://Publica.your-server.com"
+      NEXT_PUBLIC_BACKEND_URL: "https://Publica.your-server.com/api"
       JWT_SECRET: "random string that is unique to every install - just type random characters here!"
 
       # These defaults are probably fine, but if you change your user/password, update it in the 
-      # postiz-postgres or postiz-redis services below.
-      DATABASE_URL: "postgresql://postiz-user:postiz-password@postiz-postgres:5432/postiz-db-local"
-      REDIS_URL: "redis://postiz-redis:6379"
+      # Publica-postgres or Publica-redis services below.
+      DATABASE_URL: "postgresql://Publica-user:Publica-password@Publica-postgres:5432/Publica-db-local"
+      REDIS_URL: "redis://Publica-redis:6379"
       BACKEND_INTERNAL_URL: "http://localhost:3000"
       IS_GENERAL: "true" # Required for self-hosting.
 
@@ -52,44 +52,44 @@ services:
       UPLOAD_DIRECTORY: "/uploads"
       NEXT_PUBLIC_UPLOAD_DIRECTORY: "/uploads"
     volumes:
-      - postiz-config:/config/
-      - postiz-uploads:/uploads/
+      - Publica-config:/config/
+      - Publica-uploads:/uploads/
     ports:
       - 5000:5000
     networks:
-      - postiz-network
+      - Publica-network
     labels:
       - "traefik.enable=true"
       - "traefik.https.routers.<unique_router_name>.rule=Host(`coolify.io`) && PathPrefix(`/`)"
       - "traefik.https.routers.<unique_router_name>.entryPoints=https"
     depends_on:
-      postiz-postgres:
+      Publica-postgres:
         condition: service_healthy
-      postiz-redis:
+      Publica-redis:
         condition: service_healthy
 
-  postiz-postgres:
+  Publica-postgres:
     image: postgres:14.5
-    container_name: postiz-postgres
+    container_name: Publica-postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: postiz-password
-      POSTGRES_USER: postiz-user
-      POSTGRES_DB: postiz-db-local
+      POSTGRES_PASSWORD: Publica-password
+      POSTGRES_USER: Publica-user
+      POSTGRES_DB: Publica-db-local
     volumes:
       - postgres-volume:/var/lib/postgresql/data
     ports:
       - 5432:5432
     networks:
-      - postiz-network
+      - Publica-network
     healthcheck:
-      test: pg_isready -U postiz-user -d postiz-db-local
+      test: pg_isready -U Publica-user -d Publica-db-local
       interval: 10s
       timeout: 3s
       retries: 3
-  postiz-redis:
+  Publica-redis:
     image: redis:7.2
-    container_name: postiz-redis
+    container_name: Publica-redis
     restart: always
     ports:
       - 6379:6379
@@ -99,23 +99,23 @@ services:
       timeout: 3s
       retries: 3
     volumes:
-      - postiz-redis-data:/data
+      - Publica-redis-data:/data
     networks:
-      - postiz-network
+      - Publica-network
 
 
 volumes:
   postgres-volume:
     external: false
 
-  postiz-redis-data:
+  Publica-redis-data:
     external: false
 
-  postiz-config:
+  Publica-config:
     external: false
 
 networks:
-  postiz-network:
+  Publica-network:
     external: false
 ```
 
@@ -124,16 +124,16 @@ Save the configuration.
 ### Check the configuration
 
 - In the "Service Stack" tab;
- - Suggest changing the "Service Name" to just "postiz" for clarity.
+ - Suggest changing the "Service Name" to just "Publica" for clarity.
  - Click the "Connect to Predefined Network" tab.
- - Check that 3 services are defined - `postiz`, `postiz-postgres` and `postiz-redis`.
+ - Check that 3 services are defined - `Publica`, `Publica-postgres` and `Publica-redis`.
 - In the "Storages" tab, check that the 3 related volumes are created.
 
 ### Start the deployment
 
-Postiz is approximately 2.5Gb and several container layers, it will take some time to download, be patient. You should see "Downloading" and "Extracting" messages. The Postiz dependencies are almost 200k files, and this can take a while.
+Publica is approximately 2.5Gb and several container layers, it will take some time to download, be patient. You should see "Downloading" and "Extracting" messages. The Publica dependencies are almost 200k files, and this can take a while.
 
-Hopefully you will see a message like `Container postiz-dssc8gc880s88cg08cck884s  Started.` in the logs. Once you see this message, close the startup logs view.
+Hopefully you will see a message like `Container Publica-dssc8gc880s88cg08cck884s  Started.` in the logs. Once you see this message, close the startup logs view.
 
 Check that the services are running in the "Service Stack" tab, and make sure  they are not constantly restarting, or failing to start.
 

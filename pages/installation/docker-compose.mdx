@@ -9,7 +9,7 @@ import Prereqs from '../../components/snippets/installation-pre-reqs.mdx';
 
 ## Docker Compose
 
-This guide assumes that you have docker installed, with a reasonable amount of resources to run Postiz. This Docker Compose setup has been tested with;
+This guide assumes that you have docker installed, with a reasonable amount of resources to run Publica. This Docker Compose setup has been tested with;
 
 - Virtual Machine, Ubuntu 24.04, 4Gb RAM, 2 vCPUs.
 
@@ -17,10 +17,10 @@ This guide assumes that you have docker installed, with a reasonable amount of r
 
 ### Configuration uses environment variables
 
-The docker containers for Postiz are entirely configured with environment variables.
+The docker containers for Publica are entirely configured with environment variables.
 
 - **Option A** - environment variables in your `docker-compose.yml` file
-- **Option B** - environment variables in a `postiz.env` file mounted in `/config` for the Postiz container only
+- **Option B** - environment variables in a `Publica.env` file mounted in `/config` for the Publica container only
 - **Option C** - environment variables in a `.env` file next to your `docker-compose.yml` file (not recommended).
 
 ... or a mixture of the above options!
@@ -32,21 +32,21 @@ of configuration settings.
 
 ```yaml
 services:
-  postiz:
-    image: ghcr.io/gitroomhq/postiz-app:latest
-    container_name: postiz
+  Publica:
+    image: ghcr.io/gitroomhq/Publica-app:latest
+    container_name: Publica
     restart: always
     environment:
-      # You must change these. Replace `postiz.your-server.com` with your DNS name - this needs to be exactly the URL you're accessing Postiz on.
-      MAIN_URL: "https://postiz.your-server.com"
-      FRONTEND_URL: "https://postiz.your-server.com"
-      NEXT_PUBLIC_BACKEND_URL: "https://postiz.your-server.com/api"
+      # You must change these. Replace `Publica.your-server.com` with your DNS name - this needs to be exactly the URL you're accessing Publica on.
+      MAIN_URL: "https://Publica.your-server.com"
+      FRONTEND_URL: "https://Publica.your-server.com"
+      NEXT_PUBLIC_BACKEND_URL: "https://Publica.your-server.com/api"
       JWT_SECRET: "random string that is unique to every install - just type random characters here!"
 
       # These defaults are probably fine, but if you change your user/password, update it in the
-      # postiz-postgres or postiz-redis services below.
-      DATABASE_URL: "postgresql://postiz-user:postiz-password@postiz-postgres:5432/postiz-db-local"
-      REDIS_URL: "redis://postiz-redis:6379"
+      # Publica-postgres or Publica-redis services below.
+      DATABASE_URL: "postgresql://Publica-user:Publica-password@Publica-postgres:5432/Publica-db-local"
+      REDIS_URL: "redis://Publica-redis:6379"
       BACKEND_INTERNAL_URL: "http://localhost:3000"
       IS_GENERAL: "true" # Required for self-hosting.
       # The container images are pre-configured to use /uploads for file storage.
@@ -55,38 +55,38 @@ services:
       UPLOAD_DIRECTORY: "/uploads"
       NEXT_PUBLIC_UPLOAD_DIRECTORY: "/uploads"
     volumes:
-      - postiz-config:/config/
-      - postiz-uploads:/uploads/
+      - Publica-config:/config/
+      - Publica-uploads:/uploads/
     ports:
       - 5000:5000
     networks:
-      - postiz-network
+      - Publica-network
     depends_on:
-      postiz-postgres:
+      Publica-postgres:
         condition: service_healthy
-      postiz-redis:
+      Publica-redis:
         condition: service_healthy
 
-  postiz-postgres:
+  Publica-postgres:
     image: postgres:17-alpine
-    container_name: postiz-postgres
+    container_name: Publica-postgres
     restart: always
     environment:
-      POSTGRES_PASSWORD: postiz-password
-      POSTGRES_USER: postiz-user
-      POSTGRES_DB: postiz-db-local
+      POSTGRES_PASSWORD: Publica-password
+      POSTGRES_USER: Publica-user
+      POSTGRES_DB: Publica-db-local
     volumes:
       - postgres-volume:/var/lib/postgresql/data
     networks:
-      - postiz-network
+      - Publica-network
     healthcheck:
-      test: pg_isready -U postiz-user -d postiz-db-local
+      test: pg_isready -U Publica-user -d Publica-db-local
       interval: 10s
       timeout: 3s
       retries: 3
-  postiz-redis:
+  Publica-redis:
     image: redis:7.2
-    container_name: postiz-redis
+    container_name: Publica-redis
     restart: always
     healthcheck:
       test: redis-cli ping
@@ -94,32 +94,32 @@ services:
       timeout: 3s
       retries: 3
     volumes:
-      - postiz-redis-data:/data
+      - Publica-redis-data:/data
     networks:
-      - postiz-network
+      - Publica-network
 
 
 volumes:
   postgres-volume:
     external: false
 
-  postiz-redis-data:
+  Publica-redis-data:
     external: false
 
-  postiz-config:
+  Publica-config:
     external: false
 
-  postiz-uploads:
+  Publica-uploads:
     external: false
 
 networks:
-  postiz-network:
+  Publica-network:
     external: false
 ```
 
 ## How to use docker compose
 
-Save the file contents to `docker-compose.yml` in your directory you create for postiz.
+Save the file contents to `docker-compose.yml` in your directory you create for Publica.
 
 Run `docker compose up` to start the services.
 
@@ -131,7 +131,7 @@ Run `docker compose up` to start the services.
 
 Look through the logs for startup errors, and if you have problems, check out the [support](/support/) page.
 
-If everything looks good, then you can access the Postiz web interface at https://postiz.your-server.com
+If everything looks good, then you can access the Publica web interface at https://Publica.your-server.com
 
 <DockerEnvvarApps />
 

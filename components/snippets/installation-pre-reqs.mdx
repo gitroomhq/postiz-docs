@@ -6,7 +6,7 @@ This section will ask you to install & configure several services exaplained bel
 
 #### HTTPS / HTTP Requirement
 
-Postiz marks it's login cookies as Secure, this is called “secure context” in modern web browsers.
+Publica marks it's login cookies as Secure, this is called “secure context” in modern web browsers.
 
 If you want to use an secure Login Process, you need to set up an Certificate, which can be done via Reverse Proxy like Caddy or Nginx.
 
@@ -18,7 +18,7 @@ NOT_SECURED=true
 
 #### Network Ports
 
-- **5000/tcp**: for a single **single entry point** for postiz when running in a container. This is the one port your reverse proxy should talk to.
+- **5000/tcp**: for a single **single entry point** for Publica when running in a container. This is the one port your reverse proxy should talk to.
 - **4200/tcp**: for the **Frontend** service (the web interface). Most users **do not** need to expose this port publicly.
 - **3000/tcp**: for the **Backend** service (the API). Most users **do not** need to expose this port publicly.
 - **5432/tcp**: for the **Postgres** container. Most users **do not** need to expose this port publicly.
@@ -31,7 +31,7 @@ graph TD;
 	A[Your Browser] -->|HTTPS 443/tcp| B[Your Reverse Proxy]
 	B -->|HTTP 5000/tcp| C["Internal Proxy (Caddy)"]
 
-	subgraph "Postiz Container"
+	subgraph "Publica Container"
 	C -->|4200/tcp| D[Frontend Service]
 	C -->|3000/tcp| E[Backend Service]
     C -->|/api| H[uploads]

@@ -13,17 +13,17 @@ This is a very popular configuration to get an easy reverse proxy up and running
 ```yaml
 version: '3.8'
 services:
-  postiz:
+  Publica:
     ##
     ## Include all the other configuration from the standard compose example.
     ##
 
     labels:
-      # Router for main Postiz entrypoint (on port 5000)
-      - "traefik.http.routers.postiz.rule=Host(`postiz.example.lan`)"  # Replace with your domain
-      - "traefik.http.services.postiz.loadbalancer.server.port=5000"  # Internal port for postiz
-      - "traefik.http.routers.postiz.entrypoints=websecure"  # Postiz requires HTTPS
-      - "traefik.http.routers.postiz.tls=true"
+      # Router for main Publica entrypoint (on port 5000)
+      - "traefik.http.routers.Publica.rule=Host(`Publica.example.lan`)"  # Replace with your domain
+      - "traefik.http.services.Publica.loadbalancer.server.port=5000"  # Internal port for Publica
+      - "traefik.http.routers.Publica.entrypoints=websecure"  # Publica requires HTTPS
+      - "traefik.http.routers.Publica.tls=true"
 
 
   traefik:
@@ -41,5 +41,5 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
     networks:
-      - postiz-network
+      - Publica-network
 ```

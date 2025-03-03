@@ -5,7 +5,7 @@ description: 'Learn the architecture of the project'
 
 ## Architecture
 
-Postiz is composed of 4 main services and 3 external services - all 4 of the main services typically run within a **single docker container**, and talk to each other through HTTP. Those 4 main servers typically talk to other containers, running the external services - the SQL Database, Redis Queue and Storage.
+Publica is composed of 4 main services and 3 external services - all 4 of the main services typically run within a **single docker container**, and talk to each other through HTTP. Those 4 main servers typically talk to other containers, running the external services - the SQL Database, Redis Queue and Storage.
 
 ```mermaid
 flowchart LR;
@@ -53,7 +53,7 @@ It relies on the backend to:
 
 ### Backend
 
-The backend is the "brain" of Postiz, and coordinates all the work. Typically the SQL database it talks to is Postgres, but other databases can be used.
+The backend is the "brain" of Publica, and coordinates all the work. Typically the SQL database it talks to is Postgres, but other databases can be used.
 
 ### Cron
 

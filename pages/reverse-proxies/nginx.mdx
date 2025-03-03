@@ -128,7 +128,7 @@ Copy your config from here:
         add_header Referrer-Policy "no-referrer" always;  # Better privacy control
         add_header Permissions-Policy "geolocation=(self), microphone=(), camera=()" always;  # Limit browser permissions
 
-        # Reverse Proxy to Postiz application
+        # Reverse Proxy to Publica application
         location / {
             proxy_pass http://localhost:5000;
             proxy_http_version 1.1;
@@ -186,7 +186,7 @@ Copy your config from here:
         ssl_certificate /etc/letsencrypt/live/<subdomain.domain.tld>/fullchain.pem; # CHANGE HERE
         ssl_certificate_key /etc/letsencrypt/live/<subdomain.domain.tld>/privkey.pem; # CHANGE HERE
 
-        # Proxy requests to Postiz running on port 5000
+        # Proxy requests to Publica running on port 5000
         location / {
             proxy_pass http://localhost:5000;
             proxy_set_header Host $host;
@@ -224,5 +224,5 @@ echo -e '#!/bin/bash\nginx -t && systemctl reload nginx' | sudo tee /etc/letsenc
 sudo systemctl reload nginx
 ```
 ### Vuola!
-Your Nginx reverse proxy is now running, securely serving your Postiz instance at your subdomain.domain.tld. 🎉
+Your Nginx reverse proxy is now running, securely serving your Publica instance at your subdomain.domain.tld. 🎉
 </Steps>

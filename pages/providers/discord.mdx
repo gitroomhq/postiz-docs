@@ -32,7 +32,7 @@ DISCORD_CLIENT_SECRET="your_client_secret"
 
 <OAuth2Redirect provider = "discord" />
 
-The redirect URI is the URL that Discord will redirect to after you have logged in. Assuming you are running Postiz on `postiz.example.com`, this would be: `https://postiz.example.com/integrations/social/discord`. Alternatively if you are running on `localhost:4200`, this would be `http://localhost:4200/integrations/social/discord`. You only really need one of these, depending on where you are running Postiz.
+The redirect URI is the URL that Discord will redirect to after you have logged in. Assuming you are running Publica on `Publica.example.com`, this would be: `https://Publica.example.com/integrations/social/discord`. Alternatively if you are running on `localhost:4200`, this would be `http://localhost:4200/integrations/social/discord`. You only really need one of these, depending on where you are running Publica.
 
 You can find this in the **OAuth2** section of the Discord Developer Portal.
 
@@ -48,12 +48,12 @@ With the token that is generated, set it in your .env file as follows;
 DISCORD_BOT_TOKEN_ID="your_bot_token"
 ```
 
-If you do not set this, you will get 404 errors when trying to add the Discord channel in the Postiz web interface.
+If you do not set this, you will get 404 errors when trying to add the Discord channel in the Publica web interface.
 
-Stop Postiz if it is running, and then start it using the .env file with the Discord details.
+Stop Publica if it is running, and then start it using the .env file with the Discord details.
 
-### Add a Discord channel in the Postiz web interface
+### Add a Discord channel in the Publica web interface
 
-Go to the Postiz web interface, and click on the "Add Channel" button, and then select "Discord". You should be redirected to Discord to login.
+Go to the Publica web interface, and click on the "Add Channel" button, and then select "Discord". You should be redirected to Discord to login.
 </Steps>
 

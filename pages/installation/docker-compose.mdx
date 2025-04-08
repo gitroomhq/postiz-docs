@@ -53,6 +53,7 @@ services:
       REDIS_URL: "redis://postiz-redis:6379"
       BACKEND_INTERNAL_URL: "http://localhost:3000"
       IS_GENERAL: "true" # Required for self-hosting.
+      DISABLE_REGISTRATION: "true" # Only allow single registration, then disable signup
       # The container images are pre-configured to use /uploads for file storage.
       # You probably should not change this unless you have a really good reason!
       STORAGE_PROVIDER: "local"

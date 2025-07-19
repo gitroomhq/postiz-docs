@@ -54,7 +54,7 @@ sudo mkdir -p /var/www/certbot/.well-known/acme-challenge && sudo chown -R www-d
 ```bash
 sudo ln -s /etc/nginx/sites-available/<subdomain.domain.tld> /etc/nginx/sites-enabled/
 ```
-Restart nginx to apply the changes: `nginx -s reload`. (Important to do before obtaining SSL certificate below.)
+Reload nginx to apply the changes: `nginx -s reload`. (Important to do before obtaining SSL certificate below.)
 ### Obtain SSL Certificates Using Webroot method:
 ```bash
 sudo certbot certonly --webroot -w /var/www/certbot -d <subdomain.domain.tld> --email your-email@example.com --agree-tos --no-eff-email

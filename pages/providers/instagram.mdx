@@ -23,7 +23,14 @@ The following steps will guide you through the setup of a Meta application that 
 <Steps>
 ### Step 1
 Select a business portfolio, then create a [new app in Meta for developers](https://developers.facebook.com/apps/creation/).<br />
-Please be advised that for public applications, you will need to verify your business.
+Please be advised that for public applications, you will need to verify your business,
+and [submit a screencast](https://developers.facebook.com/docs/resp-plat-initiatives/individual-processes/app-review/submission-guide)
+showing log-in to your app, connecting an actual Instagram account,
+clicking the during-connect link to privacy policy, posting something with a comment,
+showing that it actually appears in the feed, and showing the Postiz analytics.
+It can be one long video for all three (Facebook, Instagram (Facebook Business) and Instagram (standalone)) flows.
+Expect many LLM-generated roundtrips with the review team,
+who might not be very helpful understanding the distinction between the two Instagram flows.
 
 ![Business Portfolio](/images/providers/facebook/Business-Portfolio.png)
 
@@ -156,3 +163,11 @@ Go to your Instagram account, and accept the tester invitation in the [Apps and 
 
 </Steps>
 
+### Setting up permissions
+
+If you want to be able to access any Instagram account without adding them as Instagram Testers,
+go to advanced permission (just like the Facebook Business variant) and request access for the following scopes:
+`instagram_business_basic`
+`instagram_business_content_publish`
+`instagram_business_manage_comments`
+`instagram_business_manage_insights`

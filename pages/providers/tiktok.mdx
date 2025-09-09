@@ -16,9 +16,10 @@ TikTok will also not allow http:// for your app redirect URI, so you will need t
 </Callout>
 
 <Callout type="warning">
-**NOTE:** Due to TikTok's restrictions, to upload media you have to host Postiz on a domain using a reverse proxy such as [Caddy](/reverse-proxies/caddy/) or an more manual setup with [Cloudflare R2](/configuration/r2/).
+**NOTE:** TikTok fetches media via pull_from_url. Your media files must be publicly reachable over HTTPS; localhost or private routes (e.g., /uploads) will fail. 
+Expose your uploads via a reverse proxy (e.g., [Caddy](/reverse-proxies/caddy/)) or use object storage/CDN such as [Cloudflare R2](/configuration/r2/) with public access.
 
-Make sure the domain you host media on is on your developer account's list of sites with verified ownership.
+Ensure the media domain is listed under your TikTok developer account’s verified sites.
 </Callout>
 
 <Steps>

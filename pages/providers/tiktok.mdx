@@ -8,11 +8,13 @@ import OAuth2Redirect from "../../components/snippets/oauth2redirect.tsx";
 import NeverShare from "../../components/snippets/never.share.mdx";
 
 <NeverShare />
+
 <Callout>
 This integration requires that you have a TikTok developer account. It also requires that you have a public website, with https, and can upload files to that site to verify ownership.
 
 TikTok will also not allow http:// for your app redirect URI, so you will need to be accessing Postiz from HTTPS.
 </Callout>
+
 <Callout type="warning">
 **NOTE:** Due to TikTok's restrictions, to upload media you have to host Postiz on a domain using a reverse proxy such as [Caddy](/reverse-proxies/caddy/) or an more manual setup with [Cloudflare R2](/configuration/r2/).
 

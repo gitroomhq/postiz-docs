@@ -15,6 +15,13 @@ This integration requires that you have a TikTok developer account. It also requ
 TikTok will also not allow http:// for your app redirect URI, so you will need to be accessing Postiz from HTTPS.
 </Callout>
 
+<Callout type="warning">
+**NOTE:** TikTok fetches media via pull_from_url. Your media files must be publicly reachable over HTTPS; localhost or private routes (e.g., /uploads) will fail. 
+Expose your uploads via a reverse proxy (e.g., [Caddy](/reverse-proxies/caddy/)) or use object storage/CDN such as [Cloudflare R2](/configuration/r2/) with public access.
+
+Ensure the media domain is listed under your TikTok developer account’s verified sites.
+</Callout>
+
 <Steps>
 
 ### Create you app

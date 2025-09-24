@@ -68,6 +68,29 @@ Response:
 
 <br />
 
+### Get the next available slot for a channel
+
+```http
+GET https://api.postiz.com/public/v1/find-slot/:id
+```
+
+Payload:
+`id` - Channel ID
+
+Response:
+
+```json
+[
+  {
+    "date": "2025-01-01T10:00:00.000Z"
+  }
+]
+```
+
+---
+
+<br />
+
 ### Upload a new file (from-data)
 
 ```http

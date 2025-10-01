@@ -3,9 +3,6 @@ name: Build static docs
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
 
 jobs:
   build:
@@ -13,6 +10,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -22,3 +21,21 @@ jobs:
 
       - run: npm ci
       - run: npm run build --if-present
+
+      - name: Get Project Version from Git Tag
+        id: get_version
+        run: |
+          # Use 'git describe' to find the closest tag, falling back to the commit SHA if no tag is found.
+          # --tags includes all tags, --always ensures it always outputs something.
+          VERSION=$(git describe --tags --always)
+          echo "Project version is $VERSION"
+          echo "tag=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: SonarQube Analysis (Branch)
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with: 
+          args: >
+            -Dsonar.projectVersion=${{ steps.get_version.outputs.tag }}

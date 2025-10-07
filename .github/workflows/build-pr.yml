@@ -2,16 +2,20 @@
 name: Build static docs
 
 on:
-  push:
+  pull_request_target:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    environment: 
+      name: build-pr
+      
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Use Node.js
         uses: actions/setup-node@v4
@@ -31,7 +35,7 @@ jobs:
           echo "Project version is $VERSION"
           echo "tag=$VERSION" >> $GITHUB_OUTPUT
       
-      - name: SonarQube Analysis (Branch)
+      - name: SonarQube Analysis (Pull Request)
         uses: SonarSource/sonarqube-scan-action@v6
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -39,3 +43,6 @@ jobs:
         with: 
           args: >
             -Dsonar.projectVersion=${{ steps.get_version.outputs.tag }}
+            -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
+            -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }}
+            -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}

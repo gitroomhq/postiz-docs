@@ -111,6 +111,34 @@ Response:
 }
 ```
 
+<br />
+### Upload a new file from an existing URL
+
+```http
+POST https://api.postiz.com/public/v1/upload-from-url
+```
+
+Payload:
+
+```json
+{
+  "url": "Your URL path"
+}
+```
+
+Response:
+
+```json
+{
+  "id": "e639003b-f727-4a1e-87bd-74a2c48ae41e",
+  "name": "vXJYn8EzSB.png",
+  "path": "https://uploads.gitroom.com/vXJYn8EzSB.png",
+  "organizationId": "85460a39-6329-4cf4-a252-187ce89a3480",
+  "createdAt": "2024-12-14T08:18:54.274Z",
+  "updatedAt": "2024-12-14T08:18:54.274Z"
+}
+```
+
 ---
 
 <br />

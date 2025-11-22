@@ -11,14 +11,21 @@ import NeverShare from "../../components/snippets/never.share.mdx";
 Head over to [Linkedin developers](https://www.linkedin.com/developers/apps) and create a new app.
 ![Linkedin](/images/providers/linkedin/linkedin-001.png)
 
-Fill in all the details, once created head over to Products and make sure you add all the required products.
+Fill in all the details, once created head over to Products and make sure you add all the required products:
+
+- Share on LinkedIn
+- Advertising API
+- Sign In with LinkedIn using OpenID Connect
+
 ![Linkedin](/images/providers/linkedin/linkedin-002.png)
 
-It is important to request the Advertising API permissions and fill up the request form, or you will not have the ability to refresh your tokens.
+It is important to request the Advertising API permissions and fill out the request form, or you will not have the ability to refresh your tokens.
+
+Have all of your information ready as the Advertising API request form asks quite a few questions about your business and use-case. Make sure to mention that your app is *not* being used to collect "member data". This will greatly increase your chances of being accepted. You can read more about the process [here](https://www.linkedin.com/help/linkedin/answer/a527289).
 
 <OAuth2Redirect provider = "linkedin" />
 
-If you are using the "LinkedIN Page" provider, then the redirect url should be "linkedin-page".
+If you are using the "LinkedIn Page" provider, then the redirect url should be "linkedin-page".
 
 Copy the created `Client ID` and `Client Secret` and add them to your `.env` file.
 
@@ -26,4 +33,4 @@ Copy the created `Client ID` and `Client Secret` and add them to your `.env` fil
 LINKEDIN_CLIENT_ID=""
 LINKEDIN_CLIENT_SECRET=""
 ```
-You can find those under the Auth Tab of your LinkedIn App in the developer portal.
+You can find these IDs under the Auth Tab of your LinkedIn App in the developer portal.

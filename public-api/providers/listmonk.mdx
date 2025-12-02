@@ -1,0 +1,69 @@
+---
+title: 'Listmonk Settings'
+description: 'Provider settings for Listmonk newsletter campaigns'
+---
+
+## Overview
+
+Listmonk is a self-hosted newsletter and mailing list manager. When creating campaigns, you need to specify the subject, preview text, list, and optionally a template.
+
+## Settings Schema
+
+```json
+{
+  "__type": "listmonk",
+  "subject": "Newsletter Subject Line",
+  "preview": "Preview text shown in email clients",
+  "list": "list-id",
+  "template": "template-id"
+}
+```
+
+## Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `__type` | string | ✅ | Must be `"listmonk"` |
+| `subject` | string | ✅ | Email subject line (min 1 char) |
+| `preview` | string | ✅ | Preview text for email clients |
+| `list` | string | ✅ | List ID to send to |
+| `template` | string | ❌ | Template ID to use |
+
+## Example
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-listmonk-integration-id"
+      },
+      "value": [
+        {
+          "content": "<h1>Weekly Newsletter</h1>\n<p>Here's what happened this week...</p>\n\n<h2>Top Stories</h2>\n<ul>\n<li>Story 1</li>\n<li>Story 2</li>\n</ul>\n\n<p>Thanks for reading!</p>",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "listmonk",
+        "subject": "🚀 Weekly Update - December 2024",
+        "preview": "Check out what's new this week!",
+        "list": "1",
+        "template": "2"
+      }
+    }
+  ]
+}
+```
+
+## Notes
+
+- Get the list and template IDs from your Listmonk admin dashboard
+- Content should be HTML formatted
+- The `preview` text appears in email clients before opening the email
+- If no template is specified, the default template will be used
+

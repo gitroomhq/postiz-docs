@@ -1,0 +1,90 @@
+---
+title: Facebook
+description: 'How to add Facebook to your system'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Warning>
+**NOTE:** Please be advised that Instagram and Facebook can use the same app (no need to create two separate apps)
+</Warning>
+
+<Steps>
+  <Step title="Create a new app">
+    Select a business portfolio, then create a [new app in Facebook developers](https://developers.facebook.com/apps/creation/).
+    
+    Please be advised that for public applications, you will need to verify your business.
+
+    ![Business Portfolio](/images/providers/facebook/Business-Portfolio.png)
+
+    ![Create app](/images/providers/facebook/Create-an-app.png)
+  </Step>
+
+  <Step title="Select app type">
+    Select "Other" and click next
+
+    ![Other app use cases](/images/providers/facebook/Other-app-use-cases.png)
+  </Step>
+
+  <Step title="Select business">
+    Then select business
+
+    ![Business](https://github.com/user-attachments/assets/74bde861-5441-46bb-b5b8-c5229e980237)
+  </Step>
+
+  <Step title="Add details and create app">
+    Add all your details and click Create App
+
+    ![Create app details](https://github.com/user-attachments/assets/f0c03825-0f9b-4467-94a4-ab8cf6ed7e1d)
+  </Step>
+
+  <Step title="Set up Login with Facebook">
+    ![Setup Login with Facebook](https://github.com/user-attachments/assets/08d3c1d1-d498-49d1-adac-aa6248e7c10c)
+
+    Set up login for business
+  </Step>
+
+  <Step title="Configure redirect URI">
+    Set up a redirect URI back to the application
+    
+    ![step 6](https://github.com/user-attachments/assets/8bf1774b-b6fe-4ac6-aea5-97d8c8bbf5da)
+
+    <Snippet file="oauth2redirect.mdx" />
+    
+    Replace `{provider}` with `facebook` in the redirect URI.
+  </Step>
+
+  <Step title="Request advanced permissions">
+    ![step 7](https://github.com/user-attachments/assets/a81aa2a3-de66-4099-906b-b78c641d1a23)
+
+    Go to advanced permission and request access for the following scopes:
+    - `pages_show_list`
+    - `business_management`
+    - `pages_manage_posts`
+    - `pages_manage_engagement`
+    - `pages_read_engagement`
+    - `read_insights`
+
+    <Note>
+    If your Postiz install is for personal use only these advanced permissions are not required for Postiz to function.
+    </Note>
+  </Step>
+
+  <Step title="Set app mode to Live">
+    Change the App Mode from 'Development' to 'Live'. If you do not do this then posts made via the API will display for yourself but will not be visible for other users.
+  </Step>
+
+  <Step title="Copy your credentials">
+    ![Keys](https://github.com/user-attachments/assets/ac11f87f-4951-47f8-8344-7fbc9de942e4)
+
+    Go to basic permissions copy your App ID and App Secret and paste them in your `.env` file
+
+```env
+FACEBOOK_APP_ID="app id"
+FACEBOOK_APP_SECRET="app secret"
+```
+
+    Facebook should now be working!
+  </Step>
+</Steps>
+

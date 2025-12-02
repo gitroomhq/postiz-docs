@@ -1,0 +1,118 @@
+---
+title: X (Twitter) Settings
+description: 'API settings for posting to X/Twitter'
+---
+
+## Settings Schema
+
+When creating a post for X (Twitter), use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "x",
+    "who_can_reply_post": "everyone",
+    "community": ""
+  }
+}
+```
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `x` |
+| `who_can_reply_post` | `string` | Yes | Who can reply to the post |
+| `community` | `string` | No | X Community URL |
+
+### `who_can_reply_post`
+
+Controls who can reply to your post.
+
+| Value | Description |
+|-------|-------------|
+| `everyone` | Anyone can reply |
+| `following` | Only people you follow can reply |
+| `mentionedUsers` | Only mentioned users can reply |
+| `subscribers` | Only your subscribers can reply |
+| `verified` | Only verified accounts can reply |
+
+### `community`
+
+Optional X Community URL. Must match the format:
+
+```
+https://x.com/i/communities/1493446837214187523
+```
+
+Leave empty or omit to post to your main timeline.
+
+---
+
+## Complete Example
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-x-integration-id"
+      },
+      "value": [
+        {
+          "content": "Hello from the Postiz API! 🚀",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "x",
+        "who_can_reply_post": "everyone",
+        "community": ""
+      }
+    }
+  ]
+}
+```
+
+## Thread Example
+
+Create a thread by adding multiple items to the `value` array:
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-x-integration-id"
+      },
+      "value": [
+        {
+          "content": "1/ This is the first tweet in my thread",
+          "image": []
+        },
+        {
+          "content": "2/ This is the second tweet",
+          "image": []
+        },
+        {
+          "content": "3/ And this is the final tweet!",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "x",
+        "who_can_reply_post": "everyone"
+      }
+    }
+  ]
+}
+```
+

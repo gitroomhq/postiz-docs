@@ -1,0 +1,231 @@
+---
+title: Reddit Settings
+description: 'API settings for posting to Reddit'
+---
+
+## Settings Schema
+
+When creating a post for Reddit, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "reddit",
+    "subreddit": [
+      {
+        "value": {
+          "subreddit": "programming",
+          "title": "My Post Title",
+          "type": "self",
+          "url": "",
+          "is_flair_required": false,
+          "flair": null
+        }
+      }
+    ]
+  }
+}
+```
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `reddit` |
+| `subreddit` | `array` | Yes | Array of subreddit configurations |
+
+### Subreddit Object
+
+Each item in the `subreddit` array contains a `value` object with:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `subreddit` | `string` | Yes | Subreddit name (without r/) |
+| `title` | `string` | Yes | Post title (min 2 characters) |
+| `type` | `string` | Yes | Post type |
+| `url` | `string` | Conditional | URL for link posts |
+| `is_flair_required` | `boolean` | Yes | Whether flair is required |
+| `flair` | `object` | Conditional | Flair object (required if `is_flair_required` is true) |
+
+### `type` (Post Type)
+
+| Value | Description |
+|-------|-------------|
+| `self` | Text post (uses content from post value) |
+| `link` | Link post (requires `url` field) |
+| `image` | Image post |
+| `video` | Video post |
+
+### Flair Object
+
+Required when `is_flair_required` is `true`:
+
+```json
+{
+  "flair": {
+    "id": "flair-template-id",
+    "name": "Discussion"
+  }
+}
+```
+
+---
+
+## Complete Example
+
+### Text Post (Self Post)
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-reddit-integration-id"
+      },
+      "value": [
+        {
+          "content": "I've been working on this project for the past few months and wanted to share my experience.\n\n## What I learned\n\n1. Planning is crucial\n2. Start small\n3. Iterate quickly\n\nWhat are your thoughts?",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "reddit",
+        "subreddit": [
+          {
+            "value": {
+              "subreddit": "programming",
+              "title": "My journey building a side project - lessons learned",
+              "type": "self",
+              "url": "",
+              "is_flair_required": false,
+              "flair": null
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+### Link Post
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-reddit-integration-id"
+      },
+      "value": [
+        {
+          "content": "",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "reddit",
+        "subreddit": [
+          {
+            "value": {
+              "subreddit": "technology",
+              "title": "Interesting article about AI developments",
+              "type": "link",
+              "url": "https://example.com/ai-article",
+              "is_flair_required": false,
+              "flair": null
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+### Post with Required Flair
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-reddit-integration-id"
+      },
+      "value": [
+        {
+          "content": "Looking for advice on my situation...",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "reddit",
+        "subreddit": [
+          {
+            "value": {
+              "subreddit": "personalfinance",
+              "title": "Need advice on budgeting",
+              "type": "self",
+              "url": "",
+              "is_flair_required": true,
+              "flair": {
+                "id": "abc123-flair-id",
+                "name": "Budgeting"
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+### Cross-post to Multiple Subreddits
+
+```json
+{
+  "settings": {
+    "__type": "reddit",
+    "subreddit": [
+      {
+        "value": {
+          "subreddit": "webdev",
+          "title": "New CSS feature just dropped!",
+          "type": "link",
+          "url": "https://example.com/css-news",
+          "is_flair_required": false,
+          "flair": null
+        }
+      },
+      {
+        "value": {
+          "subreddit": "frontend",
+          "title": "New CSS feature just dropped!",
+          "type": "link",
+          "url": "https://example.com/css-news",
+          "is_flair_required": false,
+          "flair": null
+        }
+      }
+    ]
+  }
+}
+```
+
+<Note>
+**Tip:** You can post to multiple subreddits simultaneously by adding multiple objects to the `subreddit` array.
+</Note>
+

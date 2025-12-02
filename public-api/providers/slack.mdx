@@ -1,0 +1,140 @@
+---
+title: Slack Settings
+description: 'API settings for posting to Slack'
+---
+
+## Settings Schema
+
+When posting a message to Slack, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "slack",
+    "channel": "channel-id"
+  }
+}
+```
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `slack` |
+| `channel` | `string` | Yes | Slack channel ID |
+
+### `channel`
+
+The Slack channel ID where the message will be posted. This is required.
+
+<Note>
+**How to get a Slack channel ID:**
+1. Right-click on the channel name in Slack
+2. Click "View channel details"
+3. Scroll to the bottom - the Channel ID is displayed there
+4. Or, the channel ID is in the URL when viewing a channel: `https://app.slack.com/client/WORKSPACE/CHANNEL_ID`
+</Note>
+
+---
+
+## Complete Example
+
+### Simple Message
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-slack-integration-id"
+      },
+      "value": [
+        {
+          "content": "🎉 *New Release v2.0*\n\nWe're excited to announce our latest update!\n\n• New dashboard design\n• Improved performance\n• Bug fixes\n\nCheck it out: https://example.com/release",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "slack",
+        "channel": "C0123456789"
+      }
+    }
+  ]
+}
+```
+
+### Message with Image
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-slack-integration-id"
+      },
+      "value": [
+        {
+          "content": "📊 *Weekly Metrics Report*\n\nHere's our performance this week:",
+          "image": [
+            {
+              "id": "metrics-image-id",
+              "path": "https://uploads.postiz.com/metrics.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "slack",
+        "channel": "C0123456789"
+      }
+    }
+  ]
+}
+```
+
+### Team Announcement
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-slack-integration-id"
+      },
+      "value": [
+        {
+          "content": ":mega: *Team Update*\n\n> Reminder: All-hands meeting tomorrow at 2 PM\n\n*Agenda:*\n1. Q4 Review\n2. 2025 Planning\n3. Open Q&A\n\nSee you there! :wave:",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "slack",
+        "channel": "C9876543210"
+      }
+    }
+  ]
+}
+```
+
+<Info>
+Slack supports its own formatting syntax:
+- `*bold*` for **bold**
+- `_italic_` for *italic*
+- `~strikethrough~` for ~~strikethrough~~
+- `:emoji_name:` for emojis
+- `> quote` for quotes
+- `` `code` `` for inline code
+</Info>
+

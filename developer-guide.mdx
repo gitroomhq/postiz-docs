@@ -1,0 +1,55 @@
+---
+title: Developer Guide
+description: 'How to get started developing with Postiz'
+---
+
+## Understand how to develop with Postiz
+
+## How to setup your development environment
+
+This page explains [How to setup your development environment](/installation/development).
+
+## Architecture Overview
+
+Before getting started with development, have a good read of the [architecture overview](/howitworks). This will give you a good understanding of how the project is structured and how the different parts of the project interact with each other.
+
+## Repository Overview
+
+Postiz is an open-source project, and the source code is available on [GitHub](https://github.com/gitroomhq/postiz-app).
+
+The project is generally built using scripts in the `package.json` file with npm. The main scripts are:
+
+* `npm run dev` - Starts the development server
+* `npm run prisma-generate` - Generates the Prisma client
+* `npm run prisma-db-push` - Pushes the database schema to the database
+
+The entire project is built under [NX](https://nx.dev/) to have a monorepo with multiple projects.
+
+Unlike other NX project, this project has one `.env` file that is shared between all the apps.
+It makes it easier to develop and deploy the project.
+
+### Frontend
+
+The frontend is built with [NextJS](https://nextjs.org/) and [TailwindCSS](https://tailwindcss.com/).
+
+### Backend
+
+The backend is built with [NestJS](https://nestjs.com/) with a basic architecture of controllers, services, repositories and dtos.
+
+It uses [Prisma](https://www.prisma.io/) as an ORM to interact with the database.
+By default Prisma uses [Postgres](https://www.postgresql.org/) as a database, but it can be easily changed to any other database since there are no native queries.
+
+It uses Redis to schedule posts and run background jobs.
+
+### Cron
+
+cron is built with [NestJS](https://nestjs.com/) and share components with the backend.
+
+### Worker
+
+worker is built with [NestJS](https://nestjs.com/) and share components with the backend.
+
+## Contributors Guide
+
+The Postiz [contributors guide](/contributing) is contained in the main repository. It provides information on how to contribute to the project, mainly the format for how to submit a pull request.
+

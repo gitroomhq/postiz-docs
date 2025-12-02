@@ -1,0 +1,83 @@
+---
+title: 'Dev.to Settings'
+description: 'Provider settings for Dev.to articles'
+---
+
+## Overview
+
+Dev.to is a community platform for developers. When posting articles, you can set the title, cover image, tags, and organization.
+
+## Settings Schema
+
+```json
+{
+  "__type": "devto",
+  "title": "Article Title",
+  "main_image": {
+    "id": "image-id",
+    "path": "https://uploads.postiz.com/cover.jpg"
+  },
+  "canonical": "https://original-url.com/article",
+  "organization": "org-id",
+  "tags": [
+    { "value": "javascript", "label": "javascript" }
+  ]
+}
+```
+
+## Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `__type` | string | ✅ | Must be `"devto"` |
+| `title` | string | ✅ | Article title (min 2 chars) |
+| `main_image` | object | ❌ | Cover image |
+| `main_image.id` | string | ✅ | Image ID |
+| `main_image.path` | string | ✅ | Image URL |
+| `canonical` | string | ❌ | Original URL for SEO |
+| `organization` | string | ❌ | Organization ID |
+| `tags` | array | ❌ | Up to 4 tags |
+| `tags[].value` | string | ✅ | Tag identifier |
+| `tags[].label` | string | ✅ | Tag display name |
+
+## Example
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-devto-integration-id"
+      },
+      "value": [
+        {
+          "content": "# Getting Started\n\nIn this tutorial, we'll explore...\n\n```javascript\nconst hello = 'world';\nconsole.log(hello);\n```\n\n## Conclusion\n\nThanks for reading!",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "devto",
+        "title": "10 JavaScript Tips for Better Code",
+        "tags": [
+          { "value": "javascript", "label": "javascript" },
+          { "value": "webdev", "label": "webdev" },
+          { "value": "tutorial", "label": "tutorial" },
+          { "value": "beginners", "label": "beginners" }
+        ]
+      }
+    }
+  ]
+}
+```
+
+## Notes
+
+- Article content supports Markdown with code blocks
+- Maximum of 4 tags allowed
+- Tags should be lowercase and match Dev.to's existing tags
+- If posting under an organization, provide the `organization` ID
+

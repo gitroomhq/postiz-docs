@@ -1,0 +1,85 @@
+---
+title: 'Hashnode Settings'
+description: 'Provider settings for Hashnode articles'
+---
+
+## Overview
+
+Hashnode is a blogging platform for developers. When posting articles, you need to specify the title, tags, and publication.
+
+## Settings Schema
+
+```json
+{
+  "__type": "hashnode",
+  "title": "Article Title",
+  "subtitle": "Article Subtitle",
+  "main_image": {
+    "id": "image-id",
+    "path": "https://uploads.postiz.com/cover.jpg"
+  },
+  "canonical": "https://original-url.com/article",
+  "publication": "publication-id",
+  "tags": [
+    { "value": "tag-id", "label": "Tag Name" }
+  ]
+}
+```
+
+## Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `__type` | string | ✅ | Must be `"hashnode"` |
+| `title` | string | ✅ | Article title (min 6 chars) |
+| `subtitle` | string | ❌ | Article subtitle (min 2 chars) |
+| `main_image` | object | ❌ | Cover image |
+| `main_image.id` | string | ✅ | Image ID |
+| `main_image.path` | string | ✅ | Image URL |
+| `canonical` | string | ❌ | Original URL for SEO |
+| `publication` | string | ✅ | Publication ID |
+| `tags` | array | ✅ | At least 1 tag required |
+| `tags[].value` | string | ✅ | Tag ID |
+| `tags[].label` | string | ✅ | Tag display name |
+
+## Example
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-hashnode-integration-id"
+      },
+      "value": [
+        {
+          "content": "# Introduction\n\nWelcome to this comprehensive guide...\n\n## Prerequisites\n\n- Node.js installed\n- Basic JavaScript knowledge\n\n## Getting Started\n\nLet's begin...",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "hashnode",
+        "title": "Complete Guide to TypeScript",
+        "subtitle": "From basics to advanced patterns",
+        "publication": "your-publication-id",
+        "tags": [
+          { "value": "typescript-id", "label": "TypeScript" },
+          { "value": "javascript-id", "label": "JavaScript" }
+        ]
+      }
+    }
+  ]
+}
+```
+
+## Notes
+
+- Title must be at least 6 characters
+- At least 1 tag is required
+- Publication ID is required - get it from your Hashnode dashboard
+- Content supports full Markdown formatting
+

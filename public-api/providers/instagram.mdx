@@ -1,0 +1,192 @@
+---
+title: Instagram Settings
+description: 'API settings for posting to Instagram'
+---
+
+## Settings Schema
+
+When creating a post for Instagram, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "instagram",
+    "post_type": "post",
+    "collaborators": []
+  }
+}
+```
+
+<Note>
+Use `__type: "instagram"` for Facebook Business-linked accounts and `__type: "instagram-standalone"` for standalone Instagram accounts. Both use the same settings schema.
+</Note>
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | `instagram` or `instagram-standalone` |
+| `post_type` | `string` | Yes | Type of Instagram post |
+| `collaborators` | `array` | No | List of collaborator usernames |
+
+### `post_type`
+
+| Value | Description |
+|-------|-------------|
+| `post` | Regular feed post |
+| `story` | Instagram Story (24-hour visibility) |
+
+### `collaborators`
+
+Array of collaborator objects. Each collaborator will receive an invite to be added as a collaborator on the post.
+
+```json
+{
+  "collaborators": [
+    { "label": "username1" },
+    { "label": "username2" }
+  ]
+}
+```
+
+---
+
+## Complete Example
+
+### Feed Post
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-instagram-integration-id"
+      },
+      "value": [
+        {
+          "content": "Beautiful sunset today! 🌅\n\n#sunset #photography #nature",
+          "image": [
+            {
+              "id": "image-id",
+              "path": "https://uploads.postiz.com/sunset.jpg"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "instagram",
+        "post_type": "post",
+        "collaborators": []
+      }
+    }
+  ]
+}
+```
+
+### Story Post
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-instagram-integration-id"
+      },
+      "value": [
+        {
+          "content": "",
+          "image": [
+            {
+              "id": "story-image-id",
+              "path": "https://uploads.postiz.com/story.jpg"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "instagram",
+        "post_type": "story"
+      }
+    }
+  ]
+}
+```
+
+### Collaborative Post
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-instagram-integration-id"
+      },
+      "value": [
+        {
+          "content": "Amazing collab with @partner! 🤝",
+          "image": [
+            {
+              "id": "collab-image-id",
+              "path": "https://uploads.postiz.com/collab.jpg"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "instagram",
+        "post_type": "post",
+        "collaborators": [
+          { "label": "partner_username" }
+        ]
+      }
+    }
+  ]
+}
+```
+
+### Carousel Post
+
+Create a carousel by adding multiple images:
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-instagram-integration-id"
+      },
+      "value": [
+        {
+          "content": "Swipe to see all the photos! 📸",
+          "image": [
+            { "id": "img1", "path": "https://uploads.postiz.com/1.jpg" },
+            { "id": "img2", "path": "https://uploads.postiz.com/2.jpg" },
+            { "id": "img3", "path": "https://uploads.postiz.com/3.jpg" }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "instagram",
+        "post_type": "post"
+      }
+    }
+  ]
+}
+```
+

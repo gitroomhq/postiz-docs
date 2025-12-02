@@ -1,0 +1,49 @@
+---
+title: Docker
+description: 'Install Postiz using Docker standalone'
+---
+
+<Snippet file="installation-recommended-options.mdx" />
+
+<Snippet file="installation-pre-reqs.mdx" />
+
+## Set environment variables
+
+Postiz configuration is entirely via environment variables for now. You might be used to setting environment variables when starting containers,
+however postiz needs a LOT of environment variables, so setting these on command line or in a docker-compose is probably not practical for long
+term maintainability.
+
+It is recommended to use a `.env` file, which the Postiz containers look for in /config. Docker will automatically create this file for you on a 
+docker volume the first time you start up Postiz. 
+
+The default .env file can be found here; [example .env file](https://raw.githubusercontent.com/gitroomhq/postiz-app/main/.env.example)
+
+## Create the container
+
+This example below shows how to create the Postiz container on the command line.
+
+Note that you will need to replace the `./config` with the path to your config directory. You will also need Postgres and Redis running.
+
+```bash
+docker create --name postiz -v postiz-uploads:/uploads/ -v postiz-config:/config/ -p 5000:5000 ghcr.io/gitroomhq/postiz-app:latest
+```
+
+<Snippet file="docker-envvar-apps.mdx" />
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Configure uploads" icon="cloud-arrow-up" href="/configuration/r2">
+    Set up R2 for file storage
+  </Card>
+  <Card title="Architecture" icon="diagram-project" href="/howitworks">
+    Learn the architecture of the project
+  </Card>
+  <Card title="Email notifications" icon="envelope" href="/configuration/emails">
+    Set up email for notifications
+  </Card>
+  <Card title="Providers" icon="plug" href="/providers/overview">
+    Set up providers such as LinkedIn, X and Reddit
+  </Card>
+</CardGroup>
+

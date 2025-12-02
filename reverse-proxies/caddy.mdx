@@ -1,0 +1,30 @@
+---
+title: Caddy
+description: 'Configure Caddy as a reverse proxy for Postiz'
+---
+
+This page briefly explains how to use Caddy to reverse proxy Postiz. A configuration file example is below;
+
+## Example Caddyfile
+
+```caddy
+postiz.example.lan {
+        reverse_proxy * localhost:5000
+        tls internal
+}
+```
+
+In this example, we have a single port for Postiz, port 5000, which is the internal proxy built into the Docker container images. The `tls internal` directive is used to enable internal TLS for secure communication.
+
+You will need to install the certificate into your browser with this configuration. If you are hosting on a public domain, Caddy allows you to use LetsEncrypt for automatic certificate management. For more information, refer to the [Caddy documentation](https://caddyserver.com/docs/).
+
+## Postiz configuration
+
+To ensure that Postiz works correctly behind a reverse proxy, you may need to adjust its configuration in your .env file / environment variables. The following variables should be set to the correct values:
+
+```bash
+MAIN_URL="https://postiz.example.lan"
+FRONTEND_URL="https://postiz.example.lan"
+NEXT_PUBLIC_BACKEND_URL="https://postiz.example.lan/api"
+```
+

@@ -1,0 +1,71 @@
+---
+title: Telegram
+description: 'How to add Telegram to your system'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Steps>
+  <Step title="Create a Telegram Bot">
+    1. Open Telegram and message [@BotFather](https://t.me/botfather).
+    2. Click Start
+    3. Click Menu
+       - Click "Create a new bot"
+       - Enter a name for your bot (e.g., `MyPostizBot`).
+
+    ![Name Bot](https://github.com/user-attachments/assets/974c1ad3-4648-4d41-8d20-22b6e8cb0bc8)
+       
+       - Choose a unique username ending with "bot" (e.g., `MyPostizBot_bot`).
+
+    ![Unique Bot Name](https://github.com/user-attachments/assets/e4824ed2-c812-4a03-b43a-bf4f680eff23)
+
+    Once your bot is created, **BotFather** will give you an **API Token**. Keep it safe—you'll need it later.
+
+    ![Bot Token](https://github.com/user-attachments/assets/71bdc32c-36d5-45cd-b0d8-08d5eefcaadc)
+  </Step>
+
+  <Step title="Configure Bot Group Permissions (optional but recommended)">
+    1. Click on "Menu"
+    2. Click on "Edit your bots"
+    3. Select your bot
+    4. Click on "Bot Settings"
+
+    ![Bot Settings](https://github.com/user-attachments/assets/908924ee-2567-4c13-bfeb-52f5684680a3)
+
+    5. Click on "Group Privacy"
+
+    ![Group Privacy](https://github.com/user-attachments/assets/6a756212-7af3-437f-88fe-74ca5579666d)
+
+    6. If "Privacy mode" is enabled, turn it off (it is enabled by default)
+  </Step>
+
+  <Step title="Add Your Bot to Telegram Groups or Channels">
+    1. Navigate to your group/channel
+    2. Add your bot to your group/channel
+    3. The bot requires these permissions to work with Postiz:
+       - access to messages — so the bot can read messages sent in the group/channel
+       - Send Text Messages — so the bot can send messages
+       - Send Media — so the bot can send media
+
+    <Info>
+    While not strictly required, making your bot an `admin` is **recommended**. It will give the bot all the permissions needed and make the setup easier and faster.
+    </Info>
+  </Step>
+
+  <Step title="Add Bot Token to Your Application">
+    In your `.env` file, add the **Telegram Bot Name** (Without the @) and the **Telegram Bot API Token** that you received from **BotFather** in Step 1:
+
+```env
+TELEGRAM_BOT_NAME="MyPostizBot_bot"
+TELEGRAM_TOKEN="MyPostizBot token"
+```
+
+    <Info>
+    If you are using Docker Compose, include the `NTBA_FIX_350: 1` variable directly in your `docker-compose.yml`.
+    See [Node Telegram Bot API](https://github.com/yagop/node-telegram-bot-api/blob/master/doc/usage.md#file-options-metadata) for reference.
+    </Info>
+
+    You should be able to connect your group/channel to Postiz now!
+  </Step>
+</Steps>
+

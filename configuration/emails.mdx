@@ -1,0 +1,55 @@
+---
+title: Email Notifications
+description: 'How to send notifications to users'
+---
+
+Postiz supports two email providers: Resend and NodeMailer (SMTP).
+
+If you have an email provider configured, then new users will require activation.
+
+```env
+EMAIL_PROVIDER: "resend|nodemailer"
+```
+
+You must also set the sender name and email address for all providers as follows;
+
+```env
+EMAIL_FROM_NAME: "Postiz Emailer"
+EMAIL_FROM_ADDRESS: "postiz@example.com"
+```
+
+## Resend
+
+Postiz uses Resend to send email notifications to users. If this key is set, users
+will also require activation.
+
+<Steps>
+  <Step title="Register on Resend">
+    Register to [Resend](https://resend.com), and connect your domain.
+  </Step>
+  <Step title="Copy your API Key">
+    Copy your API Key from the Resend control panel.
+  </Step>
+  <Step title="Edit your .env file">
+    Open the .env file and edit the following line.
+
+```env
+EMAIL_PROVIDER="resend"
+RESEND_API_KEY="<your-api-key-here>"
+```
+  </Step>
+</Steps>
+
+## NodeMailer (SMTP)
+
+This is an alternative to Resend. You can use NodeMailer, which is simply a SMTP library, to connect to any SMTP server.
+
+```env
+EMAIL_PROVIDER: "nodemailer"
+EMAIL_HOST: "smtp.gmail.com" # smtp host if you choose nodemailer
+EMAIL_PORT: "465" # smtp port if you choose nodemailer
+EMAIL_SECURE: "true" # smtp secure if you choose nodemailer
+EMAIL_USER: "user" # smtp user if you choose nodemailer
+EMAIL_PASS: "pass" # smtp pass if you choose nodemailer
+```
+

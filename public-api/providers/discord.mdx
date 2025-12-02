@@ -1,0 +1,138 @@
+---
+title: Discord Settings
+description: 'API settings for posting to Discord'
+---
+
+## Settings Schema
+
+When posting a message to Discord, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "discord",
+    "channel": "channel-id"
+  }
+}
+```
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `discord` |
+| `channel` | `string` | Yes | Discord channel ID |
+
+### `channel`
+
+The Discord channel ID where the message will be posted. This is required.
+
+<Note>
+**How to get a Discord channel ID:**
+1. Enable Developer Mode in Discord (User Settings → App Settings → Advanced → Developer Mode)
+2. Right-click on the channel
+3. Click "Copy Channel ID"
+</Note>
+
+---
+
+## Complete Example
+
+### Text Message
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-discord-integration-id"
+      },
+      "value": [
+        {
+          "content": "🎉 **New Update Released!**\n\nWe've just shipped some exciting new features:\n\n• Feature 1\n• Feature 2\n• Feature 3\n\nCheck it out and let us know what you think!",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "discord",
+        "channel": "1234567890123456789"
+      }
+    }
+  ]
+}
+```
+
+### Message with Image
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-discord-integration-id"
+      },
+      "value": [
+        {
+          "content": "Check out this preview of our new feature! 👀",
+          "image": [
+            {
+              "id": "preview-image-id",
+              "path": "https://uploads.postiz.com/preview.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "discord",
+        "channel": "1234567890123456789"
+      }
+    }
+  ]
+}
+```
+
+### Announcement with Formatting
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-discord-integration-id"
+      },
+      "value": [
+        {
+          "content": "# 📢 Important Announcement\n\n> We'll be performing scheduled maintenance tonight from 10 PM - 12 AM UTC.\n\n**What to expect:**\n- Brief service interruption\n- Improved performance after maintenance\n\n*Thank you for your patience!*",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "discord",
+        "channel": "9876543210987654321"
+      }
+    }
+  ]
+}
+```
+
+<Info>
+Discord supports Markdown formatting in messages. You can use:
+- `**bold**` for **bold**
+- `*italic*` for *italic*
+- `# Heading` for headings
+- `> quote` for quotes
+- `` `code` `` for inline code
+</Info>
+

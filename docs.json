@@ -1,68 +1,174 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "theme": "maple",
+  "name": "Postiz Documentation",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#9900e6",
+    "light": "#b266ff",
+    "dark": "#7700b3"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "introduction",
+              "howitworks",
+              "quickstart"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Installation",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "installation/docker-compose",
+              "installation/docker",
+              "installation/kubernetes-helm",
+              "installation/coolify",
+              "installation/development",
+              "installation/devcontainer"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Configuration",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "configuration/reference",
+              "configuration/docker",
+              "configuration/emails",
+              "configuration/r2",
+              "configuration/oauth"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Reverse Proxies",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "reverse-proxies/caddy",
+              "reverse-proxies/nginx",
+              "reverse-proxies/traefik"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Providers",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Provider Configuration",
             "pages": [
-              "api-reference/introduction"
+              "providers/overview",
+              "configuration/create-provider"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Social Platforms",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "providers/x-twitter",
+              "providers/linkedin",
+              "providers/linkedin-page",
+              "providers/facebook",
+              "providers/instagram",
+              "providers/threads",
+              "providers/bluesky",
+              "providers/mastodon"
+            ]
+          },
+          {
+            "group": "Video Platforms",
+            "pages": [
+              "providers/youtube",
+              "providers/tiktok"
+            ]
+          },
+          {
+            "group": "Other Platforms",
+            "pages": [
+              "providers/reddit",
+              "providers/pinterest",
+              "providers/discord",
+              "providers/slack",
+              "providers/telegram",
+              "providers/dribbble"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Public API",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "public-api/introduction"
+            ]
+          },
+          {
+            "group": "Integrations",
+            "pages": [
+              "public-api/integrations/list",
+              "public-api/integrations/is-connected",
+              "public-api/integrations/find-slot"
+            ]
+          },
+          {
+            "group": "Posts",
+            "pages": [
+              "public-api/posts/list",
+              "public-api/posts/create",
+              "public-api/posts/delete"
+            ]
+          },
+          {
+            "group": "Uploads",
+            "pages": [
+              "public-api/uploads/upload-file",
+              "public-api/uploads/upload-from-url"
+            ]
+          },
+          {
+            "group": "Video Generation",
+            "pages": [
+              "public-api/video/generate",
+              "public-api/video/function"
+            ]
+          },
+          {
+            "group": "Provider Settings (21 with custom settings)",
+            "pages": [
+              "public-api/providers/x",
+              "public-api/providers/linkedin",
+              "public-api/providers/facebook",
+              "public-api/providers/instagram",
+              "public-api/providers/warpcast",
+              "public-api/providers/youtube",
+              "public-api/providers/tiktok",
+              "public-api/providers/reddit",
+              "public-api/providers/lemmy",
+              "public-api/providers/pinterest",
+              "public-api/providers/discord",
+              "public-api/providers/slack",
+              "public-api/providers/dribbble",
+              "public-api/providers/medium",
+              "public-api/providers/devto",
+              "public-api/providers/hashnode",
+              "public-api/providers/wordpress",
+              "public-api/providers/listmonk",
+              "public-api/providers/gmb"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Contributing",
+        "groups": [
+          {
+            "group": "Development",
+            "pages": [
+              "developer-guide",
+              "contributing",
+              "support"
             ]
           }
         ]
@@ -71,52 +177,55 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "GitHub",
+          "href": "https://github.com/gitroomhq/postiz-app",
+          "icon": "github"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Discord",
+          "href": "https://discord.postiz.com",
+          "icon": "discord"
+        },
+        {
+          "anchor": "YouTube",
+          "href": "https://youtube.com/@postizofficial",
+          "icon": "youtube"
         }
       ]
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
   },
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "icon": "discord",
+        "label": "Discord",
+        "href": "https://discord.postiz.com"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Register to the cloud",
+      "href": "https://postiz.com"
     }
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "cursor"
+    ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/neaborleon",
+      "github": "https://github.com/gitroomhq/postiz-app",
+      "discord": "https://discord.postiz.com"
     }
   }
 }

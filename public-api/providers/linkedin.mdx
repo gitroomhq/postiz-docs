@@ -1,0 +1,138 @@
+---
+title: LinkedIn Settings
+description: 'API settings for posting to LinkedIn'
+---
+
+## Settings Schema
+
+When creating a post for LinkedIn (profile or page), use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "linkedin",
+    "post_as_images_carousel": false
+  }
+}
+```
+
+<Note>
+Use `__type: "linkedin"` for personal profiles and `__type: "linkedin-page"` for company pages. Both use the same settings schema.
+</Note>
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | `linkedin` or `linkedin-page` |
+| `post_as_images_carousel` | `boolean` | No | Display multiple images as a carousel |
+
+### `post_as_images_carousel`
+
+When set to `true` and you have multiple images, they will be displayed as a swipeable carousel instead of a collage.
+
+| Value | Description |
+|-------|-------------|
+| `true` | Images displayed as carousel |
+| `false` | Images displayed as collage (default) |
+
+---
+
+## Complete Example
+
+### Text Post
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-linkedin-integration-id"
+      },
+      "value": [
+        {
+          "content": "Excited to share our latest update! 🎉\n\n#innovation #tech",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "linkedin"
+      }
+    }
+  ]
+}
+```
+
+### Carousel Post
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-linkedin-integration-id"
+      },
+      "value": [
+        {
+          "content": "Check out our product showcase! Swipe through to see all features →",
+          "image": [
+            {
+              "id": "image-1-id",
+              "path": "https://uploads.postiz.com/image1.png"
+            },
+            {
+              "id": "image-2-id",
+              "path": "https://uploads.postiz.com/image2.png"
+            },
+            {
+              "id": "image-3-id",
+              "path": "https://uploads.postiz.com/image3.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "linkedin",
+        "post_as_images_carousel": true
+      }
+    }
+  ]
+}
+```
+
+### Company Page Post
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-linkedin-page-integration-id"
+      },
+      "value": [
+        {
+          "content": "We're hiring! Join our team and help us build the future.",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "linkedin-page",
+        "post_as_images_carousel": false
+      }
+    }
+  ]
+}
+```
+

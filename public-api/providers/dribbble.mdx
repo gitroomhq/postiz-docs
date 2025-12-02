@@ -1,0 +1,152 @@
+---
+title: Dribbble Settings
+description: 'API settings for posting to Dribbble'
+---
+
+## Settings Schema
+
+When creating a shot on Dribbble, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "dribbble",
+    "title": "My Shot Title",
+    "team": ""
+  }
+}
+```
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `dribbble` |
+| `title` | `string` | Yes | Shot title (min 1 character) |
+| `team` | `string` | No | Team URL (if posting for a team) |
+
+### `title`
+
+Required title for your Dribbble shot. This is displayed prominently on your shot.
+
+### `team`
+
+Optional team URL. If you're part of a Dribbble team and want to post on behalf of the team, provide the team URL.
+
+---
+
+## Complete Example
+
+### Personal Shot
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-dribbble-integration-id"
+      },
+      "value": [
+        {
+          "content": "New dashboard design concept exploring dark mode aesthetics and modern UI patterns. Built with Figma.\n\n#ui #ux #dashboard #darkmode #design",
+          "image": [
+            {
+              "id": "shot-image-id",
+              "path": "https://uploads.postiz.com/dashboard-design.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "dribbble",
+        "title": "Dashboard UI - Dark Mode Concept",
+        "team": ""
+      }
+    }
+  ]
+}
+```
+
+### Team Shot
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-dribbble-integration-id"
+      },
+      "value": [
+        {
+          "content": "Our latest branding project for TechCorp. Full case study coming soon!\n\n#branding #logo #identity",
+          "image": [
+            {
+              "id": "branding-image-id",
+              "path": "https://uploads.postiz.com/branding.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "dribbble",
+        "title": "TechCorp Brand Identity",
+        "team": "https://dribbble.com/teams/my-design-team"
+      }
+    }
+  ]
+}
+```
+
+### Mobile App Design
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-dribbble-integration-id"
+      },
+      "value": [
+        {
+          "content": "Fitness tracking app concept with focus on clean data visualization and motivational design elements.\n\nSwipe to see all screens →\n\n#mobileapp #fitness #appdesign #ios",
+          "image": [
+            {
+              "id": "app-screen-1",
+              "path": "https://uploads.postiz.com/fitness-1.png"
+            },
+            {
+              "id": "app-screen-2",
+              "path": "https://uploads.postiz.com/fitness-2.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "dribbble",
+        "title": "Fitness App - UI/UX Design",
+        "team": ""
+      }
+    }
+  ]
+}
+```
+
+<Note>
+**Dribbble Tips:**
+- Use high-quality images (800×600 or larger recommended)
+- Include relevant tags in your description
+- Add context about your design process in the content
+</Note>
+

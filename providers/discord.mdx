@@ -1,0 +1,68 @@
+---
+title: Discord
+description: 'How to add Discord to your system'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Note>
+This integration requires that you have **Manage Server** permissions on the Discord server you want to integrate with.
+</Note>
+
+<Steps>
+  <Step title="Create a Discord Application">
+    Login to Discord on the web, and then go to the [Discord Developer Portal](https://discord.com/developers/applications) and click on "New Application".
+    
+    ![New Application](/images/providers/discord/discord_create_app.png)
+  </Step>
+
+  <Step title="Add an App Icon">
+    ![App Icon](/images/providers/discord/discord_add_app_icon.png)
+
+    Upload the App Icon of your choice (1024x1024px max) and save your changes. If you do not do this, you will get 404 errors in logs when trying to add the Discord channel in the Postiz web interface.
+  </Step>
+
+  <Step title="Get and set your Client ID and Client Secret">
+    You can find this in the **OAuth2** section of the Discord Developer Portal.
+
+    ![Copy Keys](/images/providers/discord/discord_copy_keys.png)
+
+    Set these in your .env file as follows;
+
+```env
+DISCORD_CLIENT_ID="your_client_id"
+DISCORD_CLIENT_SECRET="your_client_secret"
+```
+  </Step>
+
+  <Step title="Add a Redirect URI">
+    <Snippet file="oauth2redirect.mdx" />
+    
+    Replace `{provider}` with `discord` in the redirect URI.
+
+    The redirect URI is the URL that Discord will redirect to after you have logged in. Assuming you are running Postiz on `postiz.example.com`, this would be: `https://postiz.example.com/integrations/social/discord`. Alternatively if you are running on `localhost:4200`, this would be `http://localhost:4200/integrations/social/discord`. You only really need one of these, depending on where you are running Postiz.
+
+    You can find this in the **OAuth2** section of the Discord Developer Portal.
+
+    ![Redirect URI](/images/providers/discord/discord_redirect_uri.png)
+  </Step>
+
+  <Step title="Create a Bot">
+    Navigate to the "Bot" section of the Discord Developer Portal. Fill out the bot details however you like, and then click "Reset Token".
+
+    With the token that is generated, set it in your .env file as follows;
+
+```env
+DISCORD_BOT_TOKEN_ID="your_bot_token"
+```
+
+    If you do not set this, you will get 404 errors when trying to add the Discord channel in the Postiz web interface.
+
+    Stop Postiz if it is running, and then start it using the .env file with the Discord details.
+  </Step>
+
+  <Step title="Add a Discord channel in the Postiz web interface">
+    Go to the Postiz web interface, and click on the "Add Channel" button, and then select "Discord". You should be redirected to Discord to login.
+  </Step>
+</Steps>
+

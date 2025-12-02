@@ -1,0 +1,93 @@
+---
+title: OIDC Configuration
+description: 'How to configure OIDC for Postiz'
+---
+
+<Warning>
+**Warning:** With the actual implementation of the OIDC provider, GitHub / Google login provider will be disabled.
+</Warning>
+
+If you want to use OAuth/OIDC, please follow the instructions below.
+
+We will use [Authentik](https://goauthentik.io/) as an OIDC provider example, with base URL `https://authentik.example.com`
+
+<Steps>
+  <Step title="Create an Application/Provider on the Authentik side">
+    You will find the following important information:
+
+    - `redirect_uri` => `https://postiz.yourserver.com/settings`
+    - `client_id` => `randomclientid`
+    - `client_secret` => `randomclientsecret`
+    - `auth_url` => `https://authentik.example.com/application/o/authorize`
+    - `token_url` => `https://authentik.example.com/application/o/token`
+    - `userinfo_url`=> `https://authentik.example.com/application/o/userinfo`
+
+    <Note>
+    The same information needs to be configured on other OIDC providers such as Keycloak, Dex, etc.
+    </Note>
+  </Step>
+
+  <Step title="Configure POSTIZ_GENERIC_OAUTH">
+    ```env
+    POSTIZ_GENERIC_OAUTH="true"
+    ```
+    Set to `true` to enable OIDC login.
+  </Step>
+
+  <Step title="Configure display name">
+    ```env
+    NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME="Authentik"
+    ```
+    Will display the name of the OIDC provider on the login page.
+  </Step>
+
+  <Step title="Configure logo URL">
+    ```env
+    NEXT_PUBLIC_POSTIZ_OAUTH_LOGO_URL="https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/authentik.png"
+    ```
+    Will display the logo of the OIDC provider on the login page button.
+  </Step>
+
+  <Step title="Configure POSTIZ_OAUTH_URL">
+    ```env
+    POSTIZ_OAUTH_URL="https://authentik.example.com"
+    ```
+    The base URL of the OIDC provider.
+  </Step>
+
+  <Step title="Configure POSTIZ_OAUTH_AUTH_URL">
+    ```env
+    POSTIZ_OAUTH_AUTH_URL="https://authentik.example.com/application/o/authorize/"
+    ```
+    The authorization URL of the OIDC provider.
+  </Step>
+
+  <Step title="Configure POSTIZ_OAUTH_TOKEN_URL">
+    ```env
+    POSTIZ_OAUTH_TOKEN_URL="https://authentik.example.com/application/o/token/"
+    ```
+    The token URL of the OIDC provider.
+  </Step>
+
+  <Step title="Configure POSTIZ_OAUTH_USERINFO_URL">
+    ```env
+    POSTIZ_OAUTH_USERINFO_URL="https://authentik.example.com/application/o/userinfo/"
+    ```
+    The userinfo URL of the OIDC provider.
+  </Step>
+
+  <Step title="Configure POSTIZ_OAUTH_CLIENT_ID">
+    ```env
+    POSTIZ_OAUTH_CLIENT_ID="randomclientid"
+    ```
+    The client ID of the OIDC provider.
+  </Step>
+
+  <Step title="Configure POSTIZ_OAUTH_CLIENT_SECRET">
+    ```env
+    POSTIZ_OAUTH_CLIENT_SECRET="randomclientsecret"
+    ```
+    The client secret of the OIDC provider.
+  </Step>
+</Steps>
+

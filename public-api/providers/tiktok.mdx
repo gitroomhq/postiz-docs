@@ -1,0 +1,175 @@
+---
+title: TikTok Settings
+description: 'API settings for posting to TikTok'
+---
+
+## Settings Schema
+
+When uploading a video to TikTok, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "tiktok",
+    "title": "",
+    "privacy_level": "PUBLIC_TO_EVERYONE",
+    "duet": false,
+    "stitch": false,
+    "comment": true,
+    "autoAddMusic": "no",
+    "brand_content_toggle": false,
+    "brand_organic_toggle": false,
+    "video_made_with_ai": false,
+    "content_posting_method": "DIRECT_POST"
+  }
+}
+```
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `tiktok` |
+| `title` | `string` | No | Video title (max 90 characters) |
+| `privacy_level` | `string` | Yes | Who can view the video |
+| `duet` | `boolean` | Yes | Allow duets |
+| `stitch` | `boolean` | Yes | Allow stitches |
+| `comment` | `boolean` | Yes | Allow comments |
+| `autoAddMusic` | `string` | Yes | Auto-add music to video |
+| `brand_content_toggle` | `boolean` | Yes | Branded content disclosure |
+| `brand_organic_toggle` | `boolean` | Yes | Organic branded content |
+| `video_made_with_ai` | `boolean` | No | AI-generated content disclosure |
+| `content_posting_method` | `string` | Yes | How to post the content |
+
+### `privacy_level`
+
+| Value | Description |
+|-------|-------------|
+| `PUBLIC_TO_EVERYONE` | Anyone can view |
+| `MUTUAL_FOLLOW_FRIENDS` | Only mutual followers can view |
+| `FOLLOWER_OF_CREATOR` | Only your followers can view |
+| `SELF_ONLY` | Only you can view |
+
+### `autoAddMusic`
+
+| Value | Description |
+|-------|-------------|
+| `yes` | TikTok will auto-add music |
+| `no` | No automatic music |
+
+### `content_posting_method`
+
+| Value | Description |
+|-------|-------------|
+| `DIRECT_POST` | Post directly to TikTok |
+| `UPLOAD` | Upload for manual posting |
+
+---
+
+## Complete Example
+
+### Public Video with Interactions Enabled
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-tiktok-integration-id"
+      },
+      "value": [
+        {
+          "content": "Check out this awesome tip! 🔥 #tips #viral #fyp",
+          "image": [
+            {
+              "id": "video-id",
+              "path": "https://uploads.postiz.com/tiktok-video.mp4"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "tiktok",
+        "title": "Quick Productivity Tip",
+        "privacy_level": "PUBLIC_TO_EVERYONE",
+        "duet": true,
+        "stitch": true,
+        "comment": true,
+        "autoAddMusic": "no",
+        "brand_content_toggle": false,
+        "brand_organic_toggle": false,
+        "video_made_with_ai": false,
+        "content_posting_method": "DIRECT_POST"
+      }
+    }
+  ]
+}
+```
+
+### Branded Content Video
+
+```json
+{
+  "settings": {
+    "__type": "tiktok",
+    "title": "Partnership with Brand",
+    "privacy_level": "PUBLIC_TO_EVERYONE",
+    "duet": false,
+    "stitch": false,
+    "comment": true,
+    "autoAddMusic": "no",
+    "brand_content_toggle": true,
+    "brand_organic_toggle": true,
+    "video_made_with_ai": false,
+    "content_posting_method": "DIRECT_POST"
+  }
+}
+```
+
+### AI-Generated Content
+
+```json
+{
+  "settings": {
+    "__type": "tiktok",
+    "title": "AI Generated Art",
+    "privacy_level": "PUBLIC_TO_EVERYONE",
+    "duet": true,
+    "stitch": true,
+    "comment": true,
+    "autoAddMusic": "yes",
+    "brand_content_toggle": false,
+    "brand_organic_toggle": false,
+    "video_made_with_ai": true,
+    "content_posting_method": "DIRECT_POST"
+  }
+}
+```
+
+### Private Video (Draft)
+
+```json
+{
+  "settings": {
+    "__type": "tiktok",
+    "title": "",
+    "privacy_level": "SELF_ONLY",
+    "duet": false,
+    "stitch": false,
+    "comment": false,
+    "autoAddMusic": "no",
+    "brand_content_toggle": false,
+    "brand_organic_toggle": false,
+    "content_posting_method": "UPLOAD"
+  }
+}
+```
+
+<Warning>
+**Important:** TikTok requires media files to be publicly accessible via HTTPS. Local files or private URLs will fail. Use [Cloudflare R2](/configuration/r2) or similar storage with public access.
+</Warning>
+

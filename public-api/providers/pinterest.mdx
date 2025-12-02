@@ -1,0 +1,141 @@
+---
+title: Pinterest Settings
+description: 'API settings for posting to Pinterest'
+---
+
+## Settings Schema
+
+When creating a Pin on Pinterest, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "pinterest",
+    "board": "board-id",
+    "title": "My Pin Title",
+    "link": "https://example.com",
+    "dominant_color": "#FF5733"
+  }
+}
+```
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `pinterest` |
+| `board` | `string` | Yes | Board ID to pin to |
+| `title` | `string` | No | Pin title (max 100 characters) |
+| `link` | `string` | No | Destination URL |
+| `dominant_color` | `string` | No | Dominant color for the pin |
+
+### `board`
+
+The board ID where the pin will be saved. This is required and must be a valid board ID from your Pinterest account.
+
+<Note>
+Get board IDs by using Postiz's UI to view your boards, or by using Pinterest's API directly.
+</Note>
+
+### `title`
+
+Optional pin title with a maximum of 100 characters.
+
+### `link`
+
+Optional destination URL. When users click "Visit" on your pin, they'll be taken to this URL.
+
+### `dominant_color`
+
+Optional hex color code that represents the dominant color of your pin. Pinterest may use this for visual presentation.
+
+---
+
+## Complete Example
+
+### Basic Pin
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-pinterest-integration-id"
+      },
+      "value": [
+        {
+          "content": "Beautiful home decor inspiration for your living room! 🏠✨",
+          "image": [
+            {
+              "id": "pin-image-id",
+              "path": "https://uploads.postiz.com/decor.jpg"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "pinterest",
+        "board": "1234567890123456789",
+        "title": "Living Room Decor Ideas",
+        "link": "https://myblog.com/living-room-decor",
+        "dominant_color": ""
+      }
+    }
+  ]
+}
+```
+
+### Pin with All Options
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-pinterest-integration-id"
+      },
+      "value": [
+        {
+          "content": "Try this delicious recipe! Perfect for summer dinners. Full recipe on my blog 👇",
+          "image": [
+            {
+              "id": "recipe-image-id",
+              "path": "https://uploads.postiz.com/recipe.jpg"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "pinterest",
+        "board": "9876543210987654321",
+        "title": "Easy Summer Pasta Recipe",
+        "link": "https://myrecipes.com/summer-pasta",
+        "dominant_color": "#E8B4B8"
+      }
+    }
+  ]
+}
+```
+
+### Simple Pin (Minimal Settings)
+
+```json
+{
+  "settings": {
+    "__type": "pinterest",
+    "board": "1234567890123456789",
+    "title": "",
+    "link": "",
+    "dominant_color": ""
+  }
+}
+```
+

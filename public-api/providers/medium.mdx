@@ -1,0 +1,78 @@
+---
+title: 'Medium Settings'
+description: 'Provider settings for Medium articles'
+---
+
+## Overview
+
+Medium is a publishing platform for articles and stories. When posting to Medium, you can set article metadata, tags, and publication options.
+
+## Settings Schema
+
+```json
+{
+  "__type": "medium",
+  "title": "Article Title",
+  "subtitle": "Article Subtitle",
+  "canonical": "https://original-url.com/article",
+  "publication": "publication-id",
+  "tags": [
+    { "value": "programming", "label": "Programming" }
+  ]
+}
+```
+
+## Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `__type` | string | ✅ | Must be `"medium"` |
+| `title` | string | ✅ | Article title (min 2 chars) |
+| `subtitle` | string | ✅ | Article subtitle (min 2 chars) |
+| `canonical` | string | ❌ | Original URL for SEO (canonical link) |
+| `publication` | string | ❌ | Publication ID to post to |
+| `tags` | array | ❌ | Up to 4 tags |
+| `tags[].value` | string | ✅ | Tag identifier |
+| `tags[].label` | string | ✅ | Tag display name |
+
+## Example
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-medium-integration-id"
+      },
+      "value": [
+        {
+          "content": "# Introduction\n\nThis is my article content written in markdown.\n\n## Section 1\n\nMore content here...",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "medium",
+        "title": "Building Modern Web Applications",
+        "subtitle": "A comprehensive guide to full-stack development",
+        "tags": [
+          { "value": "programming", "label": "Programming" },
+          { "value": "webdev", "label": "Web Development" },
+          { "value": "javascript", "label": "JavaScript" }
+        ]
+      }
+    }
+  ]
+}
+```
+
+## Notes
+
+- Article content should be written in Markdown format
+- Maximum of 4 tags allowed
+- If you have a publication, use the `publication` field to post directly to it
+- Use `canonical` if the article was originally published elsewhere
+

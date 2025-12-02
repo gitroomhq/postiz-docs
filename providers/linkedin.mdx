@@ -1,0 +1,46 @@
+---
+title: LinkedIn
+description: 'How to add LinkedIn to your system'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Steps>
+  <Step title="Create a new app">
+    Head over to [LinkedIn developers](https://www.linkedin.com/developers/apps) and create a new app.
+    
+    ![LinkedIn](/images/providers/linkedin/linkedin-001.png)
+  </Step>
+
+  <Step title="Add required products">
+    Fill in all the details, once created head over to Products and make sure you add all the required products.
+    
+    ![LinkedIn](/images/providers/linkedin/linkedin-002.png)
+
+    <Warning>
+    It is important to request the Advertising API permissions and fill up the request form, or you will not have the ability to refresh your tokens.
+    </Warning>
+  </Step>
+
+  <Step title="Configure OAuth2 Redirect URI">
+    <Snippet file="oauth2redirect.mdx" />
+    
+    Replace `{provider}` with `linkedin` in the redirect URI.
+
+    <Note>
+    If you are using the "LinkedIn Page" provider, then the redirect url should be "linkedin-page".
+    </Note>
+  </Step>
+
+  <Step title="Copy your credentials">
+    Copy the created `Client ID` and `Client Secret` and add them to your `.env` file.
+
+```env
+LINKEDIN_CLIENT_ID=""
+LINKEDIN_CLIENT_SECRET=""
+```
+
+    You can find those under the Auth Tab of your LinkedIn App in the developer portal.
+  </Step>
+</Steps>
+

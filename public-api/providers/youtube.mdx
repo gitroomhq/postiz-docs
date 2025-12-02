@@ -1,0 +1,179 @@
+---
+title: YouTube Settings
+description: 'API settings for posting to YouTube'
+---
+
+## Settings Schema
+
+When uploading a video to YouTube, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "youtube",
+    "title": "My Video Title",
+    "type": "public",
+    "selfDeclaredMadeForKids": "no",
+    "thumbnail": null,
+    "tags": []
+  }
+}
+```
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `youtube` |
+| `title` | `string` | Yes | Video title (2-100 characters) |
+| `type` | `string` | Yes | Video visibility |
+| `selfDeclaredMadeForKids` | `string` | No | Made for kids declaration |
+| `thumbnail` | `object` | No | Custom thumbnail |
+| `tags` | `array` | No | Video tags |
+
+### `title`
+
+Video title with the following constraints:
+- Minimum: 2 characters
+- Maximum: 100 characters
+
+### `type` (visibility)
+
+| Value | Description |
+|-------|-------------|
+| `public` | Anyone can search for and view |
+| `unlisted` | Anyone with the link can view |
+| `private` | Only you can view |
+
+### `selfDeclaredMadeForKids`
+
+| Value | Description |
+|-------|-------------|
+| `yes` | Content is made for kids |
+| `no` | Content is not made for kids |
+
+### `thumbnail`
+
+Custom thumbnail object (uploaded via the uploads endpoint):
+
+```json
+{
+  "thumbnail": {
+    "id": "thumbnail-id",
+    "path": "https://uploads.postiz.com/thumbnail.jpg"
+  }
+}
+```
+
+### `tags`
+
+Array of tag objects for video SEO:
+
+```json
+{
+  "tags": [
+    { "value": "tech", "label": "tech" },
+    { "value": "tutorial", "label": "tutorial" }
+  ]
+}
+```
+
+---
+
+## Complete Example
+
+### Public Video with Tags
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-youtube-integration-id"
+      },
+      "value": [
+        {
+          "content": "In this video, I'll show you how to use the Postiz API to automate your social media workflow.\n\nTimestamps:\n0:00 Introduction\n1:30 Setup\n5:00 First API call\n10:00 Conclusion",
+          "image": [
+            {
+              "id": "video-id",
+              "path": "https://uploads.postiz.com/tutorial.mp4"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "youtube",
+        "title": "How to Use Postiz API - Complete Tutorial",
+        "type": "public",
+        "selfDeclaredMadeForKids": "no",
+        "tags": [
+          { "value": "postiz", "label": "postiz" },
+          { "value": "api", "label": "api" },
+          { "value": "tutorial", "label": "tutorial" },
+          { "value": "social media automation", "label": "social media automation" }
+        ]
+      }
+    }
+  ]
+}
+```
+
+### Video with Custom Thumbnail
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-youtube-integration-id"
+      },
+      "value": [
+        {
+          "content": "Full video description here...",
+          "image": [
+            {
+              "id": "video-id",
+              "path": "https://uploads.postiz.com/video.mp4"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "youtube",
+        "title": "My Awesome Video",
+        "type": "public",
+        "selfDeclaredMadeForKids": "no",
+        "thumbnail": {
+          "id": "thumb-id",
+          "path": "https://uploads.postiz.com/thumbnail.jpg"
+        },
+        "tags": []
+      }
+    }
+  ]
+}
+```
+
+### Private/Unlisted Video
+
+```json
+{
+  "settings": {
+    "__type": "youtube",
+    "title": "Private Team Update",
+    "type": "unlisted",
+    "selfDeclaredMadeForKids": "no",
+    "tags": []
+  }
+}
+```
+

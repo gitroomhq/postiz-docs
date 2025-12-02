@@ -1,0 +1,69 @@
+---
+title: 'WordPress Settings'
+description: 'Provider settings for WordPress posts'
+---
+
+## Overview
+
+WordPress integration allows you to publish posts to your WordPress site. You can set the title, featured image, and post type.
+
+## Settings Schema
+
+```json
+{
+  "__type": "wordpress",
+  "title": "Post Title",
+  "main_image": {
+    "id": "image-id",
+    "path": "https://uploads.postiz.com/featured.jpg"
+  },
+  "type": "post"
+}
+```
+
+## Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `__type` | string | ✅ | Must be `"wordpress"` |
+| `title` | string | ✅ | Post title (min 2 chars) |
+| `main_image` | object | ❌ | Featured image |
+| `main_image.id` | string | ✅ | Image ID |
+| `main_image.path` | string | ✅ | Image URL |
+| `type` | string | ✅ | Post type (depends on your WordPress setup) |
+
+## Example
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-wordpress-integration-id"
+      },
+      "value": [
+        {
+          "content": "<h2>Introduction</h2>\n<p>Welcome to our latest blog post...</p>\n\n<h2>Main Content</h2>\n<p>Here's what you need to know...</p>",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "wordpress",
+        "title": "Latest Company Updates",
+        "type": "post"
+      }
+    }
+  ]
+}
+```
+
+## Notes
+
+- The `type` field depends on your WordPress configuration (e.g., "post", "page", or custom post types)
+- Content can be HTML or Markdown depending on your WordPress setup
+- Featured images will be uploaded to your WordPress media library
+

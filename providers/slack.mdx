@@ -1,0 +1,51 @@
+---
+title: Slack
+description: 'How to add Slack to your system'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Note>
+This integration requires that you have a Slack Workspace
+</Note>
+
+<Steps>
+  <Step title="Create Slack App">
+    Head to [Slack Applications Dashboard](https://api.slack.com/apps) and select "From scratch", fill out all the required Information.
+  </Step>
+
+  <Step title="Set up OAuth Scopes and redirect URIs">
+    <Snippet file="oauth2redirect.mdx" />
+    
+    Replace `{provider}` with `slack` in the redirect URI.
+
+    Head to Features > OAuth & Permissions
+    1. Add the redirect URI (see above)
+    2. At Scopes > Bot Token Scopes, add these Scopes:
+       - `chat:write`
+       - `channels:read`
+       - `users:read`
+       - `groups:read`
+       - `channels:join`
+  </Step>
+
+  <Step title="Set an App Icon">
+    Head back to Settings > Basic Information > Display Information
+    
+    Now set an Icon that meets these Requirements:
+    1. It has to be a Square
+    2. It has to be 512px×512px to 2000px×2000px
+    
+    If you do not set an App Icon, Postiz won't let you install the Integration.
+  </Step>
+
+  <Step title="Copy Client ID and Secret">
+    Head back to App Credentials, copy the Client ID and Secret and paste it to your Environment:
+
+```env
+SLACK_ID=""
+SLACK_SECRET=""
+```
+  </Step>
+</Steps>
+

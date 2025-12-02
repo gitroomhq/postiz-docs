@@ -1,0 +1,45 @@
+## Installation Prerequisites
+
+This section will ask you to install & configure several services explained below.
+
+### Network Requirements
+
+#### HTTPS / HTTP Requirement
+
+Postiz marks it's login cookies as Secure, this is called "secure context" in modern web browsers.
+
+If you want to use a secure Login Process, you need to set up a Certificate, which can be done via Reverse Proxy like Caddy or Nginx.
+
+If you cannot use a certificate (HTTPS), add the following environment variable to your `.env` file:
+```env
+NOT_SECURED=true
+```
+<Warning>
+**Security Warning**: Setting `NOT_SECURED=true` disables secure cookie requirements. This should only be used in development environments or when you fully understand the security implications. Not recommended for production use.
+</Warning>
+
+#### Network Ports
+
+- **5000/tcp**: for a single **single entry point** for postiz when running in a container. This is the one port your reverse proxy should talk to.
+- **4200/tcp**: for the **Frontend** service (the web interface). Most users **do not** need to expose this port publicly.
+- **3000/tcp**: for the **Backend** service (the API). Most users **do not** need to expose this port publicly.
+- **5432/tcp**: for the **Postgres** container. Most users **do not** need to expose this port publicly.
+- **6379/tcp**: for the **Redis** container. Most users **do not** need to expose this port publicly.
+
+If you are using docker images, we recommend just exposing port 5000 to your external proxy. This will reduce the likelihood of misconfiguration, and make it easier to manage your network.
+
+```mermaid
+graph TD;
+	A[Your Browser] -->|HTTPS 443/tcp| B[Your Reverse Proxy]
+	B -->|HTTP 5000/tcp| C["Internal Proxy (Caddy)"]
+
+	subgraph "Postiz Container"
+	C -->|4200/tcp| D[Frontend Service]
+	C -->|3000/tcp| E[Backend Service]
+    C -->|/api| H[uploads]
+	end
+
+	E -->|5432/tcp| F[Postgres Container]
+	E -->|6379/tcp| G[Redis Container]
+```
+

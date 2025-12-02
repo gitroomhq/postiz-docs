@@ -1,0 +1,1753 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Postiz Public API",
+    "description": "API for managing social media posts, integrations, and media uploads in Postiz.\n\n## Authentication\n\nAll endpoints require an API key passed in the `Authorization` header:\n\n```\nAuthorization: your-api-key\n```\n\nGet your API key from Postiz Settings.\n\n## Rate Limits\n\nThere is a limit of **30 requests per hour**.\n\n## Terminology\n\nThe UI uses `channel`, but the API uses `integration`. They refer to the same thing.\n\n## Supported Platforms (27)\n\n**Social Platforms:** X (Twitter), LinkedIn, LinkedIn Page, Facebook, Instagram, Instagram Standalone, Threads, Bluesky, Mastodon, Warpcast (Farcaster), Nostr, VK\n\n**Video Platforms:** YouTube, TikTok\n\n**Community Platforms:** Reddit, Lemmy, Discord, Slack, Telegram\n\n**Design Platforms:** Pinterest, Dribbble\n\n**Blogging Platforms:** Medium, Dev.to, Hashnode, WordPress\n\n**Business:** Google My Business (GMB), Listmonk (newsletters)",
+    "license": {
+      "name": "MIT"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.postiz.com/public/v1",
+      "description": "Postiz Cloud"
+    },
+    {
+      "url": "https://{your-domain}/api/public/v1",
+      "description": "Self-hosted",
+      "variables": {
+        "your-domain": {
+          "default": "localhost:5000",
+          "description": "Your Postiz instance domain"
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Integrations",
+      "description": "Manage connected social media channels"
+    },
+    {
+      "name": "Posts",
+      "description": "Create, list, and delete posts"
+    },
+    {
+      "name": "Uploads",
+      "description": "Upload media files"
+    },
+    {
+      "name": "Video Generation",
+      "description": "Generate videos with AI"
+    }
+  ],
+  "paths": {
+    "/integrations": {
+      "get": {
+        "tags": ["Integrations"],
+        "summary": "List all integrations",
+        "description": "Returns all connected social media channels for your organization.",
+        "operationId": "listIntegrations",
+        "responses": {
+          "200": {
+            "description": "List of integrations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Integration"
+                  }
+                },
+                "example": [
+                  {
+                    "id": "cm4ean69r0003w8w1cdomox9n",
+                    "name": "Nevo David",
+                    "identifier": "x",
+                    "picture": "https://uploads.postiz.com/avatar.jpg",
+                    "disabled": false,
+                    "profile": "nevodavid",
+                    "customer": {
+                      "id": "customer-id",
+                      "name": "My Company"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/is-connected": {
+      "get": {
+        "tags": ["Integrations"],
+        "summary": "Check connection status",
+        "description": "Verify if your API key is valid and connected.",
+        "operationId": "isConnected",
+        "responses": {
+          "200": {
+            "description": "Connection status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "connected": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "example": {
+                  "connected": true
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/find-slot/{id}": {
+      "get": {
+        "tags": ["Integrations"],
+        "summary": "Find next available slot",
+        "description": "Get the next available time slot for posting to a specific channel.",
+        "operationId": "findSlot",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Integration ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Next available slot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                },
+                "example": {
+                  "date": "2025-01-15T10:00:00.000Z"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/posts": {
+      "get": {
+        "tags": ["Posts"],
+        "summary": "List posts",
+        "description": "Get posts within a date range.",
+        "operationId": "listPosts",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "required": true,
+            "description": "Start date in UTC ISO format",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "example": "2024-12-01T00:00:00.000Z"
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "required": true,
+            "description": "End date in UTC ISO format",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "example": "2024-12-31T23:59:59.000Z"
+          },
+          {
+            "name": "customer",
+            "in": "query",
+            "required": false,
+            "description": "Filter by customer ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of posts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Posts"],
+        "summary": "Create a post",
+        "description": "Create or schedule a new post. Each social media platform has its own settings schema.",
+        "operationId": "createPost",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePostRequest"
+              },
+              "examples": {
+                "x-post": {
+                  "summary": "X (Twitter) Post",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-x-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Hello from the Postiz API! 🚀",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "x",
+                          "who_can_reply_post": "everyone",
+                          "community": ""
+                        }
+                      }
+                    ]
+                  }
+                },
+                "linkedin-carousel": {
+                  "summary": "LinkedIn Carousel",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-linkedin-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Check out our latest product showcase!",
+                            "image": [
+                              {"id": "img1", "path": "https://uploads.postiz.com/1.png"},
+                              {"id": "img2", "path": "https://uploads.postiz.com/2.png"}
+                            ]
+                          }
+                        ],
+                        "settings": {
+                          "__type": "linkedin",
+                          "post_as_images_carousel": true
+                        }
+                      }
+                    ]
+                  }
+                },
+                "instagram-story": {
+                  "summary": "Instagram Story",
+                  "value": {
+                    "type": "now",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-instagram-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "",
+                            "image": [
+                              {"id": "story-img", "path": "https://uploads.postiz.com/story.jpg"}
+                            ]
+                          }
+                        ],
+                        "settings": {
+                          "__type": "instagram",
+                          "post_type": "story",
+                          "collaborators": []
+                        }
+                      }
+                    ]
+                  }
+                },
+                "youtube-video": {
+                  "summary": "YouTube Video",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-youtube-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Video description here...",
+                            "image": [
+                              {"id": "video-id", "path": "https://uploads.postiz.com/video.mp4"}
+                            ]
+                          }
+                        ],
+                        "settings": {
+                          "__type": "youtube",
+                          "title": "My Awesome Video",
+                          "type": "public",
+                          "selfDeclaredMadeForKids": "no",
+                          "tags": [
+                            {"value": "tutorial", "label": "tutorial"}
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "reddit-post": {
+                  "summary": "Reddit Post",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-reddit-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Post content here...",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "reddit",
+                          "subreddit": [
+                            {
+                              "value": {
+                                "subreddit": "programming",
+                                "title": "My Post Title",
+                                "type": "self",
+                                "url": "",
+                                "is_flair_required": false,
+                                "flair": null
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "tiktok-video": {
+                  "summary": "TikTok Video",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-tiktok-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Check this out! #viral #fyp",
+                            "image": [
+                              {"id": "video-id", "path": "https://uploads.postiz.com/tiktok.mp4"}
+                            ]
+                          }
+                        ],
+                        "settings": {
+                          "__type": "tiktok",
+                          "title": "My TikTok",
+                          "privacy_level": "PUBLIC_TO_EVERYONE",
+                          "duet": true,
+                          "stitch": true,
+                          "comment": true,
+                          "autoAddMusic": "no",
+                          "brand_content_toggle": false,
+                          "brand_organic_toggle": false,
+                          "video_made_with_ai": false,
+                          "content_posting_method": "DIRECT_POST"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "medium-article": {
+                  "summary": "Medium Article",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-medium-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "# My Article\n\nThis is my article content in markdown...",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "medium",
+                          "title": "My Amazing Article",
+                          "subtitle": "A deep dive into...",
+                          "tags": [
+                            {"value": "programming", "label": "Programming"}
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "devto-article": {
+                  "summary": "Dev.to Article",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-devto-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "# Tutorial\n\nStep-by-step guide...",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "devto",
+                          "title": "Building APIs with Node.js",
+                          "tags": [
+                            {"value": "javascript", "label": "javascript"},
+                            {"value": "nodejs", "label": "nodejs"}
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "gmb-post": {
+                  "summary": "Google My Business Post",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-gmb-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Check out our latest offers!",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "gmb",
+                          "topicType": "OFFER",
+                          "callToActionType": "GET_OFFER",
+                          "callToActionUrl": "https://example.com/offer",
+                          "offerCouponCode": "SAVE20"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "simple-platform": {
+                  "summary": "Simple Platform (Facebook, Threads, Bluesky, etc.)",
+                  "value": {
+                    "type": "now",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Hello world!",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "bluesky"
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Post created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "postId": {
+                        "type": "string"
+                      },
+                      "integration": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "example": [
+                  {
+                    "postId": "post-123",
+                    "integration": "integration-456"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "delete": {
+        "tags": ["Posts"],
+        "summary": "Delete a post",
+        "description": "Delete a post by ID.",
+        "operationId": "deletePost",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Post ID to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "deleted-post-id"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/upload": {
+      "post": {
+        "tags": ["Uploads"],
+        "summary": "Upload a file",
+        "description": "Upload a media file using multipart form data.",
+        "operationId": "uploadFile",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "The file to upload"
+                  }
+                },
+                "required": ["file"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaFile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/upload-from-url": {
+      "post": {
+        "tags": ["Uploads"],
+        "summary": "Upload from URL",
+        "description": "Upload a file from an existing URL.",
+        "operationId": "uploadFromUrl",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "URL of the file to upload"
+                  }
+                },
+                "required": ["url"]
+              },
+              "example": {
+                "url": "https://example.com/image.png"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "File uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MediaFile"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/generate-video": {
+      "post": {
+        "tags": ["Video Generation"],
+        "summary": "Generate a video",
+        "description": "Create AI-generated videos for your posts.",
+        "operationId": "generateVideo",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VideoGenerationRequest"
+              },
+              "examples": {
+                "image-text-slides": {
+                  "summary": "Image Text Slides",
+                  "value": {
+                    "type": "image-text-slides",
+                    "output": "vertical",
+                    "customParams": {
+                      "voice": "elevenlabs-voice-id",
+                      "prompt": "Description of the video content"
+                    }
+                  }
+                },
+                "veo3": {
+                  "summary": "VEO3 Fast Video",
+                  "value": {
+                    "type": "veo3",
+                    "output": "vertical",
+                    "customParams": {
+                      "prompt": "A scenic view of mountains at sunset",
+                      "images": []
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Video generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string",
+                        "description": "URL of the generated video"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/video/function": {
+      "post": {
+        "tags": ["Video Generation"],
+        "summary": "Video function",
+        "description": "Execute video-related functions like loading available voices.",
+        "operationId": "videoFunction",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "functionName": {
+                    "type": "string",
+                    "description": "Function to execute"
+                  },
+                  "identifier": {
+                    "type": "string",
+                    "description": "Video type identifier"
+                  },
+                  "params": {
+                    "type": "object",
+                    "description": "Additional parameters"
+                  }
+                },
+                "required": ["functionName", "identifier"]
+              },
+              "example": {
+                "functionName": "loadVoices",
+                "identifier": "image-text-slides"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Function executed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "voices": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "description": "Your Postiz API key"
+      }
+    },
+    "schemas": {
+      "Integration": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique integration ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the account"
+          },
+          "identifier": {
+            "type": "string",
+            "description": "Provider identifier (27 platforms supported)",
+            "enum": [
+              "x",
+              "linkedin",
+              "linkedin-page",
+              "facebook",
+              "instagram",
+              "instagram-standalone",
+              "threads",
+              "bluesky",
+              "mastodon",
+              "warpcast",
+              "nostr",
+              "vk",
+              "youtube",
+              "tiktok",
+              "reddit",
+              "lemmy",
+              "discord",
+              "slack",
+              "telegram",
+              "pinterest",
+              "dribbble",
+              "medium",
+              "devto",
+              "hashnode",
+              "wordpress",
+              "gmb",
+              "listmonk"
+            ]
+          },
+          "picture": {
+            "type": "string",
+            "description": "Profile picture URL"
+          },
+          "disabled": {
+            "type": "boolean",
+            "description": "Whether the integration is disabled"
+          },
+          "profile": {
+            "type": "string",
+            "description": "Profile handle/username"
+          },
+          "customer": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "MediaFile": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique file ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "File name"
+          },
+          "path": {
+            "type": "string",
+            "description": "File URL"
+          },
+          "organizationId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "example": {
+          "id": "e639003b-f727-4a1e-87bd-74a2c48ae41e",
+          "name": "image.png",
+          "path": "https://uploads.postiz.com/image.png",
+          "organizationId": "85460a39-6329-4cf4-a252-187ce89a3480",
+          "createdAt": "2024-12-14T08:18:54.274Z",
+          "updatedAt": "2024-12-14T08:18:54.274Z"
+        }
+      },
+      "PostsResponse": {
+        "type": "object",
+        "properties": {
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Post"
+            }
+          }
+        }
+      },
+      "Post": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "publishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "releaseURL": {
+            "type": "string",
+            "description": "URL of the published post"
+          },
+          "state": {
+            "type": "string",
+            "enum": ["QUEUE", "PUBLISHED", "ERROR", "DRAFT"]
+          },
+          "integration": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "providerIdentifier": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "picture": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "CreatePostRequest": {
+        "type": "object",
+        "required": ["type", "date", "shortLink", "tags"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["draft", "schedule", "now"],
+            "description": "Post type"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Publish date in UTC ISO format"
+          },
+          "shortLink": {
+            "type": "boolean",
+            "description": "Whether to use short links"
+          },
+          "order": {
+            "type": "string",
+            "description": "Order of posts"
+          },
+          "inter": {
+            "type": "number",
+            "description": "Interval between posts"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostItem"
+            },
+            "description": "Required if type is not 'draft'"
+          }
+        }
+      },
+      "PostItem": {
+        "type": "object",
+        "required": ["integration", "value"],
+        "properties": {
+          "integration": {
+            "type": "object",
+            "required": ["id"],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Integration ID"
+              }
+            }
+          },
+          "value": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PostContent"
+            }
+          },
+          "group": {
+            "type": "string",
+            "description": "Group ID for related posts"
+          },
+          "settings": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/XSettings" },
+              { "$ref": "#/components/schemas/LinkedInSettings" },
+              { "$ref": "#/components/schemas/InstagramSettings" },
+              { "$ref": "#/components/schemas/FacebookSettings" },
+              { "$ref": "#/components/schemas/YouTubeSettings" },
+              { "$ref": "#/components/schemas/TikTokSettings" },
+              { "$ref": "#/components/schemas/RedditSettings" },
+              { "$ref": "#/components/schemas/LemmySettings" },
+              { "$ref": "#/components/schemas/PinterestSettings" },
+              { "$ref": "#/components/schemas/DiscordSettings" },
+              { "$ref": "#/components/schemas/SlackSettings" },
+              { "$ref": "#/components/schemas/DribbbleSettings" },
+              { "$ref": "#/components/schemas/MediumSettings" },
+              { "$ref": "#/components/schemas/DevToSettings" },
+              { "$ref": "#/components/schemas/HashnodeSettings" },
+              { "$ref": "#/components/schemas/WordpressSettings" },
+              { "$ref": "#/components/schemas/ListmonkSettings" },
+              { "$ref": "#/components/schemas/GmbSettings" },
+              { "$ref": "#/components/schemas/WarpcastSettings" },
+              { "$ref": "#/components/schemas/EmptySettings" }
+            ],
+            "description": "Provider-specific settings"
+          }
+        }
+      },
+      "PostContent": {
+        "type": "object",
+        "required": ["content"],
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Post text content"
+          },
+          "id": {
+            "type": "string",
+            "description": "Post ID (for updates)"
+          },
+          "image": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Media"
+            }
+          }
+        }
+      },
+      "Media": {
+        "type": "object",
+        "required": ["id", "path"],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "required": ["value", "label"],
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "XSettings": {
+        "type": "object",
+        "required": ["__type", "who_can_reply_post"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["x"],
+            "description": "Must be 'x'"
+          },
+          "who_can_reply_post": {
+            "type": "string",
+            "enum": ["everyone", "following", "mentionedUsers", "subscribers", "verified"],
+            "description": "Who can reply to the post"
+          },
+          "community": {
+            "type": "string",
+            "description": "X Community URL (format: https://x.com/i/communities/123)"
+          }
+        }
+      },
+      "LinkedInSettings": {
+        "type": "object",
+        "required": ["__type"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["linkedin", "linkedin-page"],
+            "description": "Use 'linkedin' for profiles, 'linkedin-page' for company pages"
+          },
+          "post_as_images_carousel": {
+            "type": "boolean",
+            "description": "Display multiple images as a carousel"
+          }
+        }
+      },
+      "InstagramSettings": {
+        "type": "object",
+        "required": ["__type", "post_type"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["instagram", "instagram-standalone"],
+            "description": "Use 'instagram' for FB-linked, 'instagram-standalone' for standalone"
+          },
+          "post_type": {
+            "type": "string",
+            "enum": ["post", "story"],
+            "description": "Type of Instagram post"
+          },
+          "collaborators": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "description": "Collaborator username"
+                }
+              }
+            }
+          }
+        }
+      },
+      "YouTubeSettings": {
+        "type": "object",
+        "required": ["__type", "title", "type"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["youtube"]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 100,
+            "description": "Video title"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["public", "private", "unlisted"],
+            "description": "Video visibility"
+          },
+          "selfDeclaredMadeForKids": {
+            "type": "string",
+            "enum": ["yes", "no"],
+            "description": "Made for kids declaration"
+          },
+          "thumbnail": {
+            "$ref": "#/components/schemas/Media",
+            "description": "Custom thumbnail"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          }
+        }
+      },
+      "TikTokSettings": {
+        "type": "object",
+        "required": ["__type", "privacy_level", "duet", "stitch", "comment", "autoAddMusic", "brand_content_toggle", "brand_organic_toggle", "content_posting_method"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["tiktok"]
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 90
+          },
+          "privacy_level": {
+            "type": "string",
+            "enum": ["PUBLIC_TO_EVERYONE", "MUTUAL_FOLLOW_FRIENDS", "FOLLOWER_OF_CREATOR", "SELF_ONLY"]
+          },
+          "duet": {
+            "type": "boolean"
+          },
+          "stitch": {
+            "type": "boolean"
+          },
+          "comment": {
+            "type": "boolean"
+          },
+          "autoAddMusic": {
+            "type": "string",
+            "enum": ["yes", "no"]
+          },
+          "brand_content_toggle": {
+            "type": "boolean"
+          },
+          "brand_organic_toggle": {
+            "type": "boolean"
+          },
+          "video_made_with_ai": {
+            "type": "boolean"
+          },
+          "content_posting_method": {
+            "type": "string",
+            "enum": ["DIRECT_POST", "UPLOAD"]
+          }
+        }
+      },
+      "RedditSettings": {
+        "type": "object",
+        "required": ["__type", "subreddit"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["reddit"]
+          },
+          "subreddit": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "object",
+                  "required": ["subreddit", "title", "type", "is_flair_required"],
+                  "properties": {
+                    "subreddit": {
+                      "type": "string",
+                      "minLength": 2,
+                      "description": "Subreddit name without r/"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 2,
+                      "description": "Post title"
+                    },
+                    "type": {
+                      "type": "string",
+                      "enum": ["self", "link", "image", "video"],
+                      "description": "Post type"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "URL for link posts"
+                    },
+                    "is_flair_required": {
+                      "type": "boolean"
+                    },
+                    "flair": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "LemmySettings": {
+        "type": "object",
+        "required": ["__type", "subreddit"],
+        "description": "Lemmy uses 'subreddit' for communities (historical naming)",
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["lemmy"]
+          },
+          "subreddit": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "object",
+                  "required": ["subreddit", "id", "title"],
+                  "properties": {
+                    "subreddit": {
+                      "type": "string",
+                      "minLength": 2,
+                      "description": "Community name"
+                    },
+                    "id": {
+                      "type": "string",
+                      "description": "Community ID"
+                    },
+                    "title": {
+                      "type": "string",
+                      "minLength": 2,
+                      "description": "Post title"
+                    },
+                    "url": {
+                      "type": "string",
+                      "format": "uri",
+                      "description": "Optional URL"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "PinterestSettings": {
+        "type": "object",
+        "required": ["__type", "board"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["pinterest"]
+          },
+          "board": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Board ID"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 100
+          },
+          "link": {
+            "type": "string",
+            "format": "uri"
+          },
+          "dominant_color": {
+            "type": "string"
+          }
+        }
+      },
+      "DiscordSettings": {
+        "type": "object",
+        "required": ["__type", "channel"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["discord"]
+          },
+          "channel": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Discord channel ID"
+          }
+        }
+      },
+      "SlackSettings": {
+        "type": "object",
+        "required": ["__type", "channel"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["slack"]
+          },
+          "channel": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Slack channel ID"
+          }
+        }
+      },
+      "DribbbleSettings": {
+        "type": "object",
+        "required": ["__type", "title"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["dribbble"]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Shot title"
+          },
+          "team": {
+            "type": "string",
+            "format": "uri",
+            "description": "Team URL"
+          }
+        }
+      },
+      "MediumSettings": {
+        "type": "object",
+        "required": ["__type", "title", "subtitle"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["medium"]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "description": "Article title"
+          },
+          "subtitle": {
+            "type": "string",
+            "minLength": 2,
+            "description": "Article subtitle"
+          },
+          "canonical": {
+            "type": "string",
+            "format": "uri",
+            "description": "Original URL for SEO"
+          },
+          "publication": {
+            "type": "string",
+            "description": "Publication ID to post to"
+          },
+          "tags": {
+            "type": "array",
+            "maxItems": 4,
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          }
+        }
+      },
+      "DevToSettings": {
+        "type": "object",
+        "required": ["__type", "title"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["devto"]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "description": "Article title"
+          },
+          "main_image": {
+            "$ref": "#/components/schemas/Media",
+            "description": "Cover image"
+          },
+          "canonical": {
+            "type": "string",
+            "format": "uri",
+            "description": "Original URL for SEO"
+          },
+          "organization": {
+            "type": "string",
+            "description": "Organization ID"
+          },
+          "tags": {
+            "type": "array",
+            "maxItems": 4,
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          }
+        }
+      },
+      "HashnodeSettings": {
+        "type": "object",
+        "required": ["__type", "title", "tags"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["hashnode"]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 6,
+            "description": "Article title"
+          },
+          "subtitle": {
+            "type": "string",
+            "minLength": 2,
+            "description": "Article subtitle"
+          },
+          "main_image": {
+            "$ref": "#/components/schemas/Media",
+            "description": "Cover image"
+          },
+          "canonical": {
+            "type": "string",
+            "format": "uri",
+            "description": "Original URL for SEO"
+          },
+          "publication": {
+            "type": "string",
+            "description": "Publication ID (required)"
+          },
+          "tags": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          }
+        }
+      },
+      "WordpressSettings": {
+        "type": "object",
+        "required": ["__type", "title", "type"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["wordpress"]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 2,
+            "description": "Post title"
+          },
+          "main_image": {
+            "$ref": "#/components/schemas/Media",
+            "description": "Featured image"
+          },
+          "type": {
+            "type": "string",
+            "description": "Post type (depends on WordPress setup)"
+          }
+        }
+      },
+      "ListmonkSettings": {
+        "type": "object",
+        "required": ["__type", "subject", "preview", "list"],
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["listmonk"]
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Email subject line"
+          },
+          "preview": {
+            "type": "string",
+            "description": "Email preview text"
+          },
+          "list": {
+            "type": "string",
+            "description": "List ID to send to"
+          },
+          "template": {
+            "type": "string",
+            "description": "Template ID (optional)"
+          }
+        }
+      },
+      "GmbSettings": {
+        "type": "object",
+        "required": ["__type"],
+        "description": "Google My Business post settings",
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["gmb"]
+          },
+          "topicType": {
+            "type": "string",
+            "enum": ["STANDARD", "EVENT", "OFFER"],
+            "description": "Post type"
+          },
+          "callToActionType": {
+            "type": "string",
+            "enum": ["NONE", "BOOK", "ORDER", "SHOP", "LEARN_MORE", "SIGN_UP", "GET_OFFER", "CALL"],
+            "description": "Call-to-action button"
+          },
+          "callToActionUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL for CTA (required if callToActionType is set)"
+          },
+          "eventTitle": {
+            "type": "string",
+            "description": "Event title (required for EVENT type)"
+          },
+          "eventStartDate": {
+            "type": "string",
+            "description": "Event start date"
+          },
+          "eventEndDate": {
+            "type": "string",
+            "description": "Event end date"
+          },
+          "eventStartTime": {
+            "type": "string",
+            "description": "Event start time"
+          },
+          "eventEndTime": {
+            "type": "string",
+            "description": "Event end time"
+          },
+          "offerCouponCode": {
+            "type": "string",
+            "description": "Coupon code (for OFFER type)"
+          },
+          "offerRedeemUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "Redemption URL"
+          },
+          "offerTerms": {
+            "type": "string",
+            "description": "Offer terms and conditions"
+          }
+        }
+      },
+      "FacebookSettings": {
+        "type": "object",
+        "required": ["__type"],
+        "description": "Facebook post settings",
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["facebook"]
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Optional link URL to include in the post"
+          }
+        }
+      },
+      "WarpcastSettings": {
+        "type": "object",
+        "required": ["__type"],
+        "description": "Warpcast (Farcaster) post settings",
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["warpcast"]
+          },
+          "subreddit": {
+            "type": "array",
+            "description": "Farcaster channels to post to",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "object",
+                  "required": ["id"],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Channel ID"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "EmptySettings": {
+        "type": "object",
+        "required": ["__type"],
+        "description": "For platforms that don't require additional settings",
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": ["threads", "mastodon", "bluesky", "telegram", "nostr", "vk"],
+            "description": "Platform identifier"
+          }
+        }
+      },
+      "VideoGenerationRequest": {
+        "type": "object",
+        "required": ["type", "output", "customParams"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["image-text-slides", "veo3"],
+            "description": "Video generation type"
+          },
+          "output": {
+            "type": "string",
+            "enum": ["vertical", "horizontal"],
+            "description": "Video orientation"
+          },
+          "customParams": {
+            "type": "object",
+            "properties": {
+              "voice": {
+                "type": "string",
+                "description": "ElevenLabs voice ID (for image-text-slides)"
+              },
+              "prompt": {
+                "type": "string",
+                "description": "Description/script for the video"
+              },
+              "images": {
+                "type": "array",
+                "maxItems": 3,
+                "items": {
+                  "$ref": "#/components/schemas/Media"
+                },
+                "description": "Reference images (for veo3, max 3)"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

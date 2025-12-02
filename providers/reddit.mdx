@@ -1,0 +1,32 @@
+---
+title: Reddit
+description: 'How to add Reddit to your system'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Steps>
+  <Step title="Create an app on Reddit Developers">
+    Head over to [Reddit developers](https://www.reddit.com/prefs/apps) and click on **create a new app**.
+
+    * **Name:** `MyPostizInstance` (or whatever you like)
+    * **App type:** `web app`
+    * **Redirect URI:** (see below)
+
+    <Snippet file="oauth2redirect.mdx" />
+    
+    Replace `{provider}` with `reddit` in the redirect URI.
+  </Step>
+
+  <Step title="Set environment variables">
+    Copy the Reddit client id and client secret and add them to your `.env` file.
+
+    ![Reddit](/images/providers/reddit/reddit-001.png)
+
+```env
+REDDIT_CLIENT_ID=""
+REDDIT_CLIENT_SECRET=""
+```
+  </Step>
+</Steps>
+

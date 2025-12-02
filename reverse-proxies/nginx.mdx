@@ -1,0 +1,250 @@
+---
+title: Nginx
+description: 'Configure Nginx as a reverse proxy for Postiz'
+---
+
+<Snippet file="earlydoc.mdx" />
+
+## How to add Nginx as a reverse proxy
+
+<Info>
+The following commands are tailored for Ubuntu/Debian systems. If you're using a different Linux distribution, you may need to adjust package management commands accordingly (e.g., `yum` for CentOS, `brew` for macOS).
+</Info>
+
+<Steps>
+  <Step title="Install Nginx">
+```bash
+sudo apt update && sudo apt install nginx -y
+sudo systemctl start nginx && sudo systemctl enable nginx
+```
+  </Step>
+
+  <Step title="Install Certbot for SSL">
+```bash
+sudo apt update && sudo apt install python3-certbot-nginx -y
+```
+  </Step>
+
+  <Step title="Create the Webroot Directory">
+```bash
+sudo mkdir -p /var/www/certbot/.well-known/acme-challenge && sudo chown -R www-data:www-data /var/www/certbot
+```
+  </Step>
+
+  <Step title="Create a temporary Nginx config for creating SSL certificates">
+    <Note>
+    Make sure to change subdomain.domain.tld to your actual subdomain and ensure that it is pointed to your server's IP address.
+    </Note>
+
+    Edit the file `/etc/nginx/sites-available/subdomain.domain.tld`:
+
+```nginx
+server {
+    listen 80;
+    listen [::]:80;  # IPv6 support
+    server_name <subdomain.domain.tld>;  # CHANGE HERE
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+
+    # Hide NGINX version for security reasons
+    server_tokens off;
+}
+```
+
+    Then create the symlink:
+```bash
+sudo ln -s /etc/nginx/sites-available/<subdomain.domain.tld> /etc/nginx/sites-enabled/
+```
+  </Step>
+
+  <Step title="Obtain SSL Certificates Using Webroot method">
+```bash
+sudo certbot certonly --webroot -w /var/www/certbot -d <subdomain.domain.tld> --email your-email@example.com --agree-tos --no-eff-email
+```
+  </Step>
+
+  <Step title="Edit the Nginx config">
+    Edit the file `/etc/nginx/sites-available/subdomain.domain.tld`.
+
+    <Tabs>
+      <Tab title="Secure Config (Recommended)">
+```nginx
+# HTTP -> HTTPS Redirection
+server {
+    listen 80;
+    listen [::]:80;  # IPv6 support
+    server_name <subdomain.domain.tld>;  # CHANGE HERE
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$host$request_uri;
+    }
+
+    # Hide NGINX version for security reasons
+    server_tokens off;
+}
+
+# HTTPS Configuration
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;  # Enable HTTP/2 and IPv6 support if you need
+    server_name <subdomain.domain.tld>; # CHANGE HERE
+
+    # Hide NGINX version
+    server_tokens off;
+
+    # SSL Certificates
+    ssl_certificate /etc/letsencrypt/live/<subdomain.domain.tld>/fullchain.pem;  # CHANGE HERE
+    ssl_certificate_key /etc/letsencrypt/live/<subdomain.domain.tld>/privkey.pem;  # CHANGE HERE
+    ssl_trusted_certificate /etc/letsencrypt/live/<subdomain.domain.tld>/chain.pem;  # CHANGE HERE
+
+    # Security: Stronger SSL Configuration
+    ssl_session_cache shared:SSL:10m;  # Cache SSL sessions
+    ssl_session_timeout 1d;  # Set session timeout to 1 day
+    ssl_session_tickets off;  # Disable SSL session tickets
+
+    # Use only modern SSL/TLS protocols (disables older insecure ones)
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    # Configure SSL ciphers (strong encryption algorithms)
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+    ssl_prefer_server_ciphers off;  # Allow clients to prefer their ciphers
+
+    # Diffie-Hellman parameter for Perfect Forward Secrecy (PFS)
+    ssl_dhparam /etc/ssl/certs/dhparam.pem;  # Generate with `sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048`
+
+    # OCSP Stapling for improved SSL/TLS performance
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    # DNS resolver for OCSP
+    resolver 1.1.1.1 1.0.0.1 valid=300s;
+    resolver_timeout 5s;
+
+    # some HTTP Security Headers
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;  # HSTS
+    add_header X-Frame-Options "SAMEORIGIN" always;  # Prevent Clickjacking
+    add_header X-Content-Type-Options "nosniff" always;  # Prevent MIME-type sniffing
+    add_header X-XSS-Protection "1; mode=block" always;  # XSS Protection
+    add_header Referrer-Policy "no-referrer" always;  # Better privacy control
+    add_header Permissions-Policy "geolocation=(self), microphone=(), camera=()" always;  # Limit browser permissions
+
+    # Reverse Proxy to Postiz application
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # WebSocket Support
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+    # Disable directory listing for security
+    autoindex off;
+
+    # Increase maximum post size to prevent 413 error with images larger than 2MB (changes max size to 100MB)
+    client_max_body_size 100M;
+
+    # Enable Gzip compression for better performance
+    gzip on;
+    gzip_comp_level 6;
+    gzip_min_length 1100;
+    gzip_buffers 4 32k;
+    gzip_proxied any;
+    gzip_types text/plain text/css text/javascript application/json application/xml image/svg+xml;
+
+    # Optional Access/Error Logging
+    access_log /var/log/nginx/<subdomain.domain.tld>.log; # CHANGE HERE
+    error_log /var/log/nginx/<subdomain.domain.tld>.log; # CHANGE HERE
+}
+```
+      </Tab>
+      <Tab title="Simple Config">
+```nginx
+# HTTP -> HTTPS Redirection
+server {
+    listen 80;
+    server_name <subdomain.domain.tld>; # CHANGE HERE
+
+    # Location for Let's Encrypt validation
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    return 301 https://$host$request_uri;  # Redirect all traffic to HTTPS
+}
+
+# HTTPS Configuration
+server {
+    listen 443 ssl;
+    server_name <subdomain.domain.tld>; # CHANGE HERE
+
+    # SSL certificate
+    ssl_certificate /etc/letsencrypt/live/<subdomain.domain.tld>/fullchain.pem; # CHANGE HERE
+    ssl_certificate_key /etc/letsencrypt/live/<subdomain.domain.tld>/privkey.pem; # CHANGE HERE
+
+    # Proxy requests to Postiz running on port 5000
+    location / {
+        proxy_pass http://localhost:5000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # WebSocket Support
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
+
+    # Optional Access/Error Logging
+    access_log /var/log/nginx/<subdomain.domain.tld>.log; # CHANGE HERE
+    error_log /var/log/nginx/<subdomain.domain.tld>.log; # CHANGE HERE
+}
+```
+      </Tab>
+    </Tabs>
+  </Step>
+
+  <Step title="Generate DH Parameters">
+    (Needed if you are using the "robust" nginx config option)
+```bash
+sudo openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048
+```
+  </Step>
+
+  <Step title="Test your Nginx configuration">
+```bash
+sudo nginx -t
+```
+  </Step>
+
+  <Step title="Automatic reload Nginx when SSL Certificates are renewed">
+```bash
+echo -e '#!/bin/bash\nginx -t && systemctl reload nginx' | sudo tee /etc/letsencrypt/renewal-hooks/post/nginx-reload.sh && sudo chmod a+x /etc/letsencrypt/renewal-hooks/post/nginx-reload.sh
+```
+  </Step>
+
+  <Step title="Reload Nginx">
+```bash
+sudo systemctl reload nginx
+```
+  </Step>
+
+  <Step title="Done!">
+    Your Nginx reverse proxy is now running, securely serving your Postiz instance at your subdomain.domain.tld. 🎉
+  </Step>
+</Steps>
+

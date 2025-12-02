@@ -1,0 +1,184 @@
+---
+title: 'Warpcast (Farcaster) Settings'
+description: 'Provider settings for Warpcast/Farcaster posts'
+---
+
+## Overview
+
+Warpcast is a client for the Farcaster protocol, a decentralized social network. When posting to Warpcast, you can specify which channels to post to.
+
+<Note>
+The settings use `subreddit` as the field name for historical reasons, but it refers to Farcaster channels.
+</Note>
+
+## Settings Schema
+
+```json
+{
+  "__type": "warpcast",
+  "subreddit": [
+    {
+      "value": {
+        "id": "channel-id"
+      }
+    }
+  ]
+}
+```
+
+## Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `__type` | string | ✅ | Must be `"warpcast"` |
+| `subreddit` | array | ❌ | Array of channel targets |
+| `subreddit[].value.id` | string | ✅ | Channel ID |
+
+## Examples
+
+### Simple cast (no channel)
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-warpcast-integration-id"
+      },
+      "value": [
+        {
+          "content": "Hello Farcaster! 👋",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "warpcast"
+      }
+    }
+  ]
+}
+```
+
+### Cast to a specific channel
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-warpcast-integration-id"
+      },
+      "value": [
+        {
+          "content": "Check out this new open-source project! 🚀",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "warpcast",
+        "subreddit": [
+          {
+            "value": {
+              "id": "developers"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+### Cast to multiple channels
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-warpcast-integration-id"
+      },
+      "value": [
+        {
+          "content": "Excited to announce our new feature! Built with the community in mind.",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "warpcast",
+        "subreddit": [
+          {
+            "value": {
+              "id": "announcements"
+            }
+          },
+          {
+            "value": {
+              "id": "builders"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+### Cast with image
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-warpcast-integration-id"
+      },
+      "value": [
+        {
+          "content": "New design preview! What do you think? 🎨",
+          "image": [
+            {
+              "id": "img-123",
+              "path": "https://uploads.postiz.com/design.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "warpcast",
+        "subreddit": [
+          {
+            "value": {
+              "id": "design"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+## Notes
+
+- Channel IDs are the names/slugs of Farcaster channels
+- You can post without specifying channels (posts to your main feed)
+- You can post to multiple channels simultaneously
+- Images are supported and will be displayed as embeds
+

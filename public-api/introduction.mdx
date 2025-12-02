@@ -1,0 +1,266 @@
+---
+title: API Overview
+description: 'Getting started with the Postiz Public API'
+---
+
+<Warning>
+This API is currently in Beta and in active development. It does not provide all Postiz features yet.
+</Warning>
+
+## SDKs & Integrations
+
+<CardGroup cols={2}>
+  <Card title="NodeJS SDK" icon="node-js" href="https://www.npmjs.com/package/@postiz/node">
+    Official Postiz NodeJS SDK
+  </Card>
+  <Card title="n8n Node" icon="n" href="https://www.npmjs.com/package/n8n-nodes-postiz">
+    Custom n8n node for Postiz
+  </Card>
+</CardGroup>
+
+## Authentication
+
+All API requests require an API key. Get your API key from Postiz Settings.
+
+Include the API key in the `Authorization` header:
+
+```bash
+curl -H "Authorization: your-api-key" https://api.postiz.com/public/v1/integrations
+```
+
+## Base URL
+
+| Environment | Base URL |
+|-------------|----------|
+| Postiz Cloud | `https://api.postiz.com/public/v1` |
+| Self-hosted | `https://{NEXT_PUBLIC_BACKEND_URL}/public/v1` |
+
+## Rate Limits
+
+<Info>
+**30 requests per hour** limit applies to all endpoints.
+
+This doesn't mean you can only post 30 times per hour—each API call counts as one request. Schedule multiple posts in a single request to maximize throughput.
+</Info>
+
+## Terminology
+
+<Note>
+The Postiz UI uses the term **channel**, while the API uses **integration**. They refer to the same thing—a connected social media account.
+</Note>
+
+## Supported Platforms (27 total)
+
+When creating posts, each social media platform has its own settings schema. The `settings` object must include a `__type` field matching the provider.
+
+### Platforms with custom settings (21)
+
+<Tabs>
+  <Tab title="Social">
+    | Platform | `__type` | Key settings |
+    |----------|----------|--------------|
+    | X (Twitter) | `x` | `who_can_reply_post`, `community` |
+    | LinkedIn | `linkedin` | `post_as_images_carousel` |
+    | LinkedIn Page | `linkedin-page` | `post_as_images_carousel` |
+    | Facebook | `facebook` | `url` (optional) |
+    | Instagram (FB-linked) | `instagram` | `post_type`, `collaborators` |
+    | Instagram Standalone | `instagram-standalone` | `post_type`, `collaborators` |
+    | Warpcast (Farcaster) | `warpcast` | `subreddit[]` (channels) |
+  </Tab>
+  <Tab title="Video">
+    | Platform | `__type` | Key settings |
+    |----------|----------|--------------|
+    | YouTube | `youtube` | `title`, `type`, `selfDeclaredMadeForKids`, `thumbnail`, `tags` |
+    | TikTok | `tiktok` | `privacy_level`, `duet`, `stitch`, `comment`, `autoAddMusic`, `brand_content_toggle`, `brand_organic_toggle`, `content_posting_method` |
+  </Tab>
+  <Tab title="Community">
+    | Platform | `__type` | Key settings |
+    |----------|----------|--------------|
+    | Reddit | `reddit` | `subreddit[]` with `title`, `type`, `flair` |
+    | Lemmy | `lemmy` | `subreddit[]` with `id`, `title`, `url` |
+    | Discord | `discord` | `channel` |
+    | Slack | `slack` | `channel` |
+  </Tab>
+  <Tab title="Design">
+    | Platform | `__type` | Key settings |
+    |----------|----------|--------------|
+    | Pinterest | `pinterest` | `board`, `title`, `link`, `dominant_color` |
+    | Dribbble | `dribbble` | `title`, `team` |
+  </Tab>
+  <Tab title="Blogging">
+    | Platform | `__type` | Key settings |
+    |----------|----------|--------------|
+    | Medium | `medium` | `title`, `subtitle`, `canonical`, `publication`, `tags` |
+    | Dev.to | `devto` | `title`, `main_image`, `canonical`, `organization`, `tags` |
+    | Hashnode | `hashnode` | `title`, `subtitle`, `main_image`, `publication`, `tags` |
+    | WordPress | `wordpress` | `title`, `main_image`, `type` |
+  </Tab>
+  <Tab title="Business">
+    | Platform | `__type` | Key settings |
+    |----------|----------|--------------|
+    | Google My Business | `gmb` | `topicType`, `callToActionType`, `callToActionUrl`, event/offer fields |
+    | Listmonk | `listmonk` | `subject`, `preview`, `list`, `template` |
+  </Tab>
+</Tabs>
+
+### Platforms without custom settings (6)
+
+These platforms only require `{ "__type": "platform-name" }`:
+
+| Platform | `__type` |
+|----------|----------|
+| Threads | `threads` |
+| Mastodon | `mastodon` |
+| Bluesky | `bluesky` |
+| Telegram | `telegram` |
+| Nostr | `nostr` |
+| VK | `vk` |
+
+<Card title="View Provider Settings Reference" icon="code" href="/public-api/providers/x">
+  See detailed settings schemas with examples for each platform
+</Card>
+
+## Quick Examples
+
+### Schedule a post to X (Twitter)
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": { "id": "your-integration-id" },
+      "value": [
+        {
+          "content": "Hello from the Postiz API! 🚀",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "x",
+        "who_can_reply_post": "everyone"
+      }
+    }
+  ]
+}
+```
+
+### Post immediately to LinkedIn
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": { "id": "your-linkedin-id" },
+      "value": [
+        {
+          "content": "Exciting announcement! 🎉",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "linkedin"
+      }
+    }
+  ]
+}
+```
+
+### Upload an image and post to Instagram
+
+```bash
+# Step 1: Upload the image
+curl -X POST "https://api.postiz.com/public/v1/upload" \
+  -H "Authorization: your-api-key" \
+  -F "file=@photo.jpg"
+
+# Response: { "id": "img-123", "path": "https://uploads.postiz.com/photo.jpg", ... }
+
+# Step 2: Create the post with the uploaded image
+curl -X POST "https://api.postiz.com/public/v1/posts" \
+  -H "Authorization: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "schedule",
+    "date": "2024-12-14T10:00:00.000Z",
+    "shortLink": false,
+    "tags": [],
+    "posts": [{
+      "integration": { "id": "your-instagram-id" },
+      "value": [{
+        "content": "Beautiful sunset 🌅 #photography",
+        "image": [{ "id": "img-123", "path": "https://uploads.postiz.com/photo.jpg" }]
+      }],
+      "settings": {
+        "__type": "instagram",
+        "post_type": "post"
+      }
+    }]
+  }'
+```
+
+### Publish a Medium article
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": { "id": "your-medium-id" },
+      "value": [
+        {
+          "content": "# Introduction\n\nThis is my article in markdown...",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "medium",
+        "title": "My Amazing Article",
+        "subtitle": "A deep dive into something interesting",
+        "tags": [
+          { "value": "programming", "label": "Programming" }
+        ]
+      }
+    }
+  ]
+}
+```
+
+### Create a Google My Business offer
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": { "id": "your-gmb-id" },
+      "value": [
+        {
+          "content": "🎉 Holiday Sale! 20% off everything!",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "gmb",
+        "topicType": "OFFER",
+        "callToActionType": "GET_OFFER",
+        "callToActionUrl": "https://example.com/sale",
+        "offerCouponCode": "HOLIDAY20"
+      }
+    }
+  ]
+}
+```

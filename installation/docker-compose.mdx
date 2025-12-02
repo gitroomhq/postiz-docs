@@ -1,0 +1,228 @@
+---
+title: Docker Compose
+description: 'Install Postiz using Docker Compose'
+---
+
+<Note>
+Watch the Tutorial for docker-compose install: [https://m.youtube.com/watch?v=A6CjAmJOWvA&t=5s](https://m.youtube.com/watch?v=A6CjAmJOWvA&t=5s)
+</Note>
+
+## Docker Compose
+
+This guide assumes that you have docker installed, with a reasonable amount of resources to run Postiz. This Docker Compose setup has been tested with;
+
+- Virtual Machine, Ubuntu 24.04, 2Gb RAM, 2 vCPUs.
+
+<Snippet file="installation-pre-reqs.mdx" />
+
+### Configuration uses environment variables
+
+The docker containers for Postiz are entirely configured with environment variables.
+
+- **Option A** - environment variables in your `docker-compose.yml` file
+- **Option B** - environment variables in a `postiz.env` file mounted in `/config` for the Postiz container only
+- **Option C** - environment variables in a `.env` file next to your `docker-compose.yml` file (not recommended).
+
+... or a mixture of the above options!
+
+There is a [configuration reference](/configuration/reference) page with a list
+of configuration settings.
+
+## Example `docker-compose.yml` file
+
+```yaml
+services:
+  postiz:
+    image: ghcr.io/gitroomhq/postiz-app:latest
+    container_name: postiz
+    restart: always
+    environment:
+      # === Required Settings
+      MAIN_URL: "https://postiz.your-server.com"
+      FRONTEND_URL: "https://postiz.your-server.com"
+      NEXT_PUBLIC_BACKEND_URL: "https://postiz.your-server.com/api"
+      JWT_SECRET: "random string that is unique to every install - just type random characters here!"
+      DATABASE_URL: "postgresql://postiz-user:postiz-password@postiz-postgres:5432/postiz-db-local"
+      REDIS_URL: "redis://postiz-redis:6379"
+      BACKEND_INTERNAL_URL: "http://localhost:3000"
+      IS_GENERAL: "true"
+      DISABLE_REGISTRATION: "false"
+
+      # === Storage Settings
+      STORAGE_PROVIDER: "local"
+      UPLOAD_DIRECTORY: "/uploads"
+      NEXT_PUBLIC_UPLOAD_DIRECTORY: "/uploads"
+
+      # === Cloudflare (R2) Settings
+      CLOUDFLARE_ACCOUNT_ID: "your-account-id"
+      CLOUDFLARE_ACCESS_KEY: "your-access-key"
+      CLOUDFLARE_SECRET_ACCESS_KEY: "your-secret-access-key"
+      CLOUDFLARE_BUCKETNAME: "your-bucket-name"
+      CLOUDFLARE_BUCKET_URL: "https://your-bucket-url.r2.cloudflarestorage.com/"
+      CLOUDFLARE_REGION: "auto"
+
+      # === Social Media API Settings
+      X_API_KEY: ""
+      X_API_SECRET: ""
+      LINKEDIN_CLIENT_ID: ""
+      LINKEDIN_CLIENT_SECRET: ""
+      REDDIT_CLIENT_ID: ""
+      REDDIT_CLIENT_SECRET: ""
+      GITHUB_CLIENT_ID: ""
+      GITHUB_CLIENT_SECRET: ""
+      BEEHIIVE_API_KEY: ""
+      BEEHIIVE_PUBLICATION_ID: ""
+      THREADS_APP_ID: ""
+      THREADS_APP_SECRET: ""
+      FACEBOOK_APP_ID: ""
+      FACEBOOK_APP_SECRET: ""
+      YOUTUBE_CLIENT_ID: ""
+      YOUTUBE_CLIENT_SECRET: ""
+      TIKTOK_CLIENT_ID: ""
+      TIKTOK_CLIENT_SECRET: ""
+      PINTEREST_CLIENT_ID: ""
+      PINTEREST_CLIENT_SECRET: ""
+      DRIBBBLE_CLIENT_ID: ""
+      DRIBBBLE_CLIENT_SECRET: ""
+      DISCORD_CLIENT_ID: ""
+      DISCORD_CLIENT_SECRET: ""
+      DISCORD_BOT_TOKEN_ID: ""
+      SLACK_ID: ""
+      SLACK_SECRET: ""
+      SLACK_SIGNING_SECRET: ""
+      MASTODON_URL: "https://mastodon.social"
+      MASTODON_CLIENT_ID: ""
+      MASTODON_CLIENT_SECRET: ""
+
+      # === OAuth & Authentik Settings
+      NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME: "Authentik"
+      NEXT_PUBLIC_POSTIZ_OAUTH_LOGO_URL: "https://raw.githubusercontent.com/walkxcode/dashboard-icons/master/png/authentik.png"
+      POSTIZ_GENERIC_OAUTH: "false"
+      POSTIZ_OAUTH_URL: "https://auth.example.com"
+      POSTIZ_OAUTH_AUTH_URL: "https://auth.example.com/application/o/authorize"
+      POSTIZ_OAUTH_TOKEN_URL: "https://auth.example.com/application/o/token"
+      POSTIZ_OAUTH_USERINFO_URL: "https://authentik.example.com/application/o/userinfo"
+      POSTIZ_OAUTH_CLIENT_ID: ""
+      POSTIZ_OAUTH_CLIENT_SECRET: ""
+      # POSTIZ_OAUTH_SCOPE: "openid profile email"  # Optional: uncomment to override default scope
+
+      # === Misc Settings
+      OPENAI_API_KEY: ""
+      NEXT_PUBLIC_DISCORD_SUPPORT: ""
+      NEXT_PUBLIC_POLOTNO: ""
+      API_LIMIT: 30
+
+      # === Payment / Stripe Settings
+      FEE_AMOUNT: 0.05
+      STRIPE_PUBLISHABLE_KEY: ""
+      STRIPE_SECRET_KEY: ""
+      STRIPE_SIGNING_KEY: ""
+      STRIPE_SIGNING_KEY_CONNECT: ""
+
+      # === Developer Settings
+      NX_ADD_PLUGINS: false
+
+      # === Short Link Service Settings (Optional - leave blank if unused)
+      # DUB_TOKEN: ""
+      # DUB_API_ENDPOINT: "https://api.dub.co"
+      # DUB_SHORT_LINK_DOMAIN: "dub.sh"
+      # SHORT_IO_SECRET_KEY: ""
+      # KUTT_API_KEY: ""
+      # KUTT_API_ENDPOINT: "https://kutt.it/api/v2"
+      # KUTT_SHORT_LINK_DOMAIN: "kutt.it"
+      # LINK_DRIP_API_KEY: ""
+      # LINK_DRIP_API_ENDPOINT: "https://api.linkdrip.com/v1/"
+      # LINK_DRIP_SHORT_LINK_DOMAIN: "dripl.ink"
+
+    volumes:
+      - postiz-config:/config/
+      - postiz-uploads:/uploads/
+    ports:
+      - 5000:5000
+    networks:
+      - postiz-network
+    depends_on:
+      postiz-postgres:
+        condition: service_healthy
+      postiz-redis:
+        condition: service_healthy
+
+  postiz-postgres:
+    image: postgres:17-alpine
+    container_name: postiz-postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postiz-password
+      POSTGRES_USER: postiz-user
+      POSTGRES_DB: postiz-db-local
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    networks:
+      - postiz-network
+    healthcheck:
+      test: pg_isready -U postiz-user -d postiz-db-local
+      interval: 10s
+      timeout: 3s
+      retries: 3
+  postiz-redis:
+    image: redis:7.2
+    container_name: postiz-redis
+    restart: always
+    healthcheck:
+      test: redis-cli ping
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    volumes:
+      - postiz-redis-data:/data
+    networks:
+      - postiz-network
+
+
+volumes:
+  postgres-volume:
+    external: false
+
+  postiz-redis-data:
+    external: false
+
+  postiz-config:
+    external: false
+
+  postiz-uploads:
+    external: false
+
+networks:
+  postiz-network:
+    external: false
+```
+
+## How to use docker compose
+
+Save the file contents to `docker-compose.yml` in your directory you create for postiz.
+
+Run `docker compose up` to start the services.
+
+<Warning>
+**Note** When you change variables, you must run `docker compose down` and
+then `docker compose up` to recreate these containers with these updated
+variables.
+</Warning>
+
+Look through the logs for startup errors, and if you have problems, check out the [support](/support) page.
+
+If everything looks good, then you can access the Postiz web interface at https://postiz.your-server.com
+
+<Snippet file="docker-envvar-apps.mdx" />
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Architecture" icon="diagram-project" href="/howitworks">
+    Learn the architecture of the project
+  </Card>
+  <Card title="Providers" icon="plug" href="/providers/overview">
+    Set up providers such as LinkedIn, X and Reddit
+  </Card>
+</CardGroup>
+

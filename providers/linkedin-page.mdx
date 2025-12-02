@@ -1,0 +1,51 @@
+---
+title: LinkedIn Page
+description: 'How to add a LinkedIn Page to your system'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Steps>
+  <Step title="Create a new app">
+    Head over to [LinkedIn developers](https://www.linkedin.com/developers/apps) and create a new app.
+    
+    ![LinkedIn](/images/providers/linkedin/linkedin-001.png)
+  </Step>
+
+  <Step title="Verify your app">
+    Verify your app with LinkedIn
+    
+    ![LinkedIn](/images/providers/linkedin/linkedin-004.png)
+
+    You will need to follow the verification process to request the necessary permissions listed below.
+  </Step>
+
+  <Step title="Add required products">
+    Fill in all the details, once created head over to Products and make sure you add all the required products:
+    - Share on LinkedIn
+    - Advertising API
+    - Sign in with LinkedIn using OpenID connect
+
+    <Warning>
+    It is important to request the Advertising API permissions and fill up the request form, or you will not have the ability to refresh your tokens.
+    </Warning>
+  </Step>
+
+  <Step title="Configure OAuth2 Redirect URI">
+    <Snippet file="oauth2redirect.mdx" />
+    
+    Replace `{provider}` with `linkedin-page` in the redirect URI.
+  </Step>
+
+  <Step title="Copy your credentials">
+    Copy the created `Client ID` and `Client Secret` and add them to your `.env` file.
+
+```env
+LINKEDIN_CLIENT_ID=""
+LINKEDIN_CLIENT_SECRET=""
+```
+
+    You can find those under the Auth Tab of your LinkedIn App in the developer portal.
+  </Step>
+</Steps>
+

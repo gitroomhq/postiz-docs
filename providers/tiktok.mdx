@@ -1,0 +1,73 @@
+---
+title: TikTok
+description: 'How to add TikTok to your system'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Note>
+This integration requires that you have a TikTok developer account. It also requires that you have a public website, with https, and can upload files to that site to verify ownership.
+
+TikTok will also not allow http:// for your app redirect URI, so you will need to be accessing Postiz from HTTPS.
+</Note>
+
+<Warning>
+**NOTE:** TikTok fetches media via pull_from_url. Your media files must be publicly reachable over HTTPS; localhost or private routes (e.g., /uploads) will fail. 
+Expose your uploads via a reverse proxy (e.g., [Caddy](/reverse-proxies/caddy)) or use object storage/CDN such as [Cloudflare R2](/configuration/r2) with public access.
+
+Ensure the media domain is listed under your TikTok developer account's verified sites.
+</Warning>
+
+<Steps>
+  <Step title="Create your app">
+    Go here: [https://developers.tiktok.com/apps](https://developers.tiktok.com/apps)
+
+    ![Create a new app](/images/providers/tiktok/tiktok_create_app.png)
+
+    * **App Name:** `MyPostiz`
+    * **Redirect URI:** (see below)
+
+    <Snippet file="oauth2redirect.mdx" />
+    
+    Replace `{provider}` with `tiktok` in the redirect URI.
+  </Step>
+
+  <Step title="Set a TOS and Privacy Policy">
+    This needs to be on a public domain that you have access to, that is hosted on HTTPS. 
+
+    Tick "Web" for your platforms.
+  </Step>
+
+  <Step title="Add apps">
+    Add the "Login Kit" and "Content Posting API" to your app.
+
+    For "Login Kit", set the redirect URI to http://localhost:4200/integrations/social/tiktok
+
+    For Content posting API, enable "Direct Post".
+  </Step>
+
+  <Step title="Add scopes">
+    Add the following scopes:
+    - user.info.basic
+    - video.create
+    - video.publish
+    - video.upload
+    - user.info.profile
+  </Step>
+
+  <Step title="Copy your client secret to environment variables">
+    These can be found immediately after registering your application. The client ID is 16 characters long and the secret is 32 characters long.
+
+```env
+TIKTOK_CLIENT_ID=1234567890123456
+TIKTOK_CLIENT_SECRET=12345678901234567890123456789012
+```
+
+    Restart Postiz with the updated environment variables
+  </Step>
+
+  <Step title="Add a TikTok channel in the Postiz web interface">
+    Go to the Postiz web interface, and click on the "Add Channel" button. Select "TikTok" from the list of available channels. You should be redirected to TikTok to authorize the application.
+  </Step>
+</Steps>
+

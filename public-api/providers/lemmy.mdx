@@ -1,0 +1,85 @@
+---
+title: 'Lemmy Settings'
+description: 'Provider settings for Lemmy posts'
+---
+
+## Overview
+
+Lemmy is a decentralized Reddit alternative. When posting to Lemmy, you need to specify the community and post details.
+
+<Note>
+The settings use `subreddit` as the field name for historical reasons, but it refers to Lemmy communities.
+</Note>
+
+## Settings Schema
+
+```json
+{
+  "__type": "lemmy",
+  "subreddit": [
+    {
+      "value": {
+        "subreddit": "community_name",
+        "id": "community-id",
+        "title": "Post Title",
+        "url": "https://optional-link.com"
+      }
+    }
+  ]
+}
+```
+
+## Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `__type` | string | ✅ | Must be `"lemmy"` |
+| `subreddit` | array | ✅ | Array of community targets |
+| `subreddit[].value.subreddit` | string | ✅ | Community name (min 2 chars) |
+| `subreddit[].value.id` | string | ✅ | Community ID |
+| `subreddit[].value.title` | string | ✅ | Post title (min 2 chars) |
+| `subreddit[].value.url` | string | ❌ | Optional link URL |
+
+## Example
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-lemmy-integration-id"
+      },
+      "value": [
+        {
+          "content": "Check out this interesting article about open-source software!",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "lemmy",
+        "subreddit": [
+          {
+            "value": {
+              "subreddit": "opensource",
+              "id": "123456",
+              "title": "Why Open Source Matters",
+              "url": ""
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+## Notes
+
+- You can post to multiple communities by adding more items to the `subreddit` array
+- Each community requires a unique title for the post
+- The `url` field is optional and used for link-type posts
+

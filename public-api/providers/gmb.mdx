@@ -1,0 +1,149 @@
+---
+title: 'Google My Business Settings'
+description: 'Provider settings for Google My Business posts'
+---
+
+## Overview
+
+Google My Business (GMB) allows you to create posts that appear on your Google Business Profile. You can create standard updates, events, or offers.
+
+## Settings Schema
+
+```json
+{
+  "__type": "gmb",
+  "topicType": "STANDARD",
+  "callToActionType": "LEARN_MORE",
+  "callToActionUrl": "https://example.com",
+  "eventTitle": "Event Name",
+  "eventStartDate": "2024-12-14",
+  "eventEndDate": "2024-12-15",
+  "eventStartTime": "09:00",
+  "eventEndTime": "17:00",
+  "offerCouponCode": "SAVE20",
+  "offerRedeemUrl": "https://example.com/redeem",
+  "offerTerms": "Terms and conditions apply"
+}
+```
+
+## Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `__type` | string | ✅ | Must be `"gmb"` |
+| `topicType` | string | ❌ | Post type: `STANDARD`, `EVENT`, or `OFFER` |
+| `callToActionType` | string | ❌ | CTA button type |
+| `callToActionUrl` | string | ❌ | URL for CTA (required if callToActionType is set) |
+| `eventTitle` | string | ❌ | Event name (required for EVENT type) |
+| `eventStartDate` | string | ❌ | Event start date |
+| `eventEndDate` | string | ❌ | Event end date |
+| `eventStartTime` | string | ❌ | Event start time |
+| `eventEndTime` | string | ❌ | Event end time |
+| `offerCouponCode` | string | ❌ | Coupon code (for OFFER type) |
+| `offerRedeemUrl` | string | ❌ | Redemption URL |
+| `offerTerms` | string | ❌ | Offer terms and conditions |
+
+### Call-to-Action Types
+
+- `NONE` - No button
+- `BOOK` - Book now
+- `ORDER` - Order online
+- `SHOP` - Shop now
+- `LEARN_MORE` - Learn more
+- `SIGN_UP` - Sign up
+- `GET_OFFER` - Get offer
+- `CALL` - Call
+
+## Examples
+
+### Standard Post
+
+```json
+{
+  "settings": {
+    "__type": "gmb",
+    "topicType": "STANDARD",
+    "callToActionType": "LEARN_MORE",
+    "callToActionUrl": "https://example.com/news"
+  }
+}
+```
+
+### Event Post
+
+```json
+{
+  "settings": {
+    "__type": "gmb",
+    "topicType": "EVENT",
+    "eventTitle": "Grand Opening",
+    "eventStartDate": "2024-12-20",
+    "eventEndDate": "2024-12-20",
+    "eventStartTime": "10:00",
+    "eventEndTime": "18:00",
+    "callToActionType": "BOOK",
+    "callToActionUrl": "https://example.com/rsvp"
+  }
+}
+```
+
+### Offer Post
+
+```json
+{
+  "settings": {
+    "__type": "gmb",
+    "topicType": "OFFER",
+    "callToActionType": "GET_OFFER",
+    "callToActionUrl": "https://example.com/offer",
+    "offerCouponCode": "HOLIDAY20",
+    "offerRedeemUrl": "https://example.com/redeem",
+    "offerTerms": "Valid until December 31, 2024. Cannot be combined with other offers."
+  }
+}
+```
+
+## Full Example
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-gmb-integration-id"
+      },
+      "value": [
+        {
+          "content": "🎉 Big Holiday Sale! Get 20% off all products this weekend only. Visit us in-store or shop online!",
+          "image": [
+            {
+              "id": "img-id",
+              "path": "https://uploads.postiz.com/sale-banner.jpg"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "gmb",
+        "topicType": "OFFER",
+        "callToActionType": "GET_OFFER",
+        "callToActionUrl": "https://example.com/holiday-sale",
+        "offerCouponCode": "HOLIDAY20",
+        "offerTerms": "Valid December 14-15, 2024. In-store and online."
+      }
+    }
+  ]
+}
+```
+
+## Notes
+
+- GMB posts appear on your Google Business Profile in Search and Maps
+- Images are highly recommended for better engagement
+- Event posts require date/time information
+- Offer posts can include coupon codes for tracking
+

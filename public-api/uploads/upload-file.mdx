@@ -1,0 +1,20 @@
+---
+title: 'Upload File'
+openapi: 'POST /upload'
+---
+
+## Usage
+
+After uploading, use the returned `id` and `path` in your post's `image` array:
+
+```json
+{
+  "image": [
+    {
+      "id": "returned-id",
+      "path": "returned-path-url"
+    }
+  ]
+}
+```
+

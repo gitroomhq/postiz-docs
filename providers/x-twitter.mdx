@@ -41,8 +41,12 @@ So you are going to use the normal oAuth1 flow for that (that supports Twitter v
 
   <Step title="Configure OAuth2 Redirect URI">
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `x` in the redirect URI.
+
+    **Your X OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/x`
+    - Local development: `http://localhost:4200/integrations/social/x`
+    - Docker: `http://localhost:5000/integrations/social/x`
+    - If X requires HTTPS for localhost: `https://redirectmeto.com/http://localhost:4200/integrations/social/x`
   </Step>
 
   <Step title="Copy your API keys">

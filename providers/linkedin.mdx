@@ -24,11 +24,14 @@ description: 'How to add LinkedIn to your system'
 
   <Step title="Configure OAuth2 Redirect URI">
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `linkedin` in the redirect URI.
+
+    **Your LinkedIn OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/linkedin`
+    - Local development: `http://localhost:4200/integrations/social/linkedin`
+    - Docker: `http://localhost:5000/integrations/social/linkedin`
 
     <Note>
-    If you are using the "LinkedIn Page" provider, then the redirect url should be "linkedin-page".
+    If you are using the "LinkedIn Page" provider, replace `linkedin` with `linkedin-page` in the redirect URI.
     </Note>
   </Step>
 

@@ -37,10 +37,11 @@ DISCORD_CLIENT_SECRET="your_client_secret"
 
   <Step title="Add a Redirect URI">
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `discord` in the redirect URI.
 
-    The redirect URI is the URL that Discord will redirect to after you have logged in. Assuming you are running Postiz on `postiz.example.com`, this would be: `https://postiz.example.com/integrations/social/discord`. Alternatively if you are running on `localhost:4200`, this would be `http://localhost:4200/integrations/social/discord`. You only really need one of these, depending on where you are running Postiz.
+    **Your Discord OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/discord`
+    - Local development: `http://localhost:4200/integrations/social/discord`
+    - Docker: `http://localhost:5000/integrations/social/discord`
 
     You can find this in the **OAuth2** section of the Discord Developer Portal.
 

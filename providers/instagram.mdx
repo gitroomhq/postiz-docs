@@ -64,8 +64,11 @@ If you have a Facebook Business page that is linked to your Instagram account, y
     ![Instagram](https://github.com/user-attachments/assets/78496d3f-3b84-4724-afc8-ed217d892c6d)
 
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `instagram` in the redirect URI.
+
+    **Your Instagram OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/instagram`
+    - Local development: `http://localhost:4200/integrations/social/instagram`
+    - Docker: `http://localhost:5000/integrations/social/instagram`
   </Step>
 
   <Step title="Set up permissions">
@@ -121,8 +124,11 @@ Please note that standalone option requires a professional Instagram account.
     ![Set up redirect URI](/images/providers/instagram-standalone/instagram-standalone-003.png)
 
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `instagram-standalone` in the redirect URI.
+
+    **Your Instagram Standalone OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/instagram-standalone`
+    - Local development: `http://localhost:4200/integrations/social/instagram-standalone`
+    - Docker: `http://localhost:5000/integrations/social/instagram-standalone`
   </Step>
 
   <Step title="Copy Instagram App ID and Secret">

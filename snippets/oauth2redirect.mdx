@@ -1,8 +1,4 @@
-The OAuth2 Redirect URI is the location where the provider will redirect to after trying to login. This needs to set to your Postiz `FRONTEND_URL` + `/integrations/social/` + `{provider}`.
-
-- If you are running on a container, and your Postiz URL is: `https://postiz.example.com`, then your OAuth2 Redirect URI is `https://postiz.example.com/integrations/social/{provider}`
-- If you are running on localhost, and your Postiz URL is `http://localhost:4200`, then your OAuth2 Redirect URI is `http://localhost:4200/integrations/social/{provider}`
-- If you are running on localhost, and the provider doesn't accept http uris, and your Postiz URL is `http://localhost:4200`, then your OAuth2 Redirect URI is `https://redirectmeto.com/http://localhost:4200/integrations/social/{provider}`
+The OAuth2 Redirect URI is the location where the provider will redirect to after a successful login. This needs to be set to your Postiz `FRONTEND_URL` + `/integrations/social/` + `{provider}`.
 
 You only need to set one OAuth2 Redirect URI when you are setting up your Postiz app.
 

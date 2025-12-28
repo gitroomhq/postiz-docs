@@ -14,8 +14,11 @@ description: 'How to add Reddit to your system'
     * **Redirect URI:** (see below)
 
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `reddit` in the redirect URI.
+
+    **Your Reddit OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/reddit`
+    - Local development: `http://localhost:4200/integrations/social/reddit`
+    - Docker: `http://localhost:5000/integrations/social/reddit`
   </Step>
 
   <Step title="Set environment variables">

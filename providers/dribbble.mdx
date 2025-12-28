@@ -15,8 +15,11 @@ description: 'How to add Dribbble to your system'
     * **Redirect URI:** (see below)
 
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `dribble` in the redirect URI.
+
+    **Your Dribbble OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/dribble`
+    - Local development: `http://localhost:4200/integrations/social/dribble`
+    - Docker: `http://localhost:5000/integrations/social/dribble`
   </Step>
 
   <Step title="Copy your client secret to environment variables">

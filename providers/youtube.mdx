@@ -34,8 +34,11 @@ Follow the instructions as available in the [Obtaining authorization credentials
     Create the OAuth client ID. Select "Web application" as the application type and fill in the details.
 
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `youtube` in the redirect URI.
+
+    **Your YouTube OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/youtube`
+    - Local development: `http://localhost:4200/integrations/social/youtube`
+    - Docker: `http://localhost:5000/integrations/social/youtube`
 
     Under "Authorized redirect URIs", insert your OAuth2 Redirect URI.
 

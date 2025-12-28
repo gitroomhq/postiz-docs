@@ -47,8 +47,11 @@ This is a complex integration, and it may take some time to get it right. If you
     - Click the "Show" button next to the Threads App Secret, and set the postiz environment variable `THREADS_APP_SECRET` to this value. Note that the next box is quite small, make sure you scroll across the copy the full value. It should be 32 characters long.
 
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `threads` in the redirect URI.
+
+    **Your Threads OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/threads`
+    - Local development: `http://localhost:4200/integrations/social/threads`
+    - Docker: `http://localhost:5000/integrations/social/threads`
 
     <Note>
     You have to "click" the URL to make it active, otherwise the form will not save.

@@ -28,8 +28,11 @@ Ensure the media domain is listed under your TikTok developer account's verified
     * **Redirect URI:** (see below)
 
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `tiktok` in the redirect URI.
+
+    **Your TikTok OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/tiktok`
+    - Local development (HTTPS required): `https://localhost:4200/integrations/social/tiktok`
+    - Docker (HTTPS required): `https://localhost:5000/integrations/social/tiktok`
   </Step>
 
   <Step title="Set a TOS and Privacy Policy">

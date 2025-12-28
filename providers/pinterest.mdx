@@ -22,8 +22,11 @@ This integration requires that you have a Pinterest Company Account.
 
   <Step title="Configure Redirect URI">
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `pinterest` in the redirect URI.
+
+    **Your Pinterest OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/pinterest`
+    - Local development: `http://localhost:4200/integrations/social/pinterest`
+    - Docker: `http://localhost:5000/integrations/social/pinterest`
     
     ![Setup of Redirect URIs](/images/providers/pinterest/pinterest-001.png)
   </Step>

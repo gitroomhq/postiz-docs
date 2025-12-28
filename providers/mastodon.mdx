@@ -20,8 +20,11 @@ The examples on this page use `https://mastodon.social` as the default Mastodon 
 <Steps>
   <Step title="Register your client">
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `mastodon` in the redirect URI.
+
+    **Your Mastodon OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/mastodon`
+    - Local development: `http://localhost:4200/integrations/social/mastodon`
+    - Docker: `http://localhost:5000/integrations/social/mastodon`
 
     Run the following curl command in a terminal to get the Mastodon client id and client secret.
 

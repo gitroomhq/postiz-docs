@@ -50,8 +50,11 @@ description: 'How to add Facebook to your system'
     ![step 6](https://github.com/user-attachments/assets/8bf1774b-b6fe-4ac6-aea5-97d8c8bbf5da)
 
     <Snippet file="oauth2redirect.mdx" />
-    
-    Replace `{provider}` with `facebook` in the redirect URI.
+
+    **Your Facebook OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/facebook`
+    - Local development: `http://localhost:4200/integrations/social/facebook`
+    - Docker: `http://localhost:5000/integrations/social/facebook`
   </Step>
 
   <Step title="Request advanced permissions">

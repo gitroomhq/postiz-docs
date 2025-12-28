@@ -106,6 +106,9 @@ services:
       POSTIZ_OAUTH_CLIENT_SECRET: ""
       # POSTIZ_OAUTH_SCOPE: "openid profile email"  # Optional: uncomment to override default scope
 
+      NEXT_PUBLIC_SENTRY_DSN: "http://spotlight:8969/stream"
+      SENTRY_SPOTLIGHT: "1"
+
       # === Misc Settings
       OPENAI_API_KEY: ""
       NEXT_PUBLIC_DISCORD_SUPPORT: ""
@@ -175,6 +178,16 @@ services:
       retries: 3
     volumes:
       - postiz-redis-data:/data
+    networks:
+      - postiz-network
+
+# For Application Monitoring / Debugging
+  spotlight:
+    pull_policy: always
+    container_name: spotlight
+    ports:
+      - 8969:8969/tcp
+    image: ghcr.io/getsentry/spotlight:latest
     networks:
       - postiz-network
 

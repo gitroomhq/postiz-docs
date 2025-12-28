@@ -72,7 +72,8 @@
               "providers/instagram",
               "providers/threads",
               "providers/bluesky",
-              "providers/mastodon"
+              "providers/mastodon",
+              "providers/google-my-business"
             ]
           },
           {

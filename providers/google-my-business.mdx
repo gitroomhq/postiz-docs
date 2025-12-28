@@ -1,0 +1,104 @@
+---
+title: Google My Business
+description: 'How to add Google My Business to your system'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Note>
+This integration allows you to post updates to your Google Business Profile. Before you start, make sure you have a Google account and a verified Google Business Profile.
+</Note>
+
+<Warning>
+The **Google My Business API** requires approval from Google. You must submit an access request through Google's [access request form](https://developers.google.com/my-business/content/prereqs#request-access). Approval can take a few days up to a week.
+</Warning>
+
+## Setup
+
+<Steps>
+  <Step title="Go to Google Cloud Console">
+    Make sure you are logged in to your Google account and visit the [Google Cloud Console](https://console.cloud.google.com/projectselector2/apis/credentials). Make sure to read the terms and conditions and "Agree and Continue".
+  </Step>
+
+  <Step title="Create or Select a Project">
+    Create a new project by clicking on the "Create Project" button, or select an existing project. Fill in the project name and details, then click "Create".
+
+    <Note>
+    You can use the same Google Cloud project for both YouTube and Google My Business integrations.
+    </Note>
+  </Step>
+
+  <Step title="Enable Required APIs">
+    Click **Enable APIs and Services** at the top of the dashboard. Search for and enable each of the following APIs:
+
+    - `Google My Business API` - This will only appear after your access request has been approved
+    - `My Business Account Management API`
+    - `My Business Business Information API`
+
+    For each API, click the **Enable** button on the API's detail page.
+  </Step>
+
+  <Step title="Configure OAuth Consent Screen">
+    Navigate to the **OAuth consent screen** tab. If not already configured:
+    
+    1. Select "External" user type (unless you have a Google Workspace organization)
+    2. Fill in the required app information
+    3. Add yourself as a test user
+    4. Save and continue through the wizard
+  </Step>
+
+  <Step title="Create OAuth Credentials">
+    1. Navigate to the **Credentials** tab
+    2. Click on **Create Credentials** and select **OAuth client ID**
+    3. For Application Type, select **Web application**
+    4. Enter a name for your application
+
+    <Snippet file="oauth2redirect.mdx" />
+
+    **Your Google My Business OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/gmb`
+    - Local development: `http://localhost:4200/integrations/social/gmb`
+    - Docker: `http://localhost:5000/integrations/social/gmb`
+
+    Add your redirect URI under **Authorized redirect URIs**, then click **Create**.
+  </Step>
+
+  <Step title="Copy your credentials">
+    After creating the credentials, you will see your `Client ID` and `Client Secret`. Copy these and add them to your `.env` file:
+
+```env
+GOOGLE_CLIENT_ID=""
+GOOGLE_CLIENT_SECRET=""
+```
+
+    <Note>
+    These are the same credentials used for YouTube integration. If you've already configured YouTube, you don't need to add new environment variables - just ensure the GMB redirect URI is added to your existing OAuth credentials.
+    </Note>
+  </Step>
+
+  <Step title="Restart Postiz">
+    Stop Postiz if it is running, and restart it with the updated environment variables.
+  </Step>
+
+  <Step title="Add Google My Business in Postiz">
+    Go to the Postiz web interface, click on the "Add Channel" button, and select "Google My Business". You should be redirected to Google to authorize the application.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+### API Access Not Approved
+
+If you cannot find the "Google My Business API" in the API library, your access request may still be pending. Check your email for updates from Google, or resubmit the [access request form](https://developers.google.com/my-business/content/prereqs#request-access).
+
+### 403 Forbidden Errors
+
+Make sure all three required APIs are enabled:
+- Google My Business API
+- My Business Account Management API  
+- My Business Business Information API
+
+### Business Profile Not Showing
+
+Ensure your Google Business Profile is verified and that you're logging in with the Google account that owns or manages the business profile.
+

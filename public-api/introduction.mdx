@@ -49,6 +49,22 @@ This doesn't mean you can only post 30 times per hour—each API call counts as 
 The Postiz UI uses the term **channel**, while the API uses **integration**. They refer to the same thing—a connected social media account.
 </Note>
 
+## Generate Output
+
+The easiest way to generate your post payloads is by using this wizard:
+
+- For cloud, make sure you are logged in.
+- For local, make sure your Postiz server is running and your are logged in.
+
+<Tabs>
+  <Tab title="Cloud">
+      <iframe src="https://platform.postiz.com/modal/dark/all" style={{zoom: 0.5, height: 1000, width: '100%'}} />
+  </Tab>
+  <Tab title="Local (Make sure you server is running">
+      <iframe src="http://localhost:5000/modal/dark/all" style={{zoom: 0.5, height: 1000, width: '100%'}} />
+  </Tab>
+</Tabs>
+
 ## Supported Platforms (27 total)
 
 When creating posts, each social media platform has its own settings schema. The `settings` object must include a `__type` field matching the provider.

@@ -35,8 +35,12 @@ So you are going to use the normal oAuth1 flow for that (that supports Twitter v
     ![X](/images/providers/x/x-003.png)
 
     - In the App Permission set it to `Read and Write`
-    - In the Type of App set it to `Web App, Automated App or Bot`
+    - In the Type of App set it to `Native App`
     - In the App Info set the `Callback URI / Redirect URL`
+
+    <Note>
+    You must select `Native App` for OAuth 1.0a to work correctly. Selecting `Web App, Automated App or Bot` will cause authentication to fail with error code 32.
+    </Note>
   </Step>
 
   <Step title="Configure OAuth2 Redirect URI">

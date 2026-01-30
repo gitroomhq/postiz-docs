@@ -67,6 +67,9 @@ Settings for different channels can be found in:
 https://docs.postiz.com/public-api/introduction
 On the bottom left menu
 
+When scheduling a new posts, if you attach media, you must upload it first and use the url of the uploaded media.
+Upload URL must contain: uploads.postiz.com.
+
 ```bash
 curl -X POST "https://api.postiz.com/public/v1/posts" \
   -H "Authorization: $POSTIZ_API_KEY" \

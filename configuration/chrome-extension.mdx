@@ -1,0 +1,95 @@
+---
+title: Chrome Extension
+description: 'Set up the Postiz browser extension for cookie-based integrations'
+---
+
+Some platforms (like Skool) do not offer public OAuth APIs. Postiz connects to these platforms using a browser extension that securely extracts session cookies from your browser.
+
+## How It Works
+
+1. You install the Postiz Chrome Extension in your browser.
+2. When adding a cookie-based channel, the extension reads your session cookies for that platform.
+3. The cookies are sent to your Postiz backend and stored securely as an encrypted JWT.
+4. The extension automatically refreshes cookies every 24 hours to keep connections alive.
+
+<Warning>
+Using cookies to interact with platforms may violate their terms of service. Use this feature at your own risk.
+</Warning>
+
+## Installation
+
+<Steps>
+  <Step title="Install the Extension">
+    Install the Postiz browser extension from the [Chrome Web Store](https://chromewebstore.google.com/detail/postiz/cidhffagahknaeodkplfbcpfeielnkjl?hl=en).
+
+    Alternatively, for self-hosted setups, you can build the extension from source:
+
+    ```bash
+    cd apps/extension
+    pnpm build
+    ```
+
+    Then load the `apps/extension/dist` folder as an unpacked extension in Chrome:
+    1. Navigate to `chrome://extensions/`
+    2. Enable **Developer mode** (top right toggle)
+    3. Click **Load unpacked** and select the `dist` folder
+  </Step>
+
+  <Step title="Get the Extension ID">
+    After installing the extension, you need its **Extension ID**:
+
+    1. Go to `chrome://extensions/` in Chrome
+    2. Find the **Postiz** extension
+    3. Copy the **ID** shown under the extension name (e.g., `cidhffagahknaeodkplfbcpfeielnkjl`)
+
+    If you installed from the Chrome Web Store, the ID is: `cidhffagahknaeodkplfbcpfeielnkjl`
+  </Step>
+
+  <Step title="Configure the Environment Variable">
+    Add the extension ID to your Postiz environment variables:
+
+    ```env
+    EXTENSION_ID="cidhffagahknaeodkplfbcpfeielnkjl"
+    ```
+
+    Restart Postiz after setting this variable.
+  </Step>
+</Steps>
+
+## Supported Platforms
+
+The following platforms use the Chrome Extension for authentication:
+
+<CardGroup cols={2}>
+  <Card title="Skool" icon="graduation-cap" href="/providers/skool">
+    Post to Skool communities
+  </Card>
+</CardGroup>
+
+## Self-Hosted Considerations
+
+If you are self-hosting Postiz on a domain other than `localhost` or `*.postiz.com`, you need to build a custom extension with your domain in the `externally_connectable` manifest field.
+
+Edit `apps/extension/manifest.json` and add your domain:
+
+```json
+{
+  "externally_connectable": {
+    "matches": [
+      "http://localhost/*",
+      "https://localhost/*",
+      "https://*.postiz.com/*",
+      "https://your-domain.com/*"
+    ]
+  }
+}
+```
+
+Then rebuild the extension and load it as an unpacked extension in Chrome.
+
+## Troubleshooting
+
+- **"Extension not found"** — Make sure the `EXTENSION_ID` environment variable is set and Postiz has been restarted.
+- **"Extension not reachable"** — The extension may be disabled. Check `chrome://extensions/` and make sure Postiz is enabled.
+- **"Could not get cookies"** — You must be logged in to the platform in the same Chrome browser where the extension is installed.
+- **Cookies expire** — The extension automatically refreshes cookies every 24 hours. If a connection drops, try reconnecting the channel.

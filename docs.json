@@ -39,7 +39,8 @@
               "configuration/docker",
               "configuration/emails",
               "configuration/r2",
-              "configuration/oauth"
+              "configuration/oauth",
+              "configuration/chrome-extension"
             ]
           },
           {
@@ -91,7 +92,8 @@
               "providers/discord",
               "providers/slack",
               "providers/telegram",
-              "providers/dribbble"
+              "providers/dribbble",
+              "providers/skool"
             ]
           }
         ]

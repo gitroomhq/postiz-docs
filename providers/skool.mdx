@@ -1,0 +1,60 @@
+---
+title: Skool
+description: 'How to add Skool to Postiz'
+---
+
+<Snippet file="never-share.mdx" />
+
+Skool is a **cookie-based** integration that uses the Postiz browser extension to connect. Unlike OAuth-based providers, Skool authentication works by extracting session cookies from your browser.
+
+<Warning>
+Using a browser extension to interact with a platform may violate its terms of service and could result in your account being suspended or banned. Postiz does not take responsibility for any issues arising from the use of this method.
+</Warning>
+
+## Prerequisites
+
+Before connecting Skool, you need:
+
+1. The **Postiz Chrome Extension** installed — see the [Chrome Extension guide](/configuration/chrome-extension) for setup instructions.
+2. The `EXTENSION_ID` environment variable configured in your Postiz instance.
+3. An active **Skool account** — you must be logged in to [skool.com](https://www.skool.com) in the same browser where the extension is installed.
+
+## Connecting Skool
+
+<Steps>
+  <Step title="Log in to Skool">
+    Open [skool.com](https://www.skool.com) in Chrome and make sure you are logged in to your Skool account.
+  </Step>
+
+  <Step title="Add Skool as a Channel">
+    In Postiz, click **Add Channel** and select **Skool**. You will see a warning about browser extension usage — read it and click **I understand, continue**.
+
+    The extension will automatically extract your Skool session cookies and connect your account.
+  </Step>
+
+  <Step title="Create a Post">
+    When creating a post for Skool, you will need to configure:
+
+    - **Title** — The title of your Skool post (required).
+    - **Group** — Select which Skool group to post in.
+    - **Label** — Select a label for the post, or use the default.
+
+    You can also attach images to your post. Files are uploaded directly to Skool's file storage.
+  </Step>
+</Steps>
+
+## Features
+
+- **Post to groups** — Publish posts to any Skool group you are a member of.
+- **Labels** — Assign labels to categorize your posts.
+- **Comments** — Schedule threaded comments on your posts.
+- **Image attachments** — Attach images to posts and comments.
+- **Automatic cookie refresh** — The extension refreshes your cookies every 24 hours to keep the connection alive.
+
+## Troubleshooting
+
+- **"Extension not found"** — Make sure the Postiz Chrome Extension is installed and that `EXTENSION_ID` is correctly set. See the [Chrome Extension guide](/configuration/chrome-extension).
+- **"Could not get cookies"** — Log in to [skool.com](https://www.skool.com) in Chrome before connecting.
+- **"You can't post to this channel"** — You must be an admin or have sufficient permissions in the Skool group.
+- **"Cannot post to this label"** — The selected label may have restrictions. Try a different label or the default.
+- **Session expires** — If your session expires, reconnect the integration. The extension will attempt to refresh cookies automatically every 24 hours.

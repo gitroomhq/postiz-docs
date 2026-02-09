@@ -1,0 +1,65 @@
+---
+title: Whop
+description: 'How to add Whop to Postiz'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Note>
+This integration requires that you have a [Whop](https://whop.com) account with at least one company and a forum experience set up.
+</Note>
+
+<Steps>
+  <Step title="Create a Whop OAuth Application">
+    Go to the [Whop Developer Portal](https://dash.whop.com/settings/developer) and create a new application.
+  </Step>
+
+  <Step title="Get and set your Client ID">
+    Copy the **Client ID** from your Whop application settings and add it to your `.env` file:
+
+```env
+WHOP_CLIENT_ID="your_client_id"
+```
+  </Step>
+
+  <Step title="Add a Redirect URI">
+    <Snippet file="oauth2redirect.mdx" />
+
+    **Your Whop OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/whop`
+    - Local development: `http://localhost:4200/integrations/social/whop`
+    - Docker: `http://localhost:5000/integrations/social/whop`
+
+    Add this redirect URI in your Whop application settings.
+  </Step>
+
+  <Step title="Add Whop as a Channel in Postiz">
+    Go to the Postiz web interface, click **Add Channel**, and select **Whop**. You will be redirected to Whop to authorize the connection.
+  </Step>
+
+  <Step title="Create a Post">
+    When creating a post for Whop, you will need to configure:
+
+    - **Company** — Select which Whop company to post under.
+    - **Forum** — Select the forum (experience) to post in.
+    - **Title** — An optional title for your forum post.
+
+    The post content supports **Markdown** formatting. You can also attach files to your post.
+  </Step>
+</Steps>
+
+## Features
+
+- **Post to forums** — Publish posts to any Whop forum you have access to.
+- **Markdown support** — Write posts using full Markdown formatting.
+- **Comments** — Schedule threaded comments on your posts.
+- **File attachments** — Attach images and files to posts and comments.
+- **Token refresh** — Postiz automatically refreshes your Whop access token to keep the connection alive.
+
+## Troubleshooting
+
+- **"Invalid token, please re-authenticate"** — Your access token has expired or been revoked. Reconnect the integration by removing and re-adding the Whop channel.
+- **"Insufficient permissions"** — Your Whop account may not have the required scopes. Re-authenticate to grant the necessary permissions.
+- **"Forum or experience not found"** — The selected forum may have been deleted or you no longer have access to it. Select a different forum.
+- **No companies appear** — Make sure your Whop account owns or manages at least one company.
+- **No forums appear** — The selected company must have at least one forum experience created. Set up a forum in your Whop company dashboard first.

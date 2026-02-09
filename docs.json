@@ -93,7 +93,8 @@
               "providers/slack",
               "providers/telegram",
               "providers/dribbble",
-              "providers/skool"
+              "providers/skool",
+              "providers/whop"
             ]
           }
         ]

@@ -1,0 +1,143 @@
+---
+title: Twitch Settings
+description: 'API settings for posting to Twitch chat'
+---
+
+## Settings Schema
+
+When creating a post for Twitch, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "twitch",
+    "messageType": "message",
+    "announcementColor": "primary"
+  }
+}
+```
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `twitch` |
+| `messageType` | `string` | No | Type of message to send |
+| `announcementColor` | `string` | No | Color for announcement messages |
+
+### `messageType`
+
+The type of message to send in Twitch chat.
+
+| Value | Description |
+|-------|-------------|
+| `message` | Regular chat message (default) |
+| `announcement` | Announcement message (highlighted in chat) |
+
+### `announcementColor`
+
+The color of the announcement banner. Only applies when `messageType` is `announcement`.
+
+| Value | Description |
+|-------|-------------|
+| `primary` | Default purple color |
+| `blue` | Blue announcement |
+| `green` | Green announcement |
+| `orange` | Orange announcement |
+| `purple` | Purple announcement |
+
+---
+
+## Complete Example
+
+### Regular Chat Message
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-twitch-integration-id"
+      },
+      "value": [
+        {
+          "content": "Going live in 5 minutes! Today's stream: Ranked grind to Diamond 🎮",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "twitch",
+        "messageType": "message"
+      }
+    }
+  ]
+}
+```
+
+### Announcement
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-twitch-integration-id"
+      },
+      "value": [
+        {
+          "content": "🎉 HUGE NEWS! We just hit 10,000 followers! Thank you all so much for the support! Special stream tomorrow to celebrate!",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "twitch",
+        "messageType": "announcement",
+        "announcementColor": "purple"
+      }
+    }
+  ]
+}
+```
+
+### Green Announcement
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-twitch-integration-id"
+      },
+      "value": [
+        {
+          "content": "✅ Giveaway winner announced! Congratulations to the lucky viewer! Check your DMs for prize details.",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "twitch",
+        "messageType": "announcement",
+        "announcementColor": "green"
+      }
+    }
+  ]
+}
+```
+
+<Info>
+- Regular messages appear as standard chat messages from your bot/account.
+- Announcements are highlighted with a colored banner and are more visible to viewers.
+- The `announcementColor` field is ignored when `messageType` is `message`.
+</Info>

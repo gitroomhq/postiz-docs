@@ -1,0 +1,143 @@
+---
+title: Skool Settings
+description: 'API settings for posting to Skool communities'
+---
+
+## Settings Schema
+
+When creating a post for Skool, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "skool",
+    "group": "group-id",
+    "label": "label-id",
+    "title": "My Post Title"
+  }
+}
+```
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `skool` |
+| `group` | `string` | Yes | Skool group ID |
+| `label` | `string` | Yes | Label ID for the post |
+| `title` | `string` | Yes | Title of the post (min 1 character) |
+
+### `group`
+
+The Skool group ID where the post will be published. You can find available groups by selecting them in the Postiz UI when configuring the Skool channel.
+
+### `label`
+
+The label ID to categorize the post. Each Skool group can have multiple labels — select the target label in the Postiz UI to obtain its ID.
+
+### `title`
+
+The title of the Skool post. This is a required field and must be at least 1 character long.
+
+---
+
+## Complete Example
+
+### Community Post
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-skool-integration-id"
+      },
+      "value": [
+        {
+          "content": "Hey everyone! 👋\n\nI wanted to share some tips that helped me grow my community:\n\n1. Be consistent with posting\n2. Engage with every comment\n3. Create valuable content\n\nWhat strategies have worked for you?",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "skool",
+        "group": "your-group-id",
+        "label": "your-label-id",
+        "title": "Community Growth Tips - What Worked For Me"
+      }
+    }
+  ]
+}
+```
+
+### Post with Image
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-skool-integration-id"
+      },
+      "value": [
+        {
+          "content": "Here's my progress report for this month. Really happy with the results!\n\nKey metrics:\n- Revenue up 25%\n- New members: 150\n- Engagement rate: 45%",
+          "image": [
+            {
+              "id": "metrics-image-id",
+              "path": "https://uploads.postiz.com/metrics.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "skool",
+        "group": "your-group-id",
+        "label": "your-label-id",
+        "title": "Monthly Progress Report - December 2024"
+      }
+    }
+  ]
+}
+```
+
+### Quick Announcement
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-skool-integration-id"
+      },
+      "value": [
+        {
+          "content": "We're going live in 30 minutes! Join us for a Q&A session about scaling your business.\n\nDrop your questions below and we'll cover them live! 🎙️",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "skool",
+        "group": "your-group-id",
+        "label": "your-label-id",
+        "title": "🔴 LIVE Q&A Starting Soon!"
+      }
+    }
+  ]
+}
+```
+
+<Note>
+Skool uses the Postiz Chrome Extension for authentication. Make sure the extension is installed and configured before using the API. See the [Skool provider guide](/providers/skool) for setup instructions.
+</Note>

@@ -1,0 +1,114 @@
+---
+title: Kick Settings
+description: 'API settings for posting to Kick'
+---
+
+## Settings Schema
+
+When creating a post for Kick, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "kick"
+  }
+}
+```
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `kick` |
+
+Kick has no additional settings fields. Only the `__type` identifier is required.
+
+---
+
+## Complete Example
+
+### Chat Message
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-kick-integration-id"
+      },
+      "value": [
+        {
+          "content": "Going live in 10 minutes! Today we're doing a special community stream 🎮",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "kick"
+      }
+    }
+  ]
+}
+```
+
+### Message with Image
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-kick-integration-id"
+      },
+      "value": [
+        {
+          "content": "Check out the schedule for this week! See you there 👋",
+          "image": [
+            {
+              "id": "schedule-image-id",
+              "path": "https://uploads.postiz.com/schedule.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "kick"
+      }
+    }
+  ]
+}
+```
+
+### Quick Announcement
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-kick-integration-id"
+      },
+      "value": [
+        {
+          "content": "Stream cancelled tonight due to technical issues. Will be back tomorrow at the usual time! Sorry about that 🙏",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "kick"
+      }
+    }
+  ]
+}
+```

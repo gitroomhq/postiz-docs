@@ -139,7 +139,7 @@
             ]
           },
           {
-            "group": "Provider Settings (21 with custom settings)",
+            "group": "Provider Settings (25 with custom settings)",
             "pages": [
               "public-api/providers/x",
               "public-api/providers/linkedin",
@@ -159,7 +159,11 @@
               "public-api/providers/hashnode",
               "public-api/providers/wordpress",
               "public-api/providers/listmonk",
-              "public-api/providers/gmb"
+              "public-api/providers/gmb",
+              "public-api/providers/whop",
+              "public-api/providers/skool",
+              "public-api/providers/kick",
+              "public-api/providers/twitch"
             ]
           }
         ]

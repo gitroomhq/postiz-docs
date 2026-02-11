@@ -124,6 +124,12 @@
             ]
           },
           {
+            "group": "Notifications",
+            "pages": [
+              "public-api/notifications/list"
+            ]
+          },
+          {
             "group": "Uploads",
             "pages": [
               "public-api/uploads/upload-file",

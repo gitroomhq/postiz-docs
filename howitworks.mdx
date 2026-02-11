@@ -5,7 +5,7 @@ description: 'Learn the architecture of the project'
 
 ## Architecture
 
-Postiz is composed of 4 main services and 3 external services - all 4 of the main services typically run within a **single docker container**, and talk to each other through HTTP. Those 4 main servers typically talk to other containers, running the external services - the SQL Database, Redis Queue and Storage.
+Postiz is composed of 3 main services and 4 external services - all 3 of the main services typically run within a **single docker container**, and talk to each other through HTTP. Those services talk to other containers running the external services - the SQL Database, Redis, Temporal and Storage.
 
 ```mermaid
 flowchart LR;
@@ -14,29 +14,29 @@ flowchart LR;
 
     frontend[Frontend Service]:::svc
     backend[Backend Service]:::svc
-    cron[Cron Service]:::svc
-    workers[Worker Service]:::svc
-    redis[Redis Queue]:::ext
+    orchestrator[Orchestrator Service]:::svc
+    temporal[Temporal]:::ext
+    redis[Redis]:::ext
     db[SQL Database]:::ext
     storage[Storage]:::ext
 
-	frontend --> backend
+    frontend --> backend
     backend --> db
     backend --> redis
-    cron <--> redis
-    workers --> storage
-    workers --> db
-    redis --> workers
+    backend --> temporal
+    temporal --> orchestrator
+    orchestrator --> db
+    orchestrator --> storage
     backend --> storage
 
 ```
 
 - [Frontend](#frontend) - Provides the Web user interface, talks to the Backend.
-- [Backend](#backend) - Does all the real work, provides an API for the frontend, and posts work to the redis queue.
-- [Workers](#worker) - Consumes work from the Redis Queue.
-- [Cron](#cron) - Run jobs at scheduled times.
+- [Backend](#backend) - Does all the real work, provides an API for the frontend, and triggers workflows via Temporal.
+- [Orchestrator](#orchestrator) - Runs Temporal workflows and activities, replacing the old cron and worker services.
 
-- [Redis Queue](#redis) - A simple queue for the workers to consume work from.
+- [Temporal](#temporal) - A durable workflow engine that manages scheduling, retries, and task distribution.
+- [Redis](#redis) - Used for session state management and caching.
 - [SQL Database](#db) - Stores all the data, Postgres is typically used, but any SQL database can be used.
 - [Storage](#storage) - Stores all the files, this used to be CloudFlare R2 as the default, but now it's just a local file system.
 
@@ -52,20 +52,24 @@ It relies on the backend to:
 
 ### Backend
 
-The backend is the "brain" of Postiz, and coordinates all the work. Typically the SQL database it talks to is Postgres, but other databases can be used.
+The backend is the "brain" of Postiz, and coordinates all the work. It triggers Temporal workflows for async operations like posting to social media, sending emails, and refreshing tokens. Typically the SQL database it talks to is Postgres, but other databases can be used.
 
-### Cron
+### Orchestrator
 
-The cron service does the following;
+The orchestrator replaces the old cron and worker services with Temporal workflows. It handles:
 
-- Refresh tokens from different social media platforms.
-- Check for trending change every hour and inform users about it.
-- Sync the amount of stars for every repository at the end of the day.
+- Posting scheduled content to social media platforms.
+- Refreshing tokens from different social media platforms.
+- Sending digest and notification emails.
+- Checking for missing posts and auto-posting.
+- Tracking user posting streaks.
 
-### Worker
+### Temporal
 
-The worker services does the following;
+Temporal is a durable workflow execution engine. It provides:
 
-- Post scheduled posts to social media platforms.
-- Perform multiple jobs coming from the cron.
+- **Reliable scheduling** - Workflows run at the right time with automatic retries on failure.
+- **Task queues** - Each social platform gets its own task queue for concurrency control.
+- **Workflow visibility** - A built-in UI for monitoring and debugging workflow execution.
+- **Durable state** - Workflow state is persisted, so nothing is lost if a service restarts.
 

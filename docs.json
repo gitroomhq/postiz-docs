@@ -50,51 +50,49 @@
               "reverse-proxies/nginx",
               "reverse-proxies/traefik"
             ]
-          }
-        ]
-      },
-      {
-        "tab": "Providers",
-        "groups": [
+          },
           {
-            "group": "Provider Configuration",
+            "group": "Providers",
             "pages": [
               "providers/overview",
-              "configuration/create-provider"
-            ]
-          },
-          {
-            "group": "Social Platforms",
-            "pages": [
-              "providers/x-twitter",
-              "providers/linkedin",
-              "providers/linkedin-page",
-              "providers/facebook",
-              "providers/instagram",
-              "providers/threads",
-              "providers/bluesky",
-              "providers/mastodon",
-              "providers/google-my-business"
-            ]
-          },
-          {
-            "group": "Video Platforms",
-            "pages": [
-              "providers/youtube",
-              "providers/tiktok"
-            ]
-          },
-          {
-            "group": "Other Platforms",
-            "pages": [
-              "providers/reddit",
-              "providers/pinterest",
-              "providers/discord",
-              "providers/slack",
-              "providers/telegram",
-              "providers/dribbble",
-              "providers/skool",
-              "providers/whop"
+              "configuration/create-provider",
+              {
+                "group": "Social Platforms",
+                "expanded": true,
+                "pages": [
+                  "providers/x-twitter",
+                  "providers/linkedin",
+                  "providers/linkedin-page",
+                  "providers/facebook",
+                  "providers/instagram",
+                  "providers/threads",
+                  "providers/bluesky",
+                  "providers/mastodon",
+                  "providers/google-my-business"
+                ]
+              },
+              {
+                "group": "Video Platforms",
+                "expanded": true,
+                "pages": [
+                  "providers/youtube",
+                  "providers/tiktok"
+                ]
+              },
+              {
+                "group": "Other Platforms",
+                "expanded": true,
+                "pages": [
+                  "providers/reddit",
+                  "providers/pinterest",
+                  "providers/discord",
+                  "providers/slack",
+                  "providers/telegram",
+                  "providers/dribbble",
+                  "providers/skool",
+                  "providers/whop"
+                ]
+              }
             ]
           }
         ]

@@ -121,7 +121,8 @@
             "pages": [
               "public-api/posts/list",
               "public-api/posts/create",
-              "public-api/posts/delete"
+              "public-api/posts/delete",
+              "public-api/posts/delete-by-group"
             ]
           },
           {

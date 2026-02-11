@@ -562,8 +562,8 @@
     "/posts/{id}": {
       "delete": {
         "tags": ["Posts"],
-        "summary": "Delete a post",
-        "description": "Delete a post by ID.",
+        "summary": "Delete a post by ID",
+        "description": "Delete a post by its ID. The API will look up the post and delete all posts in the same group.",
         "operationId": "deletePost",
         "parameters": [
           {
@@ -591,6 +591,45 @@
                 },
                 "example": {
                   "id": "deleted-post-id"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/posts/group/{group}": {
+      "delete": {
+        "tags": ["Posts"],
+        "summary": "Delete a post by group",
+        "description": "Delete all posts in a group by the group identifier.",
+        "operationId": "deletePostByGroup",
+        "parameters": [
+          {
+            "name": "group",
+            "in": "path",
+            "required": true,
+            "description": "Group identifier to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Posts deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "deleted-group-id"
                 }
               }
             }

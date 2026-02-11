@@ -74,11 +74,11 @@ It's the same wizard to schedule posts in the Postiz app, however instead of sch
   </Tab>
 </Tabs>
 
-## Supported Platforms (27 total)
+## Supported Platforms (32 total)
 
 When creating posts, each social media platform has its own settings schema. The `settings` object must include a `__type` field matching the provider.
 
-### Platforms with custom settings (21)
+### Platforms with custom settings (25)
 
 <Tabs>
   <Tab title="Social">
@@ -105,6 +105,8 @@ When creating posts, each social media platform has its own settings schema. The
     | Lemmy | `lemmy` | `subreddit[]` with `id`, `title`, `url` |
     | Discord | `discord` | `channel` |
     | Slack | `slack` | `channel` |
+    | Skool | `skool` | `group`, `label`, `title` |
+    | Whop | `whop` | `company`, `experience`, `title` |
   </Tab>
   <Tab title="Design">
     | Platform | `__type` | Key settings |
@@ -126,9 +128,14 @@ When creating posts, each social media platform has its own settings schema. The
     | Google My Business | `gmb` | `topicType`, `callToActionType`, `callToActionUrl`, event/offer fields |
     | Listmonk | `listmonk` | `subject`, `preview`, `list`, `template` |
   </Tab>
+  <Tab title="Streaming">
+    | Platform | `__type` | Key settings |
+    |----------|----------|--------------|
+    | Twitch | `twitch` | `messageType`, `announcementColor` |
+  </Tab>
 </Tabs>
 
-### Platforms without custom settings (6)
+### Platforms without custom settings (7)
 
 These platforms only require `{ "__type": "platform-name" }`:
 
@@ -140,6 +147,7 @@ These platforms only require `{ "__type": "platform-name" }`:
 | Telegram | `telegram` |
 | Nostr | `nostr` |
 | VK | `vk` |
+| Kick | `kick` |
 
 <Card title="View Provider Settings Reference" icon="code" href="/public-api/providers/x">
   See detailed settings schemas with examples for each platform

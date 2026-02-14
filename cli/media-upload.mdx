@@ -1,0 +1,75 @@
+---
+title: Media Upload
+description: 'Upload images, videos, and other media files for use in posts'
+---
+
+## Uploading Files
+
+Upload a local file and receive a URL you can use in posts:
+
+```bash
+postiz upload <file-path>
+```
+
+The command returns a JSON response with the uploaded file's URL:
+
+```json
+{
+  "id": "img-123",
+  "path": "https://uploads.postiz.com/your-file.jpg"
+}
+```
+
+<Warning>
+You must upload media files to Postiz before using them in posts. Many platforms (TikTok, Instagram, YouTube) require verified URLs and will reject external links.
+</Warning>
+
+## Upload and Post Workflow
+
+```bash
+# 1. Upload the file
+RESULT=$(postiz upload photo.jpg)
+FILE_URL=$(echo "$RESULT" | jq -r '.path')
+
+# 2. Use the URL in a post
+postiz posts:create \
+  -c "Check out this photo!" \
+  -m "$FILE_URL" \
+  -s "2025-01-15T10:00:00Z" \
+  -i "your-integration-id"
+```
+
+## Supported File Types
+
+<Tabs>
+  <Tab title="Images">
+    PNG, JPG, JPEG, GIF, WEBP, SVG, BMP, ICO
+  </Tab>
+  <Tab title="Videos">
+    MP4, MOV, AVI, MKV, WEBM, FLV, WMV, M4V, MPEG, 3GP
+  </Tab>
+  <Tab title="Audio">
+    MP3, WAV, OGG, AAC, FLAC, M4A
+  </Tab>
+  <Tab title="Documents">
+    PDF, DOC, DOCX
+  </Tab>
+</Tabs>
+
+## Video Upload Example
+
+Platforms like TikTok, YouTube, and Instagram require video uploads through Postiz:
+
+```bash
+# Upload the video
+VIDEO=$(postiz upload video.mp4)
+VIDEO_URL=$(echo "$VIDEO" | jq -r '.path')
+
+# Post to TikTok
+postiz posts:create \
+  -c "New video! #fyp" \
+  -m "$VIDEO_URL" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"privacy_level":"PUBLIC_TO_EVERYONE"}' \
+  -i "tiktok-integration-id"
+```

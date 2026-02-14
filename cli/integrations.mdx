@@ -1,0 +1,100 @@
+---
+title: Integrations
+description: 'Discover connected accounts, settings schemas, and dynamic tools'
+---
+
+## Listing Integrations
+
+List all connected social media accounts to get their IDs:
+
+```bash
+postiz integrations:list
+```
+
+This returns a JSON array of integrations. Use `jq` to extract specific fields:
+
+```bash
+# Get just the IDs and platform names
+postiz integrations:list | jq '.[] | {id, identifier}'
+```
+
+```bash
+# Find a specific platform
+postiz integrations:list | jq '.[] | select(.identifier=="reddit")'
+```
+
+## Getting Settings
+
+Each platform has its own settings schema with character limits, required fields, and available options. Retrieve it with:
+
+```bash
+postiz integrations:settings <integration-id>
+```
+
+The response tells you:
+- What fields are available (title, privacy level, subreddit, etc.)
+- Which fields are required
+- Character limits and validation rules
+- Available dynamic tools you can trigger
+
+<Tip>
+Always check `integrations:settings` before posting to a new platform to understand what settings are available.
+</Tip>
+
+## Triggering Tools
+
+Some platforms expose dynamic tools — for example, fetching Reddit flairs, YouTube playlists, or LinkedIn company pages. These return data you need when constructing platform-specific settings.
+
+```bash
+postiz integrations:trigger <integration-id> <method-name>
+```
+
+Pass additional data with `-d`:
+
+```bash
+postiz integrations:trigger <integration-id> <method-name> -d '{"key":"value"}'
+```
+
+### Examples
+
+**Get Reddit flairs for a subreddit:**
+```bash
+postiz integrations:trigger reddit-id getFlairs -d '{"subreddit":"programming"}'
+```
+
+**Get YouTube playlists:**
+```bash
+postiz integrations:trigger youtube-id getPlaylists
+```
+
+**Get LinkedIn company pages:**
+```bash
+postiz integrations:trigger linkedin-id getCompanies
+```
+
+**Get Pinterest boards:**
+```bash
+postiz integrations:trigger pinterest-id getBoards
+```
+
+## Discovery Workflow
+
+When working with a new platform, follow this workflow:
+
+```bash
+# 1. Find the integration ID
+INTEGRATION_ID=$(postiz integrations:list | jq -r '.[] | select(.identifier=="reddit") | .id')
+
+# 2. Check what settings and tools are available
+postiz integrations:settings "$INTEGRATION_ID"
+
+# 3. Use tools to fetch dynamic data (e.g., flairs)
+postiz integrations:trigger "$INTEGRATION_ID" getFlairs -d '{"subreddit":"programming"}'
+
+# 4. Create a post with the discovered settings
+postiz posts:create \
+  -c "My post" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"subreddit":[{"value":{"subreddit":"programming","title":"Post Title","type":"text"}}]}' \
+  -i "$INTEGRATION_ID"
+```

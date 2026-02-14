@@ -1,0 +1,228 @@
+---
+title: Platform Examples
+description: 'Ready-to-use examples for posting to specific platforms'
+---
+
+## X (Twitter)
+
+### Simple Post
+
+```bash
+postiz posts:create \
+  -c "Hello Twitter!" \
+  -s "2025-01-15T10:00:00Z" \
+  -i "twitter-id"
+```
+
+### Thread
+
+```bash
+postiz posts:create \
+  -c "Thread 1/3: Introduction" \
+  -c "Thread 2/3: Main point" \
+  -c "Thread 3/3: Conclusion" \
+  -s "2025-01-15T10:00:00Z" \
+  -d 2000 \
+  -i "twitter-id"
+```
+
+### With Reply Controls
+
+```bash
+postiz posts:create \
+  -c "Only followers can reply to this" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"who_can_reply_post":"followers"}' \
+  -i "twitter-id"
+```
+
+## Reddit
+
+### Post with Flair
+
+```bash
+# 1. Get available flairs
+postiz integrations:trigger reddit-id getFlairs -d '{"subreddit":"programming"}'
+
+# 2. Post with a flair
+postiz posts:create \
+  -c "My post content" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"subreddit":[{"value":{"subreddit":"programming","title":"Post Title","type":"text","flair":{"id":"flair-id","name":"Discussion"}}}]}' \
+  -i "reddit-id"
+```
+
+### Scripted Workflow
+
+```bash
+#!/bin/bash
+REDDIT_ID=$(postiz integrations:list | jq -r '.[] | select(.identifier=="reddit") | .id')
+FLAIRS=$(postiz integrations:trigger "$REDDIT_ID" getFlairs -d '{"subreddit":"programming"}')
+FLAIR_ID=$(echo "$FLAIRS" | jq -r '.output[0].id')
+
+postiz posts:create \
+  -c "Automated Reddit post" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings "{\"subreddit\":[{\"value\":{\"subreddit\":\"programming\",\"title\":\"Post Title\",\"type\":\"text\",\"flair\":{\"id\":\"$FLAIR_ID\"}}}]}" \
+  -i "$REDDIT_ID"
+```
+
+## YouTube
+
+```bash
+# Upload video first
+VIDEO=$(postiz upload video.mp4)
+VIDEO_URL=$(echo "$VIDEO" | jq -r '.path')
+
+postiz posts:create \
+  -c "Video description here" \
+  -m "$VIDEO_URL" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"title":"My Video Title","type":"public","tags":[{"value":"tech","label":"Tech"}]}' \
+  -i "youtube-id"
+```
+
+## TikTok
+
+```bash
+# Upload video first
+VIDEO=$(postiz upload video.mp4)
+VIDEO_URL=$(echo "$VIDEO" | jq -r '.path')
+
+postiz posts:create \
+  -c "Check this out! #fyp" \
+  -m "$VIDEO_URL" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"privacy_level":"PUBLIC_TO_EVERYONE","duet":true,"stitch":true}' \
+  -i "tiktok-id"
+```
+
+## Instagram
+
+```bash
+# Upload image first
+IMAGE=$(postiz upload photo.jpg)
+IMAGE_URL=$(echo "$IMAGE" | jq -r '.path')
+
+# Regular post
+postiz posts:create \
+  -c "Beautiful day! #photography" \
+  -m "$IMAGE_URL" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"post_type":"post"}' \
+  -i "instagram-id"
+```
+
+### Story
+
+```bash
+postiz posts:create \
+  -c "Story content" \
+  -m "$IMAGE_URL" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"post_type":"story"}' \
+  -i "instagram-id"
+```
+
+### Reel
+
+```bash
+postiz posts:create \
+  -c "Reel caption" \
+  -m "$VIDEO_URL" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"post_type":"reel"}' \
+  -i "instagram-id"
+```
+
+## LinkedIn
+
+```bash
+postiz posts:create \
+  -c "Professional update on LinkedIn" \
+  -s "2025-01-15T10:00:00Z" \
+  -i "linkedin-id"
+```
+
+### Image Carousel
+
+```bash
+postiz posts:create \
+  -c "Check out these slides!" \
+  -m "image1.jpg,image2.jpg,image3.jpg" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"post_as_images_carousel":true}' \
+  -i "linkedin-id"
+```
+
+## Pinterest
+
+```bash
+postiz posts:create \
+  -c "Pin description" \
+  -m "$IMAGE_URL" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"board":"board-id","title":"Pin Title","link":"https://example.com"}' \
+  -i "pinterest-id"
+```
+
+## Discord
+
+```bash
+postiz posts:create \
+  -c "Message to Discord" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"channel":"channel-id"}' \
+  -i "discord-id"
+```
+
+## Batch Scheduling
+
+Schedule multiple posts across different dates:
+
+```bash
+#!/bin/bash
+DATES=("2025-01-14T09:00:00Z" "2025-01-15T09:00:00Z" "2025-01-16T09:00:00Z")
+CONTENT=("Monday motivation" "Tuesday tips" "Wednesday wisdom")
+
+for i in "${!DATES[@]}"; do
+  postiz posts:create \
+    -c "${CONTENT[$i]}" \
+    -s "${DATES[$i]}" \
+    -i "twitter-id"
+done
+```
+
+## Multi-Platform Campaign
+
+Post different content per platform in one command using a JSON file:
+
+```bash
+postiz posts:create --json campaign.json
+```
+
+Example `campaign.json`:
+
+```json
+{
+  "integrations": ["twitter-123", "linkedin-456", "reddit-789"],
+  "posts": [
+    {
+      "provider": "twitter",
+      "post": [{ "content": "Short tweet version", "image": [] }]
+    },
+    {
+      "provider": "linkedin",
+      "post": [{ "content": "More detailed LinkedIn post with professional tone", "image": [] }]
+    },
+    {
+      "provider": "reddit",
+      "post": [{ "content": "Reddit post body", "image": [] }],
+      "settings": {
+        "__type": "reddit",
+        "subreddit": [{ "value": { "subreddit": "programming", "title": "Post Title", "type": "text" } }]
+      }
+    }
+  ]
+}
+```

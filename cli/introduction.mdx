@@ -1,0 +1,81 @@
+---
+title: Introduction
+description: 'Automate social media posting from the command line with the Postiz CLI'
+---
+
+The Postiz CLI is a command-line tool for automating social media posting across 28+ platforms. It wraps the [Public API](/public-api/introduction) so you can schedule posts, manage integrations, and upload media directly from your terminal or shell scripts.
+
+## Installation
+
+<Tabs>
+  <Tab title="npm">
+    ```bash
+    npm install -g postiz
+    ```
+  </Tab>
+  <Tab title="pnpm">
+    ```bash
+    pnpm install -g postiz
+    ```
+  </Tab>
+</Tabs>
+
+Verify the installation:
+
+```bash
+postiz --help
+```
+
+## Setup
+
+### API Key
+
+Set your Postiz API key as an environment variable. You can get your API key from the Postiz Settings page.
+
+```bash
+export POSTIZ_API_KEY=your_api_key_here
+```
+
+<Tip>
+Add this to your shell profile (`~/.bashrc`, `~/.zshrc`, etc.) so it persists across sessions.
+</Tip>
+
+### Custom API URL (self-hosted)
+
+If you're running a self-hosted Postiz instance, point the CLI to your server:
+
+```bash
+export POSTIZ_API_URL=https://your-postiz-server.com
+```
+
+## Quick Start
+
+```bash
+# 1. List your connected social media accounts
+postiz integrations:list
+
+# 2. Create a scheduled post
+postiz posts:create \
+  -c "Hello from the Postiz CLI!" \
+  -s "2025-01-15T10:00:00Z" \
+  -i "your-integration-id"
+
+# 3. List your scheduled posts
+postiz posts:list
+```
+
+## Commands Overview
+
+| Command | Description |
+|---------|-------------|
+| `integrations:list` | List all connected social media accounts |
+| `integrations:settings` | Get the settings schema for an integration |
+| `integrations:trigger` | Trigger a dynamic tool on an integration |
+| `posts:create` | Create a new post |
+| `posts:list` | List posts with optional date filtering |
+| `posts:delete` | Delete a post by ID |
+| `upload` | Upload a media file |
+
+<Note>
+All commands output JSON, making the CLI easy to use in scripts and automation pipelines.
+</Note>

@@ -194,6 +194,7 @@
             "pages": [
               "cli/managing-posts",
               "cli/integrations",
+              "cli/analytics",
               "cli/media-upload"
             ]
           },

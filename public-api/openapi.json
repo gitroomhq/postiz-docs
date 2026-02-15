@@ -645,6 +645,113 @@
         }
       }
     },
+    "/posts/{id}/missing": {
+      "get": {
+        "tags": ["Posts"],
+        "summary": "Get missing content",
+        "description": "When a post has been published but the platform did not return a usable post ID (the `releaseId` is set to `\"missing\"`), this endpoint fetches recent content from the provider so you can match and connect the correct one to the post.\n\nThe provider must implement the optional `missing` method. If the provider does not support it, an empty array is returned.",
+        "operationId": "getMissingContent",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Post ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of recent content items from the provider",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MissingContentItem"
+                  }
+                },
+                "example": [
+                  {
+                    "id": "7321456789012345678",
+                    "url": "https://p16-sign.tiktokcdn-us.com/obj/cover-image.jpeg"
+                  },
+                  {
+                    "id": "7321456789012345679",
+                    "url": "https://p16-sign.tiktokcdn-us.com/obj/cover-image2.jpeg"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/posts/{id}/release-id": {
+      "put": {
+        "tags": ["Posts"],
+        "summary": "Update release ID",
+        "description": "Updates the `releaseId` of a post that currently has its release ID set to `\"missing\"`. This connects the post to its actual published content on the platform, enabling analytics and statistics tracking.\n\nTypically used after calling the **Get Missing Content** endpoint to retrieve the list of available content items.",
+        "operationId": "updateReleaseId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Post ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["releaseId"],
+                "properties": {
+                  "releaseId": {
+                    "type": "string",
+                    "description": "The platform-specific content ID to connect to this post"
+                  }
+                }
+              },
+              "example": {
+                "releaseId": "7321456789012345678"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Release ID updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "releaseId": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "post-123",
+                  "releaseId": "7321456789012345678"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/analytics/{integration}": {
       "get": {
         "tags": ["Analytics"],
@@ -1983,6 +2090,19 @@
             "type": "string",
             "format": "date-time",
             "description": "When the notification was created"
+          }
+        }
+      },
+      "MissingContentItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Platform-specific content ID"
+          },
+          "url": {
+            "type": "string",
+            "description": "Thumbnail or preview URL for the content"
           }
         }
       },

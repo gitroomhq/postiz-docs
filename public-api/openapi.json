@@ -47,6 +47,10 @@
       "description": "View organization notifications"
     },
     {
+      "name": "Analytics",
+      "description": "View analytics for integrations and posts"
+    },
+    {
       "name": "Video Generation",
       "description": "Generate videos with AI"
     }
@@ -635,6 +639,130 @@
                 "example": {
                   "id": "deleted-group-id"
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/{integration}": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get platform analytics",
+        "description": "Get analytics data for a specific integration/channel. Returns metrics like followers, impressions, engagement, etc. depending on the platform.",
+        "operationId": "getAnalytics",
+        "parameters": [
+          {
+            "name": "integration",
+            "in": "path",
+            "required": true,
+            "description": "Integration ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "description": "Number of days to look back for analytics data (e.g. 7, 30, 90)",
+            "schema": {
+              "type": "string"
+            },
+            "example": "7"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Analytics data for the integration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AnalyticsData"
+                  }
+                },
+                "example": [
+                  {
+                    "label": "Followers",
+                    "data": [
+                      { "total": "1250", "date": "2025-01-01" },
+                      { "total": "1280", "date": "2025-01-02" }
+                    ],
+                    "percentageChange": 2.4
+                  },
+                  {
+                    "label": "Impressions",
+                    "data": [
+                      { "total": "5000", "date": "2025-01-01" },
+                      { "total": "5200", "date": "2025-01-02" }
+                    ],
+                    "percentageChange": 4.0
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "/analytics/post/{postId}": {
+      "get": {
+        "tags": ["Analytics"],
+        "summary": "Get post analytics",
+        "description": "Get analytics data for a specific published post. Returns metrics like likes, comments, shares, impressions, etc. depending on the platform.",
+        "operationId": "getPostAnalytics",
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "required": true,
+            "description": "Post ID",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "in": "query",
+            "required": true,
+            "description": "Number of days to look back for analytics data (e.g. 7, 30, 90)",
+            "schema": {
+              "type": "string"
+            },
+            "example": "7"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Analytics data for the post",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AnalyticsData"
+                  }
+                },
+                "example": [
+                  {
+                    "label": "Likes",
+                    "data": [
+                      { "total": "150", "date": "2025-01-01" },
+                      { "total": "175", "date": "2025-01-02" }
+                    ],
+                    "percentageChange": 16.7
+                  },
+                  {
+                    "label": "Comments",
+                    "data": [
+                      { "total": "25", "date": "2025-01-01" },
+                      { "total": "30", "date": "2025-01-02" }
+                    ],
+                    "percentageChange": 20.0
+                  }
+                ]
               }
             }
           }
@@ -1855,6 +1983,35 @@
             "type": "string",
             "format": "date-time",
             "description": "When the notification was created"
+          }
+        }
+      },
+      "AnalyticsData": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Metric label (e.g. Followers, Impressions, Likes)"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "total": {
+                  "type": "string",
+                  "description": "Metric value for this date"
+                },
+                "date": {
+                  "type": "string",
+                  "description": "Date string (YYYY-MM-DD)"
+                }
+              }
+            }
+          },
+          "percentageChange": {
+            "type": "number",
+            "description": "Percentage change over the selected period"
           }
         }
       },

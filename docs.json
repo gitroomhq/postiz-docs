@@ -124,6 +124,13 @@
             ]
           },
           {
+            "group": "Analytics",
+            "pages": [
+              "public-api/analytics/platform",
+              "public-api/analytics/post"
+            ]
+          },
+          {
             "group": "Notifications",
             "pages": [
               "public-api/notifications/list"

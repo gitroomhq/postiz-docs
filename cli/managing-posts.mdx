@@ -150,6 +150,61 @@ postiz posts:list \
 postiz posts:list --customer "customer-id"
 ```
 
+## Connecting Missing Posts
+
+Some platforms don't return a post ID immediately after publishing (the `releaseId` is set to `"missing"`). When this happens, you can fetch recent content from the provider and connect the correct one to your post. This enables analytics tracking.
+
+### List Available Content
+
+```bash
+postiz posts:missing <post-id>
+```
+
+Returns an array of recent content items from the provider with their ID and thumbnail URL:
+
+```json
+[
+  {
+    "id": "7321456789012345678",
+    "url": "https://p16-sign.tiktokcdn-us.com/obj/cover-image.jpeg"
+  },
+  {
+    "id": "7321456789012345679",
+    "url": "https://p16-sign.tiktokcdn-us.com/obj/cover-image2.jpeg"
+  }
+]
+```
+
+<Note>
+This only works for posts where the `releaseId` is `"missing"`. Returns an empty array if the provider doesn't support this feature.
+</Note>
+
+### Connect a Post
+
+Once you've identified the correct content, update the release ID:
+
+```bash
+postiz posts:connect <post-id> --release-id "7321456789012345678"
+```
+
+After connecting, the post will support full analytics via `postiz analytics:post`.
+
+### Full Workflow
+
+```bash
+# 1. Find posts with missing release IDs
+postiz posts:list | jq '.posts[] | select(.releaseId == "missing") | {id, content}'
+
+# 2. Get available content from the provider
+postiz posts:missing <post-id>
+
+# 3. Connect the correct content
+postiz posts:connect <post-id> --release-id "7321456789012345678"
+
+# 4. Verify analytics now work
+postiz analytics:post <post-id>
+```
+
 ## Deleting Posts
 
 ```bash

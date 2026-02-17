@@ -58,7 +58,9 @@
   "paths": {
     "/integrations": {
       "get": {
-        "tags": ["Integrations"],
+        "tags": [
+          "Integrations"
+        ],
         "summary": "List all integrations",
         "description": "Returns all connected social media channels for your organization.",
         "operationId": "listIntegrations",
@@ -95,7 +97,9 @@
     },
     "/is-connected": {
       "get": {
-        "tags": ["Integrations"],
+        "tags": [
+          "Integrations"
+        ],
         "summary": "Check connection status",
         "description": "Verify if your API key is valid and connected.",
         "operationId": "isConnected",
@@ -123,7 +127,9 @@
     },
     "/find-slot/{id}": {
       "get": {
-        "tags": ["Integrations"],
+        "tags": [
+          "Integrations"
+        ],
         "summary": "Find next available slot",
         "description": "Get the next available time slot for posting to a specific channel.",
         "operationId": "findSlot",
@@ -163,7 +169,9 @@
     },
     "/posts": {
       "get": {
-        "tags": ["Posts"],
+        "tags": [
+          "Posts"
+        ],
         "summary": "List posts",
         "description": "Get posts within a date range.",
         "operationId": "listPosts",
@@ -214,7 +222,9 @@
         }
       },
       "post": {
-        "tags": ["Posts"],
+        "tags": [
+          "Posts"
+        ],
         "summary": "Create a post",
         "description": "Create or schedule a new post. Each social media platform has its own settings schema.",
         "operationId": "createPost",
@@ -226,8 +236,33 @@
                 "$ref": "#/components/schemas/CreatePostRequest"
               },
               "examples": {
-                "x-post": {
-                  "summary": "X (Twitter) Post",
+                "general": {
+                  "summary": "General (Threads, Mastodon, Bluesky, Telegram, Nostr, VK, Kick)",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Hello world!",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "bluesky"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "x": {
+                  "summary": "X (Twitter)",
                   "value": {
                     "type": "schedule",
                     "date": "2024-12-14T10:00:00.000Z",
@@ -240,7 +275,7 @@
                         },
                         "value": [
                           {
-                            "content": "Hello from the Postiz API! 🚀",
+                            "content": "Hello from the Postiz API!",
                             "image": []
                           }
                         ],
@@ -253,8 +288,8 @@
                     ]
                   }
                 },
-                "linkedin-carousel": {
-                  "summary": "LinkedIn Carousel",
+                "linkedin": {
+                  "summary": "LinkedIn",
                   "value": {
                     "type": "schedule",
                     "date": "2024-12-14T10:00:00.000Z",
@@ -268,24 +303,57 @@
                         "value": [
                           {
                             "content": "Check out our latest product showcase!",
-                            "image": [
-                              {"id": "img1", "path": "https://uploads.postiz.com/1.png"},
-                              {"id": "img2", "path": "https://uploads.postiz.com/2.png"}
-                            ]
+                            "image": []
                           }
                         ],
                         "settings": {
                           "__type": "linkedin",
-                          "post_as_images_carousel": true
+                          "post_as_images_carousel": false
                         }
                       }
                     ]
                   }
                 },
-                "instagram-story": {
-                  "summary": "Instagram Story",
+                "linkedin-page": {
+                  "summary": "LinkedIn Page",
                   "value": {
-                    "type": "now",
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-linkedin-page-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Company update: We just launched a new feature!",
+                            "image": [
+                              {
+                                "id": "img1",
+                                "path": "https://uploads.postiz.com/1.png"
+                              },
+                              {
+                                "id": "img2",
+                                "path": "https://uploads.postiz.com/2.png"
+                              }
+                            ]
+                          }
+                        ],
+                        "settings": {
+                          "__type": "linkedin-page",
+                          "post_as_images_carousel": true,
+                          "carousel_name": "Product Showcase"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "instagram": {
+                  "summary": "Instagram",
+                  "value": {
+                    "type": "schedule",
                     "date": "2024-12-14T10:00:00.000Z",
                     "shortLink": false,
                     "tags": [],
@@ -296,23 +364,60 @@
                         },
                         "value": [
                           {
-                            "content": "",
+                            "content": "Beautiful sunset today!",
                             "image": [
-                              {"id": "story-img", "path": "https://uploads.postiz.com/story.jpg"}
+                              {
+                                "id": "img1",
+                                "path": "https://uploads.postiz.com/photo.jpg"
+                              }
                             ]
                           }
                         ],
                         "settings": {
                           "__type": "instagram",
-                          "post_type": "story",
+                          "post_type": "post",
+                          "is_trial_reel": false,
                           "collaborators": []
                         }
                       }
                     ]
                   }
                 },
-                "youtube-video": {
-                  "summary": "YouTube Video",
+                "instagram-standalone": {
+                  "summary": "Instagram Standalone",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-instagram-standalone-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "",
+                            "image": [
+                              {
+                                "id": "story-img",
+                                "path": "https://uploads.postiz.com/story.jpg"
+                              }
+                            ]
+                          }
+                        ],
+                        "settings": {
+                          "__type": "instagram-standalone",
+                          "post_type": "story",
+                          "is_trial_reel": false,
+                          "collaborators": []
+                        }
+                      }
+                    ]
+                  }
+                },
+                "youtube": {
+                  "summary": "YouTube",
                   "value": {
                     "type": "schedule",
                     "date": "2024-12-14T10:00:00.000Z",
@@ -327,7 +432,10 @@
                           {
                             "content": "Video description here...",
                             "image": [
-                              {"id": "video-id", "path": "https://uploads.postiz.com/video.mp4"}
+                              {
+                                "id": "video-id",
+                                "path": "https://uploads.postiz.com/video.mp4"
+                              }
                             ]
                           }
                         ],
@@ -337,15 +445,57 @@
                           "type": "public",
                           "selfDeclaredMadeForKids": "no",
                           "tags": [
-                            {"value": "tutorial", "label": "tutorial"}
+                            {
+                              "value": "tutorial",
+                              "label": "tutorial"
+                            }
                           ]
                         }
                       }
                     ]
                   }
                 },
-                "reddit-post": {
-                  "summary": "Reddit Post",
+                "tiktok": {
+                  "summary": "TikTok",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-tiktok-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Check this out! #viral #fyp",
+                            "image": [
+                              {
+                                "id": "video-id",
+                                "path": "https://uploads.postiz.com/tiktok.mp4"
+                              }
+                            ]
+                          }
+                        ],
+                        "settings": {
+                          "__type": "tiktok",
+                          "privacy_level": "PUBLIC_TO_EVERYONE",
+                          "duet": true,
+                          "stitch": true,
+                          "comment": true,
+                          "autoAddMusic": "no",
+                          "brand_content_toggle": false,
+                          "brand_organic_toggle": false,
+                          "video_made_with_ai": false,
+                          "content_posting_method": "DIRECT_POST"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "reddit": {
+                  "summary": "Reddit",
                   "value": {
                     "type": "schedule",
                     "date": "2024-12-14T10:00:00.000Z",
@@ -381,8 +531,8 @@
                     ]
                   }
                 },
-                "tiktok-video": {
-                  "summary": "TikTok Video",
+                "lemmy": {
+                  "summary": "Lemmy",
                   "value": {
                     "type": "schedule",
                     "date": "2024-12-14T10:00:00.000Z",
@@ -391,35 +541,176 @@
                     "posts": [
                       {
                         "integration": {
-                          "id": "your-tiktok-integration-id"
+                          "id": "your-lemmy-integration-id"
                         },
                         "value": [
                           {
-                            "content": "Check this out! #viral #fyp",
-                            "image": [
-                              {"id": "video-id", "path": "https://uploads.postiz.com/tiktok.mp4"}
-                            ]
+                            "content": "Post content here...",
+                            "image": []
                           }
                         ],
                         "settings": {
-                          "__type": "tiktok",
-                          "title": "My TikTok",
-                          "privacy_level": "PUBLIC_TO_EVERYONE",
-                          "duet": true,
-                          "stitch": true,
-                          "comment": true,
-                          "autoAddMusic": "no",
-                          "brand_content_toggle": false,
-                          "brand_organic_toggle": false,
-                          "video_made_with_ai": false,
-                          "content_posting_method": "DIRECT_POST"
+                          "__type": "lemmy",
+                          "subreddit": [
+                            {
+                              "value": {
+                                "subreddit": "technology",
+                                "id": "community-id",
+                                "title": "My Post Title",
+                                "url": ""
+                              }
+                            }
+                          ]
                         }
                       }
                     ]
                   }
                 },
-                "medium-article": {
-                  "summary": "Medium Article",
+                "pinterest": {
+                  "summary": "Pinterest",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-pinterest-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Pin description here...",
+                            "image": [
+                              {
+                                "id": "pin-img",
+                                "path": "https://uploads.postiz.com/pin.jpg"
+                              }
+                            ]
+                          }
+                        ],
+                        "settings": {
+                          "__type": "pinterest",
+                          "board": "board-id",
+                          "title": "My Pin",
+                          "link": "https://example.com"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "dribbble": {
+                  "summary": "Dribbble",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-dribbble-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Shot description here...",
+                            "image": [
+                              {
+                                "id": "shot-img",
+                                "path": "https://uploads.postiz.com/shot.png"
+                              }
+                            ]
+                          }
+                        ],
+                        "settings": {
+                          "__type": "dribbble",
+                          "title": "My Design Shot"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "discord": {
+                  "summary": "Discord",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-discord-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Hello Discord!",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "discord",
+                          "channel": "channel-id"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "slack": {
+                  "summary": "Slack",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-slack-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Hello Slack!",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "slack",
+                          "channel": "channel-id"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "twitch": {
+                  "summary": "Twitch",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-twitch-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Stream announcement!",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "twitch",
+                          "messageType": "announcement",
+                          "announcementColor": "primary"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "medium": {
+                  "summary": "Medium",
                   "value": {
                     "type": "schedule",
                     "date": "2024-12-14T10:00:00.000Z",
@@ -441,15 +732,18 @@
                           "title": "My Amazing Article",
                           "subtitle": "A deep dive into...",
                           "tags": [
-                            {"value": "programming", "label": "Programming"}
+                            {
+                              "value": "programming",
+                              "label": "Programming"
+                            }
                           ]
                         }
                       }
                     ]
                   }
                 },
-                "devto-article": {
-                  "summary": "Dev.to Article",
+                "devto": {
+                  "summary": "Dev.to",
                   "value": {
                     "type": "schedule",
                     "date": "2024-12-14T10:00:00.000Z",
@@ -470,16 +764,111 @@
                           "__type": "devto",
                           "title": "Building APIs with Node.js",
                           "tags": [
-                            {"value": "javascript", "label": "javascript"},
-                            {"value": "nodejs", "label": "nodejs"}
+                            {
+                              "value": "javascript",
+                              "label": "javascript"
+                            },
+                            {
+                              "value": "nodejs",
+                              "label": "nodejs"
+                            }
                           ]
                         }
                       }
                     ]
                   }
                 },
-                "gmb-post": {
-                  "summary": "Google My Business Post",
+                "hashnode": {
+                  "summary": "Hashnode",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-hashnode-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "# Getting Started\n\nArticle content here...",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "hashnode",
+                          "title": "Getting Started with Postiz",
+                          "subtitle": "A beginner's guide",
+                          "publication": "publication-id",
+                          "tags": [
+                            {
+                              "value": "webdev",
+                              "label": "Web Development"
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "wordpress": {
+                  "summary": "WordPress",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-wordpress-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Blog post content here...",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "wordpress",
+                          "title": "My Blog Post",
+                          "type": "post"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "listmonk": {
+                  "summary": "Listmonk",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-listmonk-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Newsletter content here...",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "listmonk",
+                          "subject": "Weekly Newsletter",
+                          "preview": "This week's highlights...",
+                          "list": "list-id"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "gmb": {
+                  "summary": "Google My Business",
                   "value": {
                     "type": "schedule",
                     "date": "2024-12-14T10:00:00.000Z",
@@ -507,26 +896,141 @@
                     ]
                   }
                 },
-                "simple-platform": {
-                  "summary": "Simple Platform (Facebook, Threads, Bluesky, etc.)",
+                "facebook": {
+                  "summary": "Facebook",
                   "value": {
-                    "type": "now",
+                    "type": "schedule",
                     "date": "2024-12-14T10:00:00.000Z",
                     "shortLink": false,
                     "tags": [],
                     "posts": [
                       {
                         "integration": {
-                          "id": "your-integration-id"
+                          "id": "your-facebook-integration-id"
                         },
                         "value": [
                           {
-                            "content": "Hello world!",
+                            "content": "Hello Facebook!",
                             "image": []
                           }
                         ],
                         "settings": {
-                          "__type": "bluesky"
+                          "__type": "facebook",
+                          "url": "https://example.com"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "warpcast": {
+                  "summary": "Warpcast (Farcaster)",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-warpcast-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Hello Farcaster!",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "warpcast",
+                          "subreddit": [
+                            {
+                              "value": {
+                                "id": "channel-id"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                },
+                "moltbook": {
+                  "summary": "Moltbook",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-moltbook-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Hello Moltbook!",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "moltbook",
+                          "submolt": "submolt-id"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "skool": {
+                  "summary": "Skool",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-skool-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Post content here...",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "skool",
+                          "group": "group-id",
+                          "label": "label-id",
+                          "title": "My Skool Post"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "whop": {
+                  "summary": "Whop",
+                  "value": {
+                    "type": "schedule",
+                    "date": "2024-12-14T10:00:00.000Z",
+                    "shortLink": false,
+                    "tags": [],
+                    "posts": [
+                      {
+                        "integration": {
+                          "id": "your-whop-integration-id"
+                        },
+                        "value": [
+                          {
+                            "content": "Post content here...",
+                            "image": []
+                          }
+                        ],
+                        "settings": {
+                          "__type": "whop",
+                          "company": "company-id",
+                          "experience": "experience-id",
+                          "title": "My Whop Post"
                         }
                       }
                     ]
@@ -569,7 +1073,9 @@
     },
     "/posts/{id}": {
       "delete": {
-        "tags": ["Posts"],
+        "tags": [
+          "Posts"
+        ],
         "summary": "Delete a post by ID",
         "description": "Delete a post by its ID. The API will look up the post and delete all posts in the same group.",
         "operationId": "deletePost",
@@ -608,7 +1114,9 @@
     },
     "/posts/group/{group}": {
       "delete": {
-        "tags": ["Posts"],
+        "tags": [
+          "Posts"
+        ],
         "summary": "Delete a post by group",
         "description": "Delete all posts in a group by the group identifier.",
         "operationId": "deletePostByGroup",
@@ -647,7 +1155,9 @@
     },
     "/posts/{id}/missing": {
       "get": {
-        "tags": ["Posts"],
+        "tags": [
+          "Posts"
+        ],
         "summary": "Get missing content",
         "description": "When a post has been published but the platform did not return a usable post ID (the `releaseId` is set to `\"missing\"`), this endpoint fetches recent content from the provider so you can match and connect the correct one to the post.\n\nThe provider must implement the optional `missing` method. If the provider does not support it, an empty array is returned.",
         "operationId": "getMissingContent",
@@ -691,7 +1201,9 @@
     },
     "/posts/{id}/release-id": {
       "put": {
-        "tags": ["Posts"],
+        "tags": [
+          "Posts"
+        ],
         "summary": "Update release ID",
         "description": "Updates the `releaseId` of a post that currently has its release ID set to `\"missing\"`. This connects the post to its actual published content on the platform, enabling analytics and statistics tracking.\n\nTypically used after calling the **Get Missing Content** endpoint to retrieve the list of available content items.",
         "operationId": "updateReleaseId",
@@ -712,7 +1224,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["releaseId"],
+                "required": [
+                  "releaseId"
+                ],
                 "properties": {
                   "releaseId": {
                     "type": "string",
@@ -754,7 +1268,9 @@
     },
     "/analytics/{integration}": {
       "get": {
-        "tags": ["Analytics"],
+        "tags": [
+          "Analytics"
+        ],
         "summary": "Get platform analytics",
         "description": "Get analytics data for a specific integration/channel. Returns metrics like followers, impressions, engagement, etc. depending on the platform.",
         "operationId": "getAnalytics",
@@ -794,18 +1310,30 @@
                   {
                     "label": "Followers",
                     "data": [
-                      { "total": "1250", "date": "2025-01-01" },
-                      { "total": "1280", "date": "2025-01-02" }
+                      {
+                        "total": "1250",
+                        "date": "2025-01-01"
+                      },
+                      {
+                        "total": "1280",
+                        "date": "2025-01-02"
+                      }
                     ],
                     "percentageChange": 2.4
                   },
                   {
                     "label": "Impressions",
                     "data": [
-                      { "total": "5000", "date": "2025-01-01" },
-                      { "total": "5200", "date": "2025-01-02" }
+                      {
+                        "total": "5000",
+                        "date": "2025-01-01"
+                      },
+                      {
+                        "total": "5200",
+                        "date": "2025-01-02"
+                      }
                     ],
-                    "percentageChange": 4.0
+                    "percentageChange": 4
                   }
                 ]
               }
@@ -816,7 +1344,9 @@
     },
     "/analytics/post/{postId}": {
       "get": {
-        "tags": ["Analytics"],
+        "tags": [
+          "Analytics"
+        ],
         "summary": "Get post analytics",
         "description": "Get analytics data for a specific published post. Returns metrics like likes, comments, shares, impressions, etc. depending on the platform.",
         "operationId": "getPostAnalytics",
@@ -856,18 +1386,30 @@
                   {
                     "label": "Likes",
                     "data": [
-                      { "total": "150", "date": "2025-01-01" },
-                      { "total": "175", "date": "2025-01-02" }
+                      {
+                        "total": "150",
+                        "date": "2025-01-01"
+                      },
+                      {
+                        "total": "175",
+                        "date": "2025-01-02"
+                      }
                     ],
                     "percentageChange": 16.7
                   },
                   {
                     "label": "Comments",
                     "data": [
-                      { "total": "25", "date": "2025-01-01" },
-                      { "total": "30", "date": "2025-01-02" }
+                      {
+                        "total": "25",
+                        "date": "2025-01-01"
+                      },
+                      {
+                        "total": "30",
+                        "date": "2025-01-02"
+                      }
                     ],
-                    "percentageChange": 20.0
+                    "percentageChange": 20
                   }
                 ]
               }
@@ -878,7 +1420,9 @@
     },
     "/upload": {
       "post": {
-        "tags": ["Uploads"],
+        "tags": [
+          "Uploads"
+        ],
         "summary": "Upload a file",
         "description": "Upload a media file using multipart form data.",
         "operationId": "uploadFile",
@@ -895,7 +1439,9 @@
                     "description": "The file to upload"
                   }
                 },
-                "required": ["file"]
+                "required": [
+                  "file"
+                ]
               }
             }
           }
@@ -916,7 +1462,9 @@
     },
     "/upload-from-url": {
       "post": {
-        "tags": ["Uploads"],
+        "tags": [
+          "Uploads"
+        ],
         "summary": "Upload from URL",
         "description": "Upload a file from an existing URL.",
         "operationId": "uploadFromUrl",
@@ -933,7 +1481,9 @@
                     "description": "URL of the file to upload"
                   }
                 },
-                "required": ["url"]
+                "required": [
+                  "url"
+                ]
               },
               "example": {
                 "url": "https://example.com/image.png"
@@ -957,7 +1507,9 @@
     },
     "/notifications": {
       "get": {
-        "tags": ["Notifications"],
+        "tags": [
+          "Notifications"
+        ],
         "summary": "List notifications",
         "description": "Get paginated notifications for your organization, sorted by most recent first. Returns 100 notifications per page.",
         "operationId": "listNotifications",
@@ -1011,7 +1563,9 @@
     },
     "/generate-video": {
       "post": {
-        "tags": ["Video Generation"],
+        "tags": [
+          "Video Generation"
+        ],
         "summary": "Generate a video",
         "description": "Create AI-generated videos for your posts.",
         "operationId": "generateVideo",
@@ -1077,7 +1631,9 @@
     },
     "/video/function": {
       "post": {
-        "tags": ["Video Generation"],
+        "tags": [
+          "Video Generation"
+        ],
         "summary": "Video function",
         "description": "Execute video-related functions like loading available voices.",
         "operationId": "videoFunction",
@@ -1101,7 +1657,10 @@
                     "description": "Additional parameters"
                   }
                 },
-                "required": ["functionName", "identifier"]
+                "required": [
+                  "functionName",
+                  "identifier"
+                ]
               },
               "example": {
                 "functionName": "loadVoices",
@@ -1185,6 +1744,8 @@
               "discord",
               "slack",
               "telegram",
+              "kick",
+              "twitch",
               "pinterest",
               "dribbble",
               "medium",
@@ -1192,7 +1753,10 @@
               "hashnode",
               "wordpress",
               "gmb",
-              "listmonk"
+              "listmonk",
+              "moltbook",
+              "skool",
+              "whop"
             ]
           },
           "picture": {
@@ -1286,7 +1850,12 @@
           },
           "state": {
             "type": "string",
-            "enum": ["QUEUE", "PUBLISHED", "ERROR", "DRAFT"]
+            "enum": [
+              "QUEUE",
+              "PUBLISHED",
+              "ERROR",
+              "DRAFT"
+            ]
           },
           "integration": {
             "type": "object",
@@ -1309,11 +1878,20 @@
       },
       "CreatePostRequest": {
         "type": "object",
-        "required": ["type", "date", "shortLink", "tags"],
+        "required": [
+          "type",
+          "date",
+          "shortLink",
+          "tags"
+        ],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["draft", "schedule", "now"],
+            "enum": [
+              "draft",
+              "schedule",
+              "now"
+            ],
             "description": "Post type"
           },
           "date": {
@@ -1350,11 +1928,16 @@
       },
       "PostItem": {
         "type": "object",
-        "required": ["integration", "value"],
+        "required": [
+          "integration",
+          "value"
+        ],
         "properties": {
           "integration": {
             "type": "object",
-            "required": ["id"],
+            "required": [
+              "id"
+            ],
             "properties": {
               "id": {
                 "type": "string",
@@ -1374,26 +1957,78 @@
           },
           "settings": {
             "oneOf": [
-              { "$ref": "#/components/schemas/XSettings" },
-              { "$ref": "#/components/schemas/LinkedInSettings" },
-              { "$ref": "#/components/schemas/InstagramSettings" },
-              { "$ref": "#/components/schemas/FacebookSettings" },
-              { "$ref": "#/components/schemas/YouTubeSettings" },
-              { "$ref": "#/components/schemas/TikTokSettings" },
-              { "$ref": "#/components/schemas/RedditSettings" },
-              { "$ref": "#/components/schemas/LemmySettings" },
-              { "$ref": "#/components/schemas/PinterestSettings" },
-              { "$ref": "#/components/schemas/DiscordSettings" },
-              { "$ref": "#/components/schemas/SlackSettings" },
-              { "$ref": "#/components/schemas/DribbbleSettings" },
-              { "$ref": "#/components/schemas/MediumSettings" },
-              { "$ref": "#/components/schemas/DevToSettings" },
-              { "$ref": "#/components/schemas/HashnodeSettings" },
-              { "$ref": "#/components/schemas/WordpressSettings" },
-              { "$ref": "#/components/schemas/ListmonkSettings" },
-              { "$ref": "#/components/schemas/GmbSettings" },
-              { "$ref": "#/components/schemas/WarpcastSettings" },
-              { "$ref": "#/components/schemas/EmptySettings" }
+              {
+                "$ref": "#/components/schemas/XSettings"
+              },
+              {
+                "$ref": "#/components/schemas/LinkedInSettings"
+              },
+              {
+                "$ref": "#/components/schemas/InstagramSettings"
+              },
+              {
+                "$ref": "#/components/schemas/FacebookSettings"
+              },
+              {
+                "$ref": "#/components/schemas/YouTubeSettings"
+              },
+              {
+                "$ref": "#/components/schemas/TikTokSettings"
+              },
+              {
+                "$ref": "#/components/schemas/RedditSettings"
+              },
+              {
+                "$ref": "#/components/schemas/LemmySettings"
+              },
+              {
+                "$ref": "#/components/schemas/PinterestSettings"
+              },
+              {
+                "$ref": "#/components/schemas/DiscordSettings"
+              },
+              {
+                "$ref": "#/components/schemas/SlackSettings"
+              },
+              {
+                "$ref": "#/components/schemas/TwitchSettings"
+              },
+              {
+                "$ref": "#/components/schemas/DribbbleSettings"
+              },
+              {
+                "$ref": "#/components/schemas/MediumSettings"
+              },
+              {
+                "$ref": "#/components/schemas/DevToSettings"
+              },
+              {
+                "$ref": "#/components/schemas/HashnodeSettings"
+              },
+              {
+                "$ref": "#/components/schemas/WordpressSettings"
+              },
+              {
+                "$ref": "#/components/schemas/ListmonkSettings"
+              },
+              {
+                "$ref": "#/components/schemas/GmbSettings"
+              },
+              {
+                "$ref": "#/components/schemas/WarpcastSettings"
+              },
+              {
+                "$ref": "#/components/schemas/MoltbookSettings"
+              },
+              {
+                "$ref": "#/components/schemas/SkoolSettings"
+              },
+              {
+                "$ref": "#/components/schemas/WhopSettings"
+              },
+              {
+                "$ref": "#/components/schemas/EmptySettings"
+              }
             ],
             "description": "Provider-specific settings"
           }
@@ -1401,7 +2036,9 @@
       },
       "PostContent": {
         "type": "object",
-        "required": ["content"],
+        "required": [
+          "content"
+        ],
         "properties": {
           "content": {
             "type": "string",
@@ -1421,7 +2058,10 @@
       },
       "Media": {
         "type": "object",
-        "required": ["id", "path"],
+        "required": [
+          "id",
+          "path"
+        ],
         "properties": {
           "id": {
             "type": "string"
@@ -1433,7 +2073,10 @@
       },
       "Tag": {
         "type": "object",
-        "required": ["value", "label"],
+        "required": [
+          "value",
+          "label"
+        ],
         "properties": {
           "value": {
             "type": "string"
@@ -1444,17 +2087,29 @@
         }
       },
       "XSettings": {
+        "title": "X (Twitter)",
         "type": "object",
-        "required": ["__type", "who_can_reply_post"],
+        "required": [
+          "__type",
+          "who_can_reply_post"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["x"],
+            "enum": [
+              "x"
+            ],
             "description": "Must be 'x'"
           },
           "who_can_reply_post": {
             "type": "string",
-            "enum": ["everyone", "following", "mentionedUsers", "subscribers", "verified"],
+            "enum": [
+              "everyone",
+              "following",
+              "mentionedUsers",
+              "subscribers",
+              "verified"
+            ],
             "description": "Who can reply to the post"
           },
           "community": {
@@ -1464,33 +2119,65 @@
         }
       },
       "LinkedInSettings": {
+        "title": "LinkedIn",
         "type": "object",
-        "required": ["__type"],
+        "required": [
+          "__type"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["linkedin", "linkedin-page"],
+            "enum": [
+              "linkedin",
+              "linkedin-page"
+            ],
             "description": "Use 'linkedin' for profiles, 'linkedin-page' for company pages"
           },
           "post_as_images_carousel": {
             "type": "boolean",
             "description": "Display multiple images as a carousel"
+          },
+          "carousel_name": {
+            "type": "string",
+            "description": "Name for the carousel document"
           }
         }
       },
       "InstagramSettings": {
+        "title": "Instagram",
         "type": "object",
-        "required": ["__type", "post_type"],
+        "required": [
+          "__type",
+          "post_type"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["instagram", "instagram-standalone"],
+            "enum": [
+              "instagram",
+              "instagram-standalone"
+            ],
             "description": "Use 'instagram' for FB-linked, 'instagram-standalone' for standalone"
           },
           "post_type": {
             "type": "string",
-            "enum": ["post", "story"],
+            "enum": [
+              "post",
+              "story"
+            ],
             "description": "Type of Instagram post"
+          },
+          "is_trial_reel": {
+            "type": "boolean",
+            "description": "Whether to post as a trial reel"
+          },
+          "graduation_strategy": {
+            "type": "string",
+            "enum": [
+              "MANUAL",
+              "SS_PERFORMANCE"
+            ],
+            "description": "Graduation strategy for trial reels"
           },
           "collaborators": {
             "type": "array",
@@ -1507,12 +2194,19 @@
         }
       },
       "YouTubeSettings": {
+        "title": "YouTube",
         "type": "object",
-        "required": ["__type", "title", "type"],
+        "required": [
+          "__type",
+          "title",
+          "type"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["youtube"]
+            "enum": [
+              "youtube"
+            ]
           },
           "title": {
             "type": "string",
@@ -1522,12 +2216,19 @@
           },
           "type": {
             "type": "string",
-            "enum": ["public", "private", "unlisted"],
+            "enum": [
+              "public",
+              "private",
+              "unlisted"
+            ],
             "description": "Video visibility"
           },
           "selfDeclaredMadeForKids": {
             "type": "string",
-            "enum": ["yes", "no"],
+            "enum": [
+              "yes",
+              "no"
+            ],
             "description": "Made for kids declaration"
           },
           "thumbnail": {
@@ -1543,12 +2244,25 @@
         }
       },
       "TikTokSettings": {
+        "title": "TikTok",
         "type": "object",
-        "required": ["__type", "privacy_level", "duet", "stitch", "comment", "autoAddMusic", "brand_content_toggle", "brand_organic_toggle", "content_posting_method"],
+        "required": [
+          "__type",
+          "privacy_level",
+          "duet",
+          "stitch",
+          "comment",
+          "autoAddMusic",
+          "brand_content_toggle",
+          "brand_organic_toggle",
+          "content_posting_method"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["tiktok"]
+            "enum": [
+              "tiktok"
+            ]
           },
           "title": {
             "type": "string",
@@ -1556,7 +2270,12 @@
           },
           "privacy_level": {
             "type": "string",
-            "enum": ["PUBLIC_TO_EVERYONE", "MUTUAL_FOLLOW_FRIENDS", "FOLLOWER_OF_CREATOR", "SELF_ONLY"]
+            "enum": [
+              "PUBLIC_TO_EVERYONE",
+              "MUTUAL_FOLLOW_FRIENDS",
+              "FOLLOWER_OF_CREATOR",
+              "SELF_ONLY"
+            ]
           },
           "duet": {
             "type": "boolean"
@@ -1569,7 +2288,10 @@
           },
           "autoAddMusic": {
             "type": "string",
-            "enum": ["yes", "no"]
+            "enum": [
+              "yes",
+              "no"
+            ]
           },
           "brand_content_toggle": {
             "type": "boolean"
@@ -1582,17 +2304,26 @@
           },
           "content_posting_method": {
             "type": "string",
-            "enum": ["DIRECT_POST", "UPLOAD"]
+            "enum": [
+              "DIRECT_POST",
+              "UPLOAD"
+            ]
           }
         }
       },
       "RedditSettings": {
+        "title": "Reddit",
         "type": "object",
-        "required": ["__type", "subreddit"],
+        "required": [
+          "__type",
+          "subreddit"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["reddit"]
+            "enum": [
+              "reddit"
+            ]
           },
           "subreddit": {
             "type": "array",
@@ -1602,7 +2333,12 @@
               "properties": {
                 "value": {
                   "type": "object",
-                  "required": ["subreddit", "title", "type", "is_flair_required"],
+                  "required": [
+                    "subreddit",
+                    "title",
+                    "type",
+                    "is_flair_required"
+                  ],
                   "properties": {
                     "subreddit": {
                       "type": "string",
@@ -1616,7 +2352,12 @@
                     },
                     "type": {
                       "type": "string",
-                      "enum": ["self", "link", "image", "video"],
+                      "enum": [
+                        "self",
+                        "link",
+                        "image",
+                        "video"
+                      ],
                       "description": "Post type"
                     },
                     "url": {
@@ -1645,13 +2386,19 @@
         }
       },
       "LemmySettings": {
+        "title": "Lemmy",
         "type": "object",
-        "required": ["__type", "subreddit"],
+        "required": [
+          "__type",
+          "subreddit"
+        ],
         "description": "Lemmy uses 'subreddit' for communities (historical naming)",
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["lemmy"]
+            "enum": [
+              "lemmy"
+            ]
           },
           "subreddit": {
             "type": "array",
@@ -1661,7 +2408,11 @@
               "properties": {
                 "value": {
                   "type": "object",
-                  "required": ["subreddit", "id", "title"],
+                  "required": [
+                    "subreddit",
+                    "id",
+                    "title"
+                  ],
                   "properties": {
                     "subreddit": {
                       "type": "string",
@@ -1690,12 +2441,18 @@
         }
       },
       "PinterestSettings": {
+        "title": "Pinterest",
         "type": "object",
-        "required": ["__type", "board"],
+        "required": [
+          "__type",
+          "board"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["pinterest"]
+            "enum": [
+              "pinterest"
+            ]
           },
           "board": {
             "type": "string",
@@ -1716,12 +2473,18 @@
         }
       },
       "DiscordSettings": {
+        "title": "Discord",
         "type": "object",
-        "required": ["__type", "channel"],
+        "required": [
+          "__type",
+          "channel"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["discord"]
+            "enum": [
+              "discord"
+            ]
           },
           "channel": {
             "type": "string",
@@ -1731,12 +2494,18 @@
         }
       },
       "SlackSettings": {
+        "title": "Slack",
         "type": "object",
-        "required": ["__type", "channel"],
+        "required": [
+          "__type",
+          "channel"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["slack"]
+            "enum": [
+              "slack"
+            ]
           },
           "channel": {
             "type": "string",
@@ -1746,12 +2515,18 @@
         }
       },
       "DribbbleSettings": {
+        "title": "Dribbble",
         "type": "object",
-        "required": ["__type", "title"],
+        "required": [
+          "__type",
+          "title"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["dribbble"]
+            "enum": [
+              "dribbble"
+            ]
           },
           "title": {
             "type": "string",
@@ -1766,12 +2541,19 @@
         }
       },
       "MediumSettings": {
+        "title": "Medium",
         "type": "object",
-        "required": ["__type", "title", "subtitle"],
+        "required": [
+          "__type",
+          "title",
+          "subtitle"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["medium"]
+            "enum": [
+              "medium"
+            ]
           },
           "title": {
             "type": "string",
@@ -1802,12 +2584,18 @@
         }
       },
       "DevToSettings": {
+        "title": "Dev.to",
         "type": "object",
-        "required": ["__type", "title"],
+        "required": [
+          "__type",
+          "title"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["devto"]
+            "enum": [
+              "devto"
+            ]
           },
           "title": {
             "type": "string",
@@ -1837,12 +2625,19 @@
         }
       },
       "HashnodeSettings": {
+        "title": "Hashnode",
         "type": "object",
-        "required": ["__type", "title", "tags"],
+        "required": [
+          "__type",
+          "title",
+          "tags"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["hashnode"]
+            "enum": [
+              "hashnode"
+            ]
           },
           "title": {
             "type": "string",
@@ -1877,12 +2672,19 @@
         }
       },
       "WordpressSettings": {
+        "title": "WordPress",
         "type": "object",
-        "required": ["__type", "title", "type"],
+        "required": [
+          "__type",
+          "title",
+          "type"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["wordpress"]
+            "enum": [
+              "wordpress"
+            ]
           },
           "title": {
             "type": "string",
@@ -1900,12 +2702,20 @@
         }
       },
       "ListmonkSettings": {
+        "title": "Listmonk",
         "type": "object",
-        "required": ["__type", "subject", "preview", "list"],
+        "required": [
+          "__type",
+          "subject",
+          "preview",
+          "list"
+        ],
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["listmonk"]
+            "enum": [
+              "listmonk"
+            ]
           },
           "subject": {
             "type": "string",
@@ -1927,22 +2737,40 @@
         }
       },
       "GmbSettings": {
+        "title": "Google My Business",
         "type": "object",
-        "required": ["__type"],
+        "required": [
+          "__type"
+        ],
         "description": "Google My Business post settings",
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["gmb"]
+            "enum": [
+              "gmb"
+            ]
           },
           "topicType": {
             "type": "string",
-            "enum": ["STANDARD", "EVENT", "OFFER"],
+            "enum": [
+              "STANDARD",
+              "EVENT",
+              "OFFER"
+            ],
             "description": "Post type"
           },
           "callToActionType": {
             "type": "string",
-            "enum": ["NONE", "BOOK", "ORDER", "SHOP", "LEARN_MORE", "SIGN_UP", "GET_OFFER", "CALL"],
+            "enum": [
+              "NONE",
+              "BOOK",
+              "ORDER",
+              "SHOP",
+              "LEARN_MORE",
+              "SIGN_UP",
+              "GET_OFFER",
+              "CALL"
+            ],
             "description": "Call-to-action button"
           },
           "callToActionUrl": {
@@ -1986,13 +2814,18 @@
         }
       },
       "FacebookSettings": {
+        "title": "Facebook",
         "type": "object",
-        "required": ["__type"],
+        "required": [
+          "__type"
+        ],
         "description": "Facebook post settings",
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["facebook"]
+            "enum": [
+              "facebook"
+            ]
           },
           "url": {
             "type": "string",
@@ -2002,13 +2835,18 @@
         }
       },
       "WarpcastSettings": {
+        "title": "Warpcast",
         "type": "object",
-        "required": ["__type"],
+        "required": [
+          "__type"
+        ],
         "description": "Warpcast (Farcaster) post settings",
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["warpcast"]
+            "enum": [
+              "warpcast"
+            ]
           },
           "subreddit": {
             "type": "array",
@@ -2018,7 +2856,9 @@
               "properties": {
                 "value": {
                   "type": "object",
-                  "required": ["id"],
+                  "required": [
+                    "id"
+                  ],
                   "properties": {
                     "id": {
                       "type": "string",
@@ -2032,13 +2872,24 @@
         }
       },
       "EmptySettings": {
+        "title": "Other Platforms (Threads, Mastodon, Bluesky, etc.)",
         "type": "object",
-        "required": ["__type"],
+        "required": [
+          "__type"
+        ],
         "description": "For platforms that don't require additional settings",
         "properties": {
           "__type": {
             "type": "string",
-            "enum": ["threads", "mastodon", "bluesky", "telegram", "nostr", "vk"],
+            "enum": [
+              "threads",
+              "mastodon",
+              "bluesky",
+              "telegram",
+              "nostr",
+              "vk",
+              "kick"
+            ],
             "description": "Platform identifier"
           }
         }
@@ -2137,16 +2988,26 @@
       },
       "VideoGenerationRequest": {
         "type": "object",
-        "required": ["type", "output", "customParams"],
+        "required": [
+          "type",
+          "output",
+          "customParams"
+        ],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["image-text-slides", "veo3"],
+            "enum": [
+              "image-text-slides",
+              "veo3"
+            ],
             "description": "Video generation type"
           },
           "output": {
             "type": "string",
-            "enum": ["vertical", "horizontal"],
+            "enum": [
+              "vertical",
+              "horizontal"
+            ],
             "description": "Video orientation"
           },
           "customParams": {
@@ -2169,6 +3030,129 @@
                 "description": "Reference images (for veo3, max 3)"
               }
             }
+          }
+        }
+      },
+      "TwitchSettings": {
+        "title": "Twitch",
+        "type": "object",
+        "required": [
+          "__type"
+        ],
+        "description": "Twitch post settings",
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": [
+              "twitch"
+            ]
+          },
+          "messageType": {
+            "type": "string",
+            "enum": [
+              "message",
+              "announcement"
+            ],
+            "description": "Message type"
+          },
+          "announcementColor": {
+            "type": "string",
+            "enum": [
+              "primary",
+              "blue",
+              "green",
+              "orange",
+              "purple"
+            ],
+            "description": "Announcement color (only for announcement type)"
+          }
+        }
+      },
+      "MoltbookSettings": {
+        "title": "Moltbook",
+        "type": "object",
+        "required": [
+          "__type",
+          "submolt"
+        ],
+        "description": "Moltbook post settings",
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": [
+              "moltbook"
+            ]
+          },
+          "submolt": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Submolt (community) ID"
+          }
+        }
+      },
+      "SkoolSettings": {
+        "title": "Skool",
+        "type": "object",
+        "required": [
+          "__type",
+          "group",
+          "label",
+          "title"
+        ],
+        "description": "Skool post settings",
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": [
+              "skool"
+            ]
+          },
+          "group": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Group ID"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Label/category ID"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Post title"
+          }
+        }
+      },
+      "WhopSettings": {
+        "title": "Whop",
+        "type": "object",
+        "required": [
+          "__type",
+          "company",
+          "experience"
+        ],
+        "description": "Whop post settings",
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": [
+              "whop"
+            ]
+          },
+          "company": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Company ID"
+          },
+          "experience": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Experience/forum ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "Post title"
           }
         }
       }

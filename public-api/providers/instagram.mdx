@@ -12,6 +12,7 @@ When creating a post for Instagram, use the following settings schema:
   "settings": {
     "__type": "instagram",
     "post_type": "post",
+    "is_trial_reel": false,
     "collaborators": []
   }
 }
@@ -27,6 +28,8 @@ Use `__type: "instagram"` for Facebook Business-linked accounts and `__type: "in
 |-------|------|----------|-------------|
 | `__type` | `string` | Yes | `instagram` or `instagram-standalone` |
 | `post_type` | `string` | Yes | Type of Instagram post |
+| `is_trial_reel` | `boolean` | No | Whether to post as a trial reel |
+| `graduation_strategy` | `string` | No | Graduation strategy for trial reels |
 | `collaborators` | `array` | No | List of collaborator usernames |
 
 ### `post_type`
@@ -35,6 +38,19 @@ Use `__type: "instagram"` for Facebook Business-linked accounts and `__type: "in
 |-------|-------------|
 | `post` | Regular feed post |
 | `story` | Instagram Story (24-hour visibility) |
+
+### `is_trial_reel`
+
+When set to `true`, the post will be published as a trial reel with limited initial visibility.
+
+### `graduation_strategy`
+
+Controls how trial reels graduate to full visibility. Only applicable when `is_trial_reel` is `true`.
+
+| Value | Description |
+|-------|-------------|
+| `MANUAL` | Manually graduate the reel |
+| `SS_PERFORMANCE` | Automatically graduate based on performance |
 
 ### `collaborators`
 
@@ -80,6 +96,7 @@ Array of collaborator objects. Each collaborator will receive an invite to be ad
       "settings": {
         "__type": "instagram",
         "post_type": "post",
+        "is_trial_reel": false,
         "collaborators": []
       }
     }

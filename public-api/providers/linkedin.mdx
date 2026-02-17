@@ -26,6 +26,7 @@ Use `__type: "linkedin"` for personal profiles and `__type: "linkedin-page"` for
 |-------|------|----------|-------------|
 | `__type` | `string` | Yes | `linkedin` or `linkedin-page` |
 | `post_as_images_carousel` | `boolean` | No | Display multiple images as a carousel |
+| `carousel_name` | `string` | No | Name for the carousel document |
 
 ### `post_as_images_carousel`
 
@@ -35,6 +36,10 @@ When set to `true` and you have multiple images, they will be displayed as a swi
 |-------|-------------|
 | `true` | Images displayed as carousel |
 | `false` | Images displayed as collage (default) |
+
+### `carousel_name`
+
+Optional name for the carousel document. Only used when `post_as_images_carousel` is `true`.
 
 ---
 
@@ -101,7 +106,8 @@ When set to `true` and you have multiple images, they will be displayed as a swi
       ],
       "settings": {
         "__type": "linkedin",
-        "post_as_images_carousel": true
+        "post_as_images_carousel": true,
+        "carousel_name": "Product Showcase"
       }
     }
   ]

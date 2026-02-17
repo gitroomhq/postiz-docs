@@ -177,7 +177,8 @@
               "public-api/providers/whop",
               "public-api/providers/skool",
               "public-api/providers/kick",
-              "public-api/providers/twitch"
+              "public-api/providers/twitch",
+              "public-api/providers/moltbook"
             ]
           }
         ]

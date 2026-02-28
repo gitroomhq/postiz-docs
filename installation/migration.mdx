@@ -1,0 +1,54 @@
+---
+title: Migration to Temporal
+description: 'Migration guide how to migrate to the new Temporal infrastructure'
+---
+
+## Prerequisites 
+
+- Have your existing data saved somewhere (or use the existing PostgreSQL DB)
+- Cloned the [new docker-compose repo](https://github.com/gitroomhq/postiz-docker-compose)
+
+## Migration Steps
+
+<Steps>
+  <Step title="Head into the docker-compose folder">
+      ```
+      cd ./postiz-docker-compose
+      ```
+  </Step>
+  <Step title="Insert your previous secrets into the new docker compose">
+      ```
+      nano docker-compose.yaml
+      ```
+      And insert all your previous secrets from the existing docker-compose.yml before v1.12.0
+  </Step>
+  <Step title="Start the stack, and stop it">
+      ```
+      docker compose up -d
+      ```
+      Wait for a bit to let it start.
+      ```
+      docker compose down
+      ```
+  </Step>
+    <Step title="Insert your existing data into PostgreSQL">
+            1. Identify volumes:
+            ```bash
+            docker volume ls
+            ```
+
+            2. Copy data (helper container):
+            ```bash
+            docker run --rm -v <old_postgres_volume>:/from -v <new_postgres_volume>:/to \
+                alpine sh -c "cp -a /from/. /to/"
+            ```
+    </Step>
+  <Step title="Start the stack finally">
+      ```
+      docker compose up -d
+      ```
+      And wait for it to start
+  </Step>
+</Steps>
+
+**Congratulations! You have now successfully migrated into v2.12.0, and can enjoy the new Temporal infrastructure, and new updates!**

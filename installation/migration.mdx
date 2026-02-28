@@ -1,6 +1,6 @@
 ---
 title: Migration to Temporal
-description: 'Migration guide how to migrate to the new Temporal infrastructure'
+description: 'A guide to migrating to the new Temporal infrastructure'
 ---
 
 ## Prerequisites 
@@ -31,18 +31,18 @@ description: 'Migration guide how to migrate to the new Temporal infrastructure'
       docker compose down
       ```
   </Step>
-    <Step title="Insert your existing data into PostgreSQL">
-            1. Identify volumes:
-            ```bash
-            docker volume ls
-            ```
+  <Step title="Insert your existing data into PostgreSQL">
+    1. Identify volumes:
+    ```bash
+    docker volume ls
+    ```
 
-            2. Copy data (helper container):
-            ```bash
-            docker run --rm -v <old_postgres_volume>:/from -v <new_postgres_volume>:/to \
-                alpine sh -c "cp -a /from/. /to/"
-            ```
-    </Step>
+    2. Copy data (helper container):
+    ```bash
+    docker run --rm -v <old_postgres_volume>:/from -v <new_postgres_volume>:/to \
+        alpine sh -c "cp -a /from/. /to/"
+    ```
+  </Step>
   <Step title="Start the stack finally">
       ```
       docker compose up -d
@@ -51,4 +51,4 @@ description: 'Migration guide how to migrate to the new Temporal infrastructure'
   </Step>
 </Steps>
 
-**Congratulations! You have now successfully migrated into v2.12.0, and can enjoy the new Temporal infrastructure, and new updates!**
+**Congratulations! You have now successfully migrated to v2.12.0 or later, and can enjoy the new Temporal infrastructure and updates!**

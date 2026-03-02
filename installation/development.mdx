@@ -3,8 +3,12 @@ title: Development Environment
 description: 'Set up Postiz for local development'
 ---
 
-Only use this method if you cannot use docker or want to develop on Postiz.
-[Docker-Compose](/installation/docker-compose) is the recommended Method. 
+This article guides you for local development on  Postiz. If you're only looking to self-host, docker-compose is the recommended method.
+[Docker-Compose](/installation/docker-compose) is the recommended method and now includes the Temporal stack for workflow processing.
+
+<Warning>
+  <strong>Important:</strong> Postiz uses Temporal for background workflows. If you are upgrading from v2.11.2 to v2.12.0 or later, follow the migration guide at [/installation/migration](/installation/migration) and use the maintained Docker Compose repository which includes the Temporal stack: [/installation/docker-compose](/installation/docker-compose).
+</Warning>
 
 ## Tested configurations
 
@@ -24,6 +28,7 @@ Several users using Windows (and WSL) have reported issues with the setup. This 
 - **Node.js** - for running the code! (version 18+)
 - **PostgreSQL** - or any other SQL database (instructions below suggest Docker)
 - **Redis** - for handling worker queues (instructions below suggest Docker)
+- **Temporal** - runs as a separate stack (Postgres + Elasticsearch + Temporal services). For local development run the Temporal stack via the `postiz-docker-compose` repository described in [/installation/docker-compose](/installation/docker-compose). Set `TEMPORAL_ADDRESS` in your `.env` to point at the Temporal service (example below).
 
 We have some messages from users who are using Windows, which should work, but they are not tested well yet.
 
@@ -55,6 +60,8 @@ or grab it from the repository in the next step.
 docker compose -f "docker-compose.dev.yaml" up
 ```
 
+To run Temporal locally, clone the maintained Docker Compose repository which includes the Temporal stack and follow the instructions in [/installation/docker-compose](/installation/docker-compose). See [/installation/migration](/installation/migration) for migration steps when moving data to the Temporal-enabled setup.
+
 ## Build Postiz
 
 <Steps>
@@ -75,6 +82,7 @@ JWT_SECRET="random string for your JWT secret, make it long"
 FRONTEND_URL="http://localhost:4200"
 NEXT_PUBLIC_BACKEND_URL="http://localhost:3000"
 BACKEND_INTERNAL_URL="http://localhost:3000"
+TEMPORAL_ADDRESS="localhost:7233"
 
 # Optional. Your upload directory path if you host your files locally.
 UPLOAD_DIRECTORY="/opt/postiz/uploads/"

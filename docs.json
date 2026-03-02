@@ -210,6 +210,17 @@
         ]
       },
       {
+        "tab": "Postiz Developer App",
+        "groups": [
+          {
+            "group": "OAuth2",
+            "pages": [
+              "public-api/oauth"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Contributing",
         "groups": [
           {

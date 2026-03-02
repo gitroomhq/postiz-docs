@@ -22,12 +22,22 @@ https://www.youtube.com/watch?v=c50u3K3xsCI
 
 ## Authentication
 
-All API requests require an API key. Get your API key from Postiz Settings.
+There are two ways to authenticate with the Postiz API:
 
-Include the API key in the `Authorization` header:
+### API Key
+
+Get your API key from **Settings > Developers > Public API**. Include it in the `Authorization` header:
 
 ```bash
 curl -H "Authorization: your-api-key" https://api.postiz.com/public/v1/integrations
+```
+
+### OAuth2 Token
+
+If you're building an app for other Postiz users, use [OAuth2 Authentication](/public-api/oauth) to get tokens that act on behalf of users. OAuth tokens start with `pos_` and are used the same way:
+
+```bash
+curl -H "Authorization: pos_your-oauth-token" https://api.postiz.com/public/v1/integrations
 ```
 
 ## Base URL

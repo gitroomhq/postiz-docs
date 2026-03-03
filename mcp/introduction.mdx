@@ -1,0 +1,89 @@
+---
+title: Introduction
+description: 'Connect AI agents to Postiz using the Model Context Protocol (MCP)'
+---
+
+MCP (Model Context Protocol) lets AI agents interact with Postiz directly — listing integrations, scheduling posts, generating images and videos — all through a standardized tool-calling interface.
+
+This means you can connect Claude, ChatGPT, Cursor, or any MCP-compatible client to your Postiz account and manage your social media through natural language.
+
+## How It Works
+
+Postiz exposes an MCP server that provides **8 tools** to AI agents. The agent discovers these tools, understands their schemas, and calls them on your behalf.
+
+```mermaid
+sequenceDiagram
+    participant Agent as AI Agent
+    participant MCP as Postiz MCP Server
+    participant Postiz as Postiz Backend
+
+    Agent->>MCP: Connect with API key / OAuth token
+    MCP-->>Agent: List available tools
+    Agent->>MCP: Call tool (e.g., schedule post)
+    MCP->>Postiz: Execute action
+    Postiz-->>MCP: Return result
+    MCP-->>Agent: Tool response
+```
+
+## Available Tools
+
+| Tool | Description |
+|------|-------------|
+| `integrationList` | List all connected social media accounts |
+| `integrationSchema` | Get platform-specific posting rules and settings schema |
+| `triggerTool` | Execute platform-specific helpers (e.g., list Discord channels) |
+| `schedulePostTool` | Schedule, draft, or immediately publish posts |
+| `generateImageTool` | Generate AI images for posts |
+| `generateVideoOptions` | List available video generation options |
+| `videoFunctionTool` | Get video generator settings (e.g., available voices) |
+| `generateVideoTool` | Generate videos for posts |
+
+## Authentication
+
+There are two ways to authenticate with the MCP server:
+
+### API Key
+
+Get your API key from **Settings > Developers > Public API** in Postiz. Use it directly in the MCP endpoint URL or as a Bearer token.
+
+### OAuth Token
+
+If you're building an app for other Postiz users, use [OAuth2](/public-api/oauth) to obtain tokens. OAuth tokens start with `pos_` and work the same way as API keys.
+
+## Connecting
+
+<Tabs>
+  <Tab title="Bearer Token">
+    Use the `/mcp` endpoint with your API key or OAuth token as a Bearer token:
+
+    ```
+    URL: https://api.postiz.com/mcp
+    Authorization: Bearer your-api-key
+    ```
+
+    This method supports both API keys and OAuth tokens (prefixed with `pos_`).
+  </Tab>
+  <Tab title="API Key in URL">
+    Use the `/mcp/:apiKey` endpoint with your API key embedded in the URL:
+
+    ```
+    URL: https://api.postiz.com/mcp/your-api-key
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+For self-hosted instances, replace `https://api.postiz.com` with your `NEXT_PUBLIC_BACKEND_URL`.
+</Note>
+
+## Quick Example
+
+Here's what a typical interaction looks like when an AI agent uses Postiz MCP:
+
+1. **Agent calls `integrationList`** — gets back your connected accounts (X, LinkedIn, etc.)
+2. **Agent calls `integrationSchema`** with `platform: "x"` — learns X's character limits, settings, and rules
+3. **Agent calls `schedulePostTool`** — schedules your post with the correct format
+
+All of this happens automatically when you tell your AI agent something like:
+
+> "Schedule a post to X for tomorrow at 10am: Excited to announce our new feature!"

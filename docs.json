@@ -221,6 +221,25 @@
         ]
       },
       {
+        "tab": "MCP",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "mcp/introduction",
+              "mcp/setup"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "mcp/tools",
+              "mcp/examples"
+            ]
+          }
+        ]
+      },
+      {
         "tab": "Contributing",
         "groups": [
           {

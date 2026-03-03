@@ -1,0 +1,241 @@
+---
+title: Tools Reference
+description: 'Complete reference for all Postiz MCP tools'
+---
+
+## integrationList
+
+List all connected social media accounts (channels) for your organization.
+
+**Parameters:** None
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Integration ID (use this when scheduling posts) |
+| `name` | string | Display name of the account |
+| `picture` | string | Profile picture URL |
+| `platform` | string | Platform identifier (e.g., `x`, `linkedin`, `facebook`) |
+
+---
+
+## integrationSchema
+
+Get the posting rules, character limits, required settings, and available helper tools for a specific platform. Call this before scheduling a post to understand what the platform expects.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `isPremium` | boolean | Yes | Whether the user has a premium subscription |
+| `platform` | string | Yes | Platform identifier (e.g., `x`, `linkedin`, `reddit`, `discord`) |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `rules` | string | Platform-specific posting rules and best practices |
+| `maxLength` | number | Maximum character length for posts |
+| `settings` | object | JSON schema of required settings for this platform |
+| `tools` | array | Platform-specific helper tools (see `triggerTool`) |
+
+The `tools` array contains helper functions specific to the platform. For example, Discord returns a tool to list available channels, Reddit returns a tool to search for subreddits, and LinkedIn Page returns a tool to list pages.
+
+Each tool in the array has:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `methodName` | string | Function name to pass to `triggerTool` |
+| `description` | string | What the tool does |
+| `dataSchema` | array | Parameters the tool accepts |
+
+---
+
+## triggerTool
+
+Execute a platform-specific helper function. These are discovered through `integrationSchema` and are used to fetch dynamic data like channel lists, subreddit suggestions, or page IDs.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `integrationId` | string | Yes | The integration ID from `integrationList` |
+| `methodName` | string | Yes | The function name from `integrationSchema` tools |
+| `dataSchema` | array | Yes | Key-value pairs of parameters for the function |
+
+Each item in `dataSchema`:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `key` | string | Parameter name |
+| `value` | string | Parameter value |
+
+**Example use cases:**
+- Get the list of Discord channels for a server
+- Search for Reddit subreddits
+- List LinkedIn pages you manage
+- Get Facebook page options
+
+---
+
+## schedulePostTool
+
+Schedule, draft, or immediately publish posts to social media platforms. This is the main tool for creating content.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `socialPost` | array | Yes | Array of posts to create |
+
+Each item in `socialPost`:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `integrationId` | string | Yes | Integration ID from `integrationList` |
+| `isPremium` | boolean | Yes | Whether the user has premium |
+| `date` | string | Yes | UTC datetime (e.g., `2025-01-15T10:00:00.000Z`) |
+| `shortLink` | boolean | Yes | Whether to shorten links in the post |
+| `type` | string | Yes | `draft`, `schedule`, or `now` |
+| `postsAndComments` | array | Yes | The post content and optional comments |
+| `settings` | array | Yes | Platform-specific settings from `integrationSchema` |
+
+Each item in `postsAndComments`:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `content` | string | HTML content (see formatting rules below) |
+| `attachments` | array | Array of image/media URLs |
+
+Each item in `settings`:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `key` | string | Setting name |
+| `value` | any | Setting value (prefer IDs over labels when available) |
+
+### Content Formatting
+
+Content must be HTML with these allowed tags only:
+
+| Tag | Usage |
+|-----|-------|
+| `<p>` | Wrap each line |
+| `<h1>`, `<h2>`, `<h3>` | Headings |
+| `<strong>` | Bold text |
+| `<u>` | Underlined text |
+| `<ul>`, `<li>` | Lists |
+
+<Warning>
+You cannot combine `<u>` and `<strong>` in the same element. Each line of text must be wrapped in `<p>` tags.
+</Warning>
+
+### Posts vs Comments
+
+The `postsAndComments` array behavior depends on the platform:
+
+- **Thread-based platforms** (X, Threads, Bluesky): Each array item becomes a separate post in a thread
+- **Comment-based platforms** (LinkedIn, Facebook): First item is the post, remaining items are comments
+
+### Multiple Posts
+
+To schedule multiple posts (e.g., 20 posts across different days), add multiple items to the `socialPost` array — each with its own `date` and `integrationId`.
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `postId` | string | The created post ID |
+| `integration` | string | The integration it was posted to |
+
+If validation fails, returns `{ errors: string }` with details about what went wrong (e.g., content exceeds character limit).
+
+---
+
+## generateImageTool
+
+Generate an AI image to use as a post attachment.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `prompt` | string | Yes | Description of the image to generate |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Media ID |
+| `path` | string | URL of the generated image |
+
+Use the returned `path` in the `attachments` array when scheduling a post.
+
+---
+
+## generateVideoOptions
+
+List all available video generation types and their required parameters.
+
+**Parameters:** None
+
+**Returns:** An array of video generators, each with:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `type` | string | Video type identifier (e.g., `image-text-slides`, `veo3`) |
+| `output` | string | Supported orientations: `vertical\|horizontal` |
+| `tools` | array | Helper functions (call with `videoFunctionTool`) |
+| `customParams` | object | JSON schema of required parameters |
+
+### Available Video Types
+
+| Type | Description | Requirements |
+|------|-------------|-------------|
+| Image Text Slides | Slide-based videos with text-to-speech | `prompt`, `voice` (get voice ID via `videoFunctionTool`) |
+| Veo3 | AI-generated video with audio | `prompt`, optional `images` (max 3) |
+
+---
+
+## videoFunctionTool
+
+Execute helper functions for video generators. Use this to fetch required data before generating a video (e.g., listing available voices).
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `identifier` | string | Yes | Video type identifier from `generateVideoOptions` |
+| `functionName` | string | Yes | Function name from the video type's `tools` array |
+
+**Example:** Call with `identifier: "image-text-slides"` and `functionName: "loadVoices"` to get available ElevenLabs voice IDs.
+
+---
+
+## generateVideoTool
+
+Generate a video to use as a post attachment.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `identifier` | string | Yes | Video type from `generateVideoOptions` |
+| `output` | string | Yes | `vertical` or `horizontal` |
+| `customParams` | array | Yes | Key-value pairs of parameters for the video type |
+
+Each item in `customParams`:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `key` | string | Parameter name |
+| `value` | any | Parameter value |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `url` | string | URL of the generated video |
+
+Use the returned `url` in the `attachments` array when scheduling a post.

@@ -184,7 +184,7 @@
         ]
       },
       {
-        "tab": "Postiz CLI",
+        "tab": "CLI",
         "groups": [
           {
             "group": "Getting Started",
@@ -210,17 +210,6 @@
         ]
       },
       {
-        "tab": "Postiz Developer App",
-        "groups": [
-          {
-            "group": "OAuth2",
-            "pages": [
-              "public-api/oauth"
-            ]
-          }
-        ]
-      },
-      {
         "tab": "MCP",
         "groups": [
           {
@@ -235,6 +224,17 @@
             "pages": [
               "mcp/tools",
               "mcp/examples"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Developer App (oAuth2)",
+        "groups": [
+          {
+            "group": "OAuth2",
+            "pages": [
+              "public-api/oauth"
             ]
           }
         ]

@@ -95,6 +95,104 @@
         }
       }
     },
+    "/integrations/{id}": {
+      "delete": {
+        "tags": [
+          "Integrations"
+        ],
+        "summary": "Delete a channel",
+        "description": "Delete a connected channel by its integration ID. Any scheduled posts associated with this channel will also be deleted.",
+        "operationId": "deleteChannel",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Integration ID of the channel to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Channel deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "cm4ean69r0003w8w1cdomox9n"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Channel not found"
+          }
+        }
+      }
+    },
+    "/social/{integration}": {
+      "get": {
+        "tags": [
+          "Integrations"
+        ],
+        "summary": "Get OAuth URL for a channel",
+        "description": "Generate an OAuth authorization URL for a given integration. Use this to connect a new social media channel. Only OAuth-based integrations are supported (integrations that require an external URL, such as Mastodon, are not available via this endpoint).",
+        "operationId": "getIntegrationUrl",
+        "parameters": [
+          {
+            "name": "integration",
+            "in": "path",
+            "required": true,
+            "description": "The integration identifier (e.g. x, linkedin, facebook, instagram, youtube, tiktok, reddit, etc.)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "refresh",
+            "in": "query",
+            "required": false,
+            "description": "Pass an existing integration ID to refresh its OAuth token instead of creating a new connection",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OAuth authorization URL",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "description": "The OAuth authorization URL to redirect the user to"
+                    }
+                  }
+                },
+                "example": {
+                  "url": "https://twitter.com/i/oauth2/authorize?response_type=code&client_id=..."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Integration not allowed or requires an external URL"
+          }
+        }
+      }
+    },
     "/is-connected": {
       "get": {
         "tags": [

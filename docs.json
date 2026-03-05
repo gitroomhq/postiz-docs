@@ -110,6 +110,8 @@
             "group": "Integrations",
             "pages": [
               "public-api/integrations/list",
+              "public-api/integrations/connect",
+              "public-api/integrations/delete",
               "public-api/integrations/is-connected",
               "public-api/integrations/find-slot"
             ]

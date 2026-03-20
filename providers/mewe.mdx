@@ -1,0 +1,71 @@
+---
+title: MeWe
+description: 'How to add MeWe to your system'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Note>
+MeWe's Developer Program is currently in beta with limited spots. Your application will be reviewed, and selected participants will be granted access to the API.
+</Note>
+
+MeWe supports posting to your personal timeline as well as to groups you belong to, including photo attachments.
+
+<Steps>
+  <Step title="Create a MeWe Developer Account">
+    Head over to the [MeWe Developer Portal](https://dev.mewe.com/) and sign in with your MeWe account.
+
+    Submit an application to join the MeWe Developer Program. The MeWe team will review your request and grant access once approved.
+  </Step>
+
+  <Step title="Create a new application">
+    Once approved, go to your [MeWe Developer Settings](https://mewe.com/developer) and create a new application.
+
+    When selecting the application type, choose **Standalone App** since Postiz operates as an external application that connects to MeWe's API.
+
+    Configure the permissions your application requires for posting and group access.
+  </Step>
+
+  <Step title="Configure OAuth2 Redirect URI">
+    <Snippet file="oauth2redirect.mdx" />
+
+    **Your MeWe OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/mewe`
+    - Local development: `http://localhost:4200/integrations/social/mewe`
+    - Docker: `http://localhost:5000/integrations/social/mewe`
+
+    <Warning>
+    MeWe requires HTTPS for redirect URIs in production. Make sure your Postiz instance is served over HTTPS.
+    </Warning>
+  </Step>
+
+  <Step title="Copy your credentials">
+    From your MeWe Developer Settings, copy the **App ID** and **API Key** for your application, and add them to your `.env` file:
+
+```env
+MEWE_APP_ID="your_app_id"
+MEWE_API_KEY="your_api_key"
+```
+
+    <Warning>
+    Keep your API Key confidential. Never expose it in client-side code or public repositories. All API requests using the API Key should originate from your backend server.
+    </Warning>
+  </Step>
+
+  <Step title="Add MeWe channel in Postiz">
+    Restart Postiz to apply the new environment variables. If you are using Docker Compose, run `docker compose down` and then `docker compose up`.
+
+    Go to the Postiz web interface, click on "Add Channel", and select **MeWe**. You will be redirected to MeWe to authorize the connection.
+
+    Once authorized, you can choose to post to your **Timeline** or to a specific **Group** when creating posts.
+  </Step>
+</Steps>
+
+## Posting Options
+
+When creating a post for MeWe in Postiz, you can configure:
+
+- **My Timeline** — Posts directly to your personal MeWe timeline.
+- **Group** — Posts to a specific MeWe group you belong to. You will be prompted to select the target group from a dropdown.
+
+MeWe supports text posts with optional photo attachments. Video uploads are not currently supported through this integration.

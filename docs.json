@@ -68,7 +68,8 @@
                   "providers/threads",
                   "providers/bluesky",
                   "providers/mastodon",
-                  "providers/google-my-business"
+                  "providers/google-my-business",
+                  "providers/mewe"
                 ]
               },
               {

@@ -27,7 +27,6 @@
               "installation/docker-compose",
               "installation/docker",
               "installation/kubernetes-helm",
-              "installation/coolify",
               "installation/development",
               "installation/devcontainer"
             ]

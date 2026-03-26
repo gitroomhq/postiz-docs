@@ -12,7 +12,9 @@ When creating a post for X (Twitter), use the following settings schema:
   "settings": {
     "__type": "x",
     "who_can_reply_post": "everyone",
-    "community": ""
+    "community": "",
+    "made_with_ai": false,
+    "paid_partnership": false
   }
 }
 ```
@@ -24,6 +26,8 @@ When creating a post for X (Twitter), use the following settings schema:
 | `__type` | `string` | Yes | Must be `x` |
 | `who_can_reply_post` | `string` | Yes | Who can reply to the post |
 | `community` | `string` | No | X Community URL |
+| `made_with_ai` | `boolean` | No | Mark the post as containing AI-generated content. Defaults to `false` |
+| `paid_partnership` | `boolean` | No | Mark the post as a paid promotion. Defaults to `false` |
 
 ### `who_can_reply_post`
 
@@ -71,7 +75,9 @@ Leave empty or omit to post to your main timeline.
       "settings": {
         "__type": "x",
         "who_can_reply_post": "everyone",
-        "community": ""
+        "community": "",
+        "made_with_ai": false,
+        "paid_partnership": false
       }
     }
   ]

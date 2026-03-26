@@ -122,10 +122,19 @@ sequenceDiagram
 
     ```json
     {
+      "id": "org_abc123",
+      "cus": "cus_stripe_customer_id",
       "access_token": "pos_aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890abcd",
       "token_type": "bearer"
     }
     ```
+
+    | Field | Description |
+    |-------|-------------|
+    | `id` | The organization ID associated with the authorized user |
+    | `cus` | The Stripe customer ID for the organization (useful for billing integrations) |
+    | `access_token` | The token to use for subsequent API calls |
+    | `token_type` | Always `bearer` |
 
     <Warning>
     The authorization code expires after **10 minutes** and can only be used once. If it expires, the user must go through the authorization flow again.
@@ -227,7 +236,7 @@ app.get('/callback', async (req, res) => {
     }),
   });
 
-  const { access_token } = await response.json();
+  const { id, cus, access_token } = await response.json();
 
   // Store access_token securely and use it for API calls
   // Example: fetch user's integrations

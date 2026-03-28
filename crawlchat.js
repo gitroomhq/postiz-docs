@@ -4,6 +4,7 @@ function loadCrawlChat() {
   script.id = "crawlchat-script";
   script.dataset.id = "68ac269d2961657c4b7924a9";
   script.dataset.sidepanel = true;
+  script.dataset.noPrimaryColor = true;
 
   document.head.appendChild(script);
 }

@@ -191,7 +191,8 @@
           {
             "group": "Getting Started",
             "pages": [
-              "cli/introduction"
+              "cli/introduction",
+              "cli/authentication"
             ]
           },
           {

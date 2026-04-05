@@ -1,0 +1,151 @@
+---
+title: Authentication
+description: 'Set up OAuth2 or API key authentication for the Postiz CLI'
+---
+
+## OAuth2 (Recommended)
+
+Authenticate using the device flow — no client ID or secret needed:
+
+```bash
+postiz auth:login
+```
+
+This will:
+1. Display a one-time code in your terminal
+2. Open your browser to authorize
+3. Automatically save credentials to `~/.postiz/credentials.json`
+
+### Auth Commands
+
+```bash
+# Check current auth status (verifies credentials are still valid)
+postiz auth:status
+
+# Remove stored credentials
+postiz auth:logout
+```
+
+## API Key
+
+Alternatively, set your Postiz API key as an environment variable:
+
+```bash
+export POSTIZ_API_KEY=your_api_key_here
+```
+
+You can get your API key from the Postiz Settings page.
+
+<Note>
+OAuth2 credentials take priority over the API key when both are present.
+</Note>
+
+## Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `POSTIZ_API_KEY` | No* | - | Your Postiz API key |
+| `POSTIZ_API_URL` | No | `https://api.postiz.com` | Custom API endpoint (for self-hosted Postiz) |
+| `POSTIZ_AUTH_SERVER` | No | `https://cli-auth.postiz.com` | Custom auth server URL (for self-hosted auth server) |
+
+*Either OAuth2 (via `postiz auth:login`) or `POSTIZ_API_KEY` is required.
+
+## Self-Hosting the Auth Server
+
+By default, `postiz auth:login` uses the hosted auth server at `cli-auth.postiz.com`. If you want to self-host the OAuth2 device flow server, you can run your own instance.
+
+The auth server mediates the OAuth2 device flow so CLI users can authenticate without needing client credentials.
+
+### Prerequisites
+
+- Node.js >= 18
+- PostgreSQL
+
+### How It Works
+
+```
+CLI                        Auth Server                    Postiz
+ |                              |                           |
+ |-- POST /device/code ------->|                           |
+ |<-- device_code + user_code --|                           |
+ |                              |                           |
+ |  User opens browser ------->|                           |
+ |  Enters code                |                           |
+ |                              |-- redirect to OAuth ----->|
+ |                              |<-- callback with code ----|
+ |                              |-- exchange for token ---->|
+ |                              |<-- access_token ----------|
+ |                              |  (stored in Postgres)     |
+ |                              |                           |
+ |  POST /device/token (poll) >|                           |
+ |<-- access_token ------------|                           |
+```
+
+### 1. Create an OAuth App in Postiz
+
+Go to **Postiz Settings > Developer > OAuth Apps** and create a new app. Set the callback URL to:
+
+```
+https://your-server-domain.com/device/callback
+```
+
+### 2. Set Up Postgres
+
+Create a database. The server auto-creates the `device_requests` table on startup.
+
+### 3. Configure Environment
+
+```bash
+export DATABASE_URL="postgresql://user:password@localhost:5432/postiz_auth"
+export POSTIZ_OAUTH_CLIENT_ID="pca_xxx"
+export POSTIZ_OAUTH_CLIENT_SECRET="pcs_xxx"
+export SERVER_URL="https://your-server-domain.com"
+```
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `DATABASE_URL` | Yes | - | Postgres connection string |
+| `POSTIZ_OAUTH_CLIENT_ID` | Yes | - | OAuth app client ID from Postiz |
+| `POSTIZ_OAUTH_CLIENT_SECRET` | Yes | - | OAuth app client secret from Postiz |
+| `PORT` | No | `3111` | Server port |
+| `SERVER_URL` | No | `http://localhost:{PORT}` | Public URL of this server |
+| `POSTIZ_FRONTEND_URL` | No | `https://platform.postiz.com` | Postiz frontend URL for OAuth redirects |
+| `POSTIZ_API_URL` | No | `https://api.postiz.com` | Postiz API URL for token exchange |
+
+### 4. Run the Server
+
+```bash
+cd server
+pnpm install
+
+# Development
+pnpm dev
+
+# Production
+pnpm build
+pnpm start:prod
+```
+
+### 5. Point the CLI to Your Server
+
+```bash
+export POSTIZ_AUTH_SERVER="https://your-server-domain.com"
+postiz auth:login
+```
+
+### Server Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `POST` | `/device/code` | Start a new device flow. Returns `device_code`, `user_code`, and `verification_uri`. |
+| `GET` | `/device/verify` | Browser page where the user enters their code. |
+| `POST` | `/device/verify` | Validates user code and redirects to Postiz OAuth. |
+| `GET` | `/device/callback` | Postiz redirects here after authorization. Exchanges auth code for token. |
+| `POST` | `/device/token` | CLI polls this with `device_code`. Returns token when auth completes. |
+| `GET` | `/health` | Health check. |
+
+### Deployment
+
+Any platform that runs Node.js and can connect to Postgres works — Railway, Fly.io, Render, VPS, etc.
+
+The server is stateless beyond Postgres, so it scales horizontally. Run multiple instances behind a load balancer if needed.

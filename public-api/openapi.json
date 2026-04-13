@@ -1364,6 +1364,84 @@
         }
       }
     },
+    "/posts/{id}/status": {
+      "put": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Change post status",
+        "description": "Moves a post between `draft` and `schedule` state.\n\n- `schedule` → sets the post state to `QUEUE` and (re)starts the publishing workflow so it will be published at its stored date.\n- `draft` → sets the post state to `DRAFT` and terminates any currently running publishing workflow for the post, so it will not be published.\n\nThe post keeps its stored date; only the state (and the workflow) changes.",
+        "operationId": "changePostStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Post ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "draft",
+                      "schedule"
+                    ],
+                    "description": "New status for the post"
+                  }
+                }
+              },
+              "example": {
+                "status": "schedule"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Post status updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string",
+                      "enum": [
+                        "DRAFT",
+                        "QUEUE"
+                      ]
+                    }
+                  }
+                },
+                "example": {
+                  "id": "post-123",
+                  "state": "QUEUE"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status or post not found"
+          }
+        }
+      }
+    },
     "/analytics/{integration}": {
       "get": {
         "tags": [

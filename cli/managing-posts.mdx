@@ -205,6 +205,22 @@ postiz posts:connect <post-id> --release-id "7321456789012345678"
 postiz analytics:post <post-id>
 ```
 
+## Changing Post Status
+
+Move a post between `draft` and `schedule` without changing its date.
+
+```bash
+postiz posts:status <post-id> --status draft
+postiz posts:status <post-id> --status schedule
+```
+
+- `--status schedule` promotes a draft into the publishing queue and (re)starts the workflow so it will publish at its stored date.
+- `--status draft` moves a scheduled post back to draft **and terminates any running publishing workflow**, so it will not publish.
+
+<Note>
+Use this when you want to pause a scheduled post without deleting it, or hand a draft off to the scheduler once it's ready.
+</Note>
+
 ## Deleting Posts
 
 ```bash

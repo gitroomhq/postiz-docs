@@ -124,7 +124,8 @@
               "public-api/posts/delete",
               "public-api/posts/delete-by-group",
               "public-api/posts/missing-content",
-              "public-api/posts/update-release-id"
+              "public-api/posts/update-release-id",
+              "public-api/posts/change-status"
             ]
           },
           {

@@ -1,0 +1,125 @@
+---
+title: Bluesky Settings
+description: 'API settings for posting to Bluesky'
+---
+
+## Settings Schema
+
+When creating a post for Bluesky, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "bluesky"
+  }
+}
+```
+
+<Note>
+Bluesky has no provider-specific settings beyond `__type`. Post content,
+images, and the schedule are configured at the post level - see the
+[Create Post](/public-api/posts/create) reference.
+</Note>
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `bluesky` |
+
+---
+
+## Complete Example
+
+### Text Post
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-bluesky-integration-id"
+      },
+      "value": [
+        {
+          "content": "Hello from the Postiz API! 🦋",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "bluesky"
+      }
+    }
+  ]
+}
+```
+
+### Thread Post
+
+Create a thread by adding multiple items to the `value` array. Each entry
+becomes a reply chained to the previous one:
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-bluesky-integration-id"
+      },
+      "value": [
+        {
+          "content": "1/ Starting a thread on Bluesky from the API",
+          "image": []
+        },
+        {
+          "content": "2/ Each value entry becomes a reply in the thread",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "bluesky"
+      }
+    }
+  ]
+}
+```
+
+### Post with Image
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-bluesky-integration-id"
+      },
+      "value": [
+        {
+          "content": "Sharing today's launch screenshot",
+          "image": [
+            {
+              "id": "image-id",
+              "path": "https://uploads.postiz.com/launch.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "bluesky"
+      }
+    }
+  ]
+}
+```

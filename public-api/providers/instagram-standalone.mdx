@@ -1,0 +1,77 @@
+---
+title: Instagram Standalone Settings
+description: 'API settings for posting to standalone Instagram accounts'
+---
+
+Instagram Standalone posts use the same settings schema as Facebook
+Business-linked Instagram. The only difference is the `__type` value -
+everything else (post type, trial reels, collaborators, image arrays) is
+identical.
+
+## Settings Schema
+
+```json
+{
+  "settings": {
+    "__type": "instagram-standalone",
+    "post_type": "post",
+    "is_trial_reel": false,
+    "collaborators": []
+  }
+}
+```
+
+For the full field reference (including `post_type` values, trial reel
+options, and collaborator format), see the
+[Instagram settings page](/public-api/providers/instagram).
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `instagram-standalone` |
+| `post_type` | `string` | Yes | Type of Instagram post (see [Instagram reference](/public-api/providers/instagram#post_type)) |
+| `is_trial_reel` | `boolean` | No | Whether to post as a trial reel |
+| `graduation_strategy` | `string` | No | Graduation strategy for trial reels |
+| `collaborators` | `array` | No | Tagged collaborators (see [Instagram reference](/public-api/providers/instagram#collaborators)) |
+
+---
+
+## Complete Example
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-instagram-standalone-integration-id"
+      },
+      "value": [
+        {
+          "content": "New product launch! Check it out.",
+          "image": [
+            {
+              "id": "image-id",
+              "path": "https://uploads.postiz.com/launch.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "instagram-standalone",
+        "post_type": "post",
+        "is_trial_reel": false,
+        "collaborators": []
+      }
+    }
+  ]
+}
+```
+
+For Story, Reel, and collaborator examples, see the
+[Instagram complete examples](/public-api/providers/instagram#complete-example) -
+swap `__type: "instagram"` for `__type: "instagram-standalone"`.

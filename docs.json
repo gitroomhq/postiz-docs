@@ -160,8 +160,11 @@
             "pages": [
               "public-api/providers/x",
               "public-api/providers/linkedin",
+              "public-api/providers/linkedin-page",
               "public-api/providers/facebook",
               "public-api/providers/instagram",
+              "public-api/providers/bluesky",
+              "public-api/providers/mastodon",
               "public-api/providers/warpcast",
               "public-api/providers/youtube",
               "public-api/providers/tiktok",

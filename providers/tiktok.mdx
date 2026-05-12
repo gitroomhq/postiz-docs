@@ -18,6 +18,12 @@ Expose your uploads via a reverse proxy (e.g., [Caddy](/reverse-proxies/caddy)) 
 Ensure the media domain is listed under your TikTok developer account's verified sites.
 </Warning>
 
+<Warning>
+TikTok approval is not the final step for Direct Post access. TikTok allows unaudited API clients to use the Direct Post API, but posts are restricted to private visibility until the API client completes TikTok's audit process for Terms of Service compliance.
+
+If your API client has not passed this audit, TikTok also limits Direct Post usage to up to 5 users posting in a 24-hour window, and those user accounts must be private at the time of posting. See TikTok's [Direct Post API developer guidelines](https://developers.tiktok.com/doc/content-sharing-guidelines#direct_post_api_-_developer_guidelines) for the current requirements.
+</Warning>
+
 <Steps>
   <Step title="Create your app">
     Go here: [https://developers.tiktok.com/apps](https://developers.tiktok.com/apps)
@@ -73,4 +79,3 @@ TIKTOK_CLIENT_SECRET=12345678901234567890123456789012
     Go to the Postiz web interface, and click on the "Add Channel" button. Select "TikTok" from the list of available channels. You should be redirected to TikTok to authorize the application.
   </Step>
 </Steps>
-

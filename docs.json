@@ -52,6 +52,19 @@
             ]
           },
           {
+            "group": "Troubleshooting",
+            "pages": [
+              "troubleshooting/overview",
+              "troubleshooting/oauth-connect",
+              "troubleshooting/uploads",
+              "troubleshooting/activation-and-login",
+              "troubleshooting/billing",
+              "troubleshooting/channel-limits",
+              "troubleshooting/known-issues",
+              "troubleshooting/self-host"
+            ]
+          },
+          {
             "group": "Providers",
             "pages": [
               "providers/overview",

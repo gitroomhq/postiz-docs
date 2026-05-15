@@ -1,0 +1,98 @@
+---
+title: Self-Host Gotchas
+description: 'Common problems specific to running Postiz yourself'
+---
+
+## `pnpm` heap out of memory during install
+
+The Postiz monorepo is large enough that the default Node heap can
+overflow during `pnpm install` on small VMs.
+
+**Fix**
+
+```bash
+NODE_OPTIONS="--max-old-space-size=4096" pnpm install
+```
+
+Bump to `--max-old-space-size=8192` on really small instances. See
+[System requirements](/installation/system-requirements) for minimum
+RAM.
+
+## `postgres ECONNREFUSED`
+
+Backend can't reach Postgres.
+
+**Checklist**
+
+1. `DATABASE_URL` host: is it `localhost` when the backend is in a
+   container that doesn't share host networking? Use the service name
+   (`postgres`) or the container IP instead.
+2. Postgres ready? `docker compose logs postgres` should show
+   `database system is ready to accept connections`.
+3. Port mapping: if you exposed Postgres only on the Docker network,
+   external `psql` won't work but the backend will. That's fine.
+
+## "Hide a provider from the UI"
+
+There is no env-var-based way to hide a provider from the frontend
+today. The only mechanism is to set the per-organisation `disabled`
+field on the Integration row in the database after a channel is
+connected. We're tracking the request — see the GitHub issues tagged
+`enhancement`.
+
+## Default ports
+
+Postiz uses these ports out of the box:
+
+| Service | Port |
+|---|---|
+| Backend (Nest) | `3000` (override via `PORT`) |
+| Frontend (Next.js) | `4200` |
+| Temporal frontend | `7233` |
+
+There is **no** hard requirement on port `5000`. You may see it as a
+legacy fallback in one provider integration (Telegram), but it is not
+enforced anywhere else. Don't reserve it just because you saw it in an
+old screenshot.
+
+## Mounting the uploads volume
+
+If `STORAGE_PROVIDER=local`, point `UPLOAD_DIRECTORY` at the path Postiz
+should write to, mount that path into your container, and also set
+`NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY` so the frontend knows where the
+files are served from. The Next.js config rewrites `/uploads/:path*` to
+`/api/uploads/:path*` when local storage is active. See
+[Uploads & storage](/configuration/uploads).
+
+For multi-container deployments, either share the same volume across all
+containers that need to read or write, or move to [Cloudflare R2](/configuration/r2).
+
+## Can I deploy Postiz on Vercel?
+
+**Frontend:** yes — it's a standard Next.js app and deploys cleanly to
+Vercel.
+
+**Backend:** no. The Postiz backend is a NestJS server that also embeds
+a Temporal worker. It needs a long-running Node host (Fly.io, Render,
+Railway, a VM, a Kubernetes pod, etc.) — serverless functions won't
+work.
+
+## Email isn't sending
+
+By default, Postiz uses Resend (`EMAIL_PROVIDER=resend`) and only
+becomes active when `RESEND_API_KEY` is set. To use SMTP instead, set
+`EMAIL_PROVIDER=nodemailer` and provide `EMAIL_HOST`, `EMAIL_PORT`,
+`EMAIL_USER`, `EMAIL_PASS`, `EMAIL_SECURE`. See
+[Email configuration](/configuration/emails).
+
+If no email provider is configured, user activation emails won't go
+out — but Postiz auto-activates users in that mode, so signup still
+works.
+
+## Temporal isn't reachable
+
+Since v2.12.0, Postiz schedules posts through Temporal. The backend
+needs to reach the Temporal frontend on `TEMPORAL_ADDRESS`. If you're
+upgrading from v1.x, follow the [migration guide](/installation/migration)
+— it walks through running both stacks side by side while you copy
+Postgres data over.

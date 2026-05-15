@@ -85,7 +85,8 @@
                   "providers/bluesky",
                   "providers/mastodon",
                   "providers/google-my-business",
-                  "providers/mewe"
+                  "providers/mewe",
+                  "providers/farcaster"
                 ]
               },
               {

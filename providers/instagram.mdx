@@ -13,6 +13,19 @@ description: 'How to add Instagram to your system'
 
 There are two ways to connect to an Instagram account: by using a Facebook Business or through a standalone flow that connects directly to an Instagram account. Both methods will require a [Meta for Developers account](https://developers.facebook.com/apps/).
 
+<Info>
+**What Postiz supports on Instagram:**
+
+- Feed posts (single image, carousel, video / Reels).
+- Stories (image and video).
+- Replying to comments via an explicit user action.
+
+**What Postiz does not support:**
+
+- Story link stickers / swipe-up links — the Instagram Graph API doesn't expose interactive sticker payloads, so Postiz can only upload the story media.
+- Automatic comment auto-reply — there is no agent that watches for incoming comments and replies on your behalf. You can post a reply through the API, but each reply is an explicit action.
+</Info>
+
 ## Setting up Meta Application
 
 The following steps will guide you through the setup of a Meta application that can be used for connecting Instagram to Postiz.
@@ -174,4 +187,14 @@ If you're having trouble connecting to your Instagram accounts, adding them as A
     ![Apps and Websites section of the profile settings](/images/providers/instagram-standalone/Apps-and-Websites-section-of-the-profile-settings.png)
   </Step>
 </Steps>
+
+## Troubleshooting
+
+### "Insufficient developer role" error
+
+This means the Instagram account you're trying to connect hasn't been added as a tester on the Meta app. Walk through the [Adding App Roles](#adding-app-roles) section above for that exact account: add it as an Instagram Tester, then accept the invitation from within the Instagram app's settings.
+
+### Channel connects, but posts fail with permission errors
+
+The advanced permissions on the Meta app must be approved (or your account must be a developer/tester on the app). Submit the app for review with the required scopes — until then, only roles you've added can publish.
 

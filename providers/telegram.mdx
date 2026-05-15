@@ -5,6 +5,12 @@ description: 'How to add Telegram to your system'
 
 <Snippet file="never-share.mdx" />
 
+<Warning>
+Postiz talks to Telegram using long-polling (`getUpdates`). Telegram allows only **one** connected process per bot token at a time — if you run Postiz against the same `TELEGRAM_TOKEN` from two places (e.g. self-hosted plus cloud, or two self-hosted instances), each instance will continuously kick the other off and you'll see `409 Conflict: terminated by other getUpdates` errors in the logs.
+
+Use one bot token per Postiz deployment. If you need Telegram on multiple environments, create a separate bot for each.
+</Warning>
+
 <Steps>
   <Step title="Create a Telegram Bot">
     1. Open Telegram and message [@BotFather](https://t.me/botfather).

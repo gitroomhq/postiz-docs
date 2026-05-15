@@ -1,0 +1,39 @@
+---
+title: Farcaster
+description: 'How to add Farcaster (Warpcast) to your system'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Note>
+Postiz uses [Neynar](https://neynar.com) as the Farcaster API provider.
+You need a Neynar developer account to obtain the API credentials below.
+</Note>
+
+<Info>
+Farcaster posts on Postiz accept images only — text + image, but no
+video. Posts can be up to 800 characters.
+</Info>
+
+<Steps>
+  <Step title="Create a Neynar app">
+    Go to the [Neynar dashboard](https://dev.neynar.com) and create a new app. You'll get a **Client ID** and a **Secret Key**.
+  </Step>
+
+  <Step title="Add credentials to your environment">
+    Add the following to your `.env` file:
+
+```env
+NEYNAR_CLIENT_ID="your-neynar-client-id"
+NEYNAR_SECRET_KEY="your-neynar-secret-key"
+```
+  </Step>
+
+  <Step title="Restart Postiz">
+    Stop Postiz if it is running and start it again so the new environment variables are picked up.
+  </Step>
+
+  <Step title="Add the channel">
+    In the Postiz web interface, click **Add Channel**, select **Farcaster**, and complete the Neynar login flow. Your Farcaster account will appear in the channel list.
+  </Step>
+</Steps>

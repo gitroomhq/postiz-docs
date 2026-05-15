@@ -22,6 +22,12 @@ Ensure the media domain is listed under your TikTok developer account's verified
 TikTok approval is not the final step for Direct Post access. TikTok allows unaudited API clients to use the Direct Post API, but posts are restricted to private visibility until the API client completes TikTok's audit process for Terms of Service compliance.
 
 If your API client has not passed this audit, TikTok also limits Direct Post usage to up to 5 users posting in a 24-hour window, and those user accounts must be private at the time of posting. See TikTok's [Direct Post API developer guidelines](https://developers.tiktok.com/doc/content-sharing-guidelines#direct_post_api_-_developer_guidelines) for the current requirements.
+
+In practice this means: before your TikTok developer app passes audit, the `privacy_level` setting for posts is forced to **SELF_ONLY** (private) regardless of what you choose in Postiz. Once your app is audited, all privacy levels become available.
+</Warning>
+
+<Warning>
+**Known issue:** the `/integrations/social/tiktok` connect page can crash for some accounts. If you see a blank page or "cannot read properties of undefined" error, retry from a fresh incognito window. See [Known Issues](/troubleshooting/known-issues).
 </Warning>
 
 <Steps>

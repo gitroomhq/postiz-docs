@@ -55,6 +55,22 @@ curl -H "Authorization: pos_your-oauth-token" https://api.postiz.com/public/v1/i
 This doesn't mean you can only post 90 times per hour—each API call counts as one request. Schedule multiple posts in a single request to maximize throughput.
 </Info>
 
+The rate limit is a single global value for the whole instance — it doesn't tier by subscription plan. Plans tier on channel and post-per-month quotas instead. Self-hosters can adjust the per-hour limit with the `API_LIMIT` env var (see [Configuration Reference](/configuration/reference)).
+
+## Errors
+
+| Status | Meaning |
+|---|---|
+| `400 Bad Request` | The request body or path parameter is malformed (wrong shape, unknown enum, missing required field). |
+| `401 Unauthorized` | `Authorization` header is missing or the API key is unrecognised. |
+| `403 Forbidden` | The API key is valid but doesn't own the resource (e.g. you tried to delete a post in another organisation). |
+| `404 Not Found` | The endpoint doesn't exist, or the path parameter (integration ID, post ID) was correct format but no row matched. |
+| `413 Payload Too Large` | Your request body exceeded 50 MB on `/posts` — usually because images were base64-inlined instead of pre-uploaded. See [Uploads troubleshooting](/troubleshooting/uploads). |
+| `429 Too Many Requests` | You exceeded `API_LIMIT` per hour on the create-post endpoint. |
+| `5xx` | Server error — retry with exponential backoff. |
+
+For `DELETE` endpoints, treat both `404` and `500` as "already deleted" — see [Known Issues](/troubleshooting/known-issues) for the current 500 behaviour on missing IDs.
+
 ## Terminology
 
 <Note>
@@ -77,10 +93,13 @@ It's the same wizard to schedule posts in the Postiz app, however instead of sch
       </a>
   </Tab>
   <Tab title="Local (Make sure your local server is running)">
-      <iframe src="http://localhost:5000/modal/dark/all" style={{zoom: 0.5, height: 1000, width: '100%'}} />
-        <a href="http://localhost:5000/modal/dark/all" target="_blank" rel="noopener noreferrer" style={{display: 'block', marginTop: '10px', textAlign: 'center'}}>
+      <iframe src="http://localhost:4200/modal/dark/all" style={{zoom: 0.5, height: 1000, width: '100%'}} />
+        <a href="http://localhost:4200/modal/dark/all" target="_blank" rel="noopener noreferrer" style={{display: 'block', marginTop: '10px', textAlign: 'center'}}>
              Open in full screen
         </a>
+        <p style={{fontSize: '0.85em', textAlign: 'center', marginTop: '6px'}}>
+          Source-mode default. If you're running the bundled Docker image (<code>ghcr.io/gitroomhq/postiz-app</code>), the official compose maps to <code>http://localhost:4007</code>.
+        </p>
   </Tab>
 </Tabs>
 

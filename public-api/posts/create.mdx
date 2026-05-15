@@ -3,6 +3,22 @@ title: 'Create Post'
 openapi: 'POST /posts'
 ---
 
+## Post type: `now`, `schedule`, or `draft`
+
+The top-level `type` field controls when (and whether) the post is published:
+
+| Value | Behaviour |
+|---|---|
+| `"now"` | Publish immediately. `date` is ignored. |
+| `"schedule"` | Publish at the time given in `date` (ISO 8601). |
+| `"draft"` | Save as a draft. The post is created and stored against the integration but not scheduled or published. You can promote it to a real post later from the Postiz UI. |
+
+Drafts are how you stage content via the API without committing to a publish time — useful for content review workflows or pre-filling a calendar from an external CMS.
+
+## Duplicating a post
+
+There is no dedicated duplicate / clone endpoint. To copy an existing post, fetch it with `GET /posts` and submit the returned content as a new `POST /posts` request.
+
 ## Provider-Specific Settings
 
 When creating posts, each social media platform requires different settings. The `settings` object must include a `__type` field that identifies the platform.

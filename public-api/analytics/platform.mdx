@@ -3,3 +3,24 @@ title: 'Platform Analytics'
 openapi: 'GET /analytics/{integration}'
 ---
 
+## Path parameter: `integration`
+
+The `{integration}` path parameter must be the integration's **`id`** (the UUID-shaped string returned by `GET /public/v1/integrations`).
+
+It is **not** the platform `__type` (e.g. `x`, `linkedin`) and **not** the channel display name. Passing either of those will return `400 Invalid integration`.
+
+```bash
+# Get the integration ID
+curl -H "Authorization: your-api-key" \
+  https://api.postiz.com/public/v1/integrations
+
+# Use the returned id
+curl -H "Authorization: your-api-key" \
+  https://api.postiz.com/public/v1/analytics/<integration-id>
+```
+
+## Common errors
+
+- `400 Invalid integration` — the path param is the wrong shape.
+- `404 Channel not found` — the integration exists but has been disconnected. Reconnect the channel from the Postiz UI.
+- Empty data — some platforms (notably Google My Business) restrict analytics by date range or by profile verification status. The endpoint returns an empty payload rather than an error.

@@ -28,7 +28,8 @@
               "installation/docker",
               "installation/kubernetes-helm",
               "installation/development",
-              "installation/devcontainer"
+              "installation/devcontainer",
+              "installation/migration"
             ]
           },
           {

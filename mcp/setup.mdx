@@ -40,7 +40,13 @@ Replace `your-api-key` with your actual API key from **Settings > Developers > P
 
 ## Claude Code
 
-Add Postiz as an MCP server in your Claude Code configuration:
+The fastest way is the CLI:
+
+```bash
+claude mcp add postiz --transport http --url https://api.postiz.com/mcp/your-api-key
+```
+
+Or add it to your Claude Code config directly:
 
 ```json
 {
@@ -50,6 +56,14 @@ Add Postiz as an MCP server in your Claude Code configuration:
     }
   }
 }
+```
+
+The Bearer-token transport works too — pick whichever your client supports better. Both authenticate the same way:
+
+```bash
+claude mcp add postiz --transport http \
+  --url https://api.postiz.com/mcp \
+  --header "Authorization: Bearer your-api-key"
 ```
 
 ## Cursor

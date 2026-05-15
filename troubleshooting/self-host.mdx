@@ -1,0 +1,103 @@
+---
+title: Self-Host Gotchas
+description: 'Common problems specific to running Postiz yourself'
+---
+
+## `pnpm` heap out of memory during install
+
+The Postiz monorepo is large enough that the default Node heap can
+overflow during `pnpm install` on small VMs.
+
+**Fix**
+
+```bash
+NODE_OPTIONS="--max-old-space-size=4096" pnpm install
+```
+
+If 4 GB still isn't enough and your host has the RAM to spare, raise it
+to `--max-old-space-size=8192`. Don't set the heap higher than your VM's
+available memory — that just trades OOM in Node for OOM-killed by the
+kernel. If you're stuck on a 2 GB VM, build the image elsewhere and
+deploy the prebuilt artifact instead. See
+[System requirements](/installation/system-requirements) for minimum RAM.
+
+## `postgres ECONNREFUSED`
+
+Backend can't reach Postgres.
+
+**Checklist**
+
+1. `DATABASE_URL` host: is it `localhost` when the backend is in a
+   container that doesn't share host networking? Use the service name
+   (`postgres`) or the container IP instead.
+2. Postgres ready? `docker compose logs postgres` should show
+   `database system is ready to accept connections`.
+3. Port mapping: if you exposed Postgres only on the Docker network,
+   external `psql` won't work but the backend will. That's fine.
+
+## "Hide a provider from the UI"
+
+There is no env-var-based way to hide a provider from the frontend
+today. The only mechanism is to set the per-organisation `disabled`
+field on the Integration row in the database after a channel is
+connected. We're tracking the request — see the GitHub issues tagged
+`enhancement`.
+
+## Default ports
+
+It depends on how you're running Postiz.
+
+**Official Docker image** (`ghcr.io/gitroomhq/postiz-app`): the
+container bundles frontend + backend and exposes a single port `5000`.
+The official compose maps that to host `4007:5000` — so you reach Postiz
+at `http://localhost:4007/`.
+
+**Running from source** (`pnpm dev` / `pnpm start`): frontend listens
+on `4200`, backend on `3000` (overridable via `PORT`). Connect a reverse
+proxy in front to give your users a single URL — see
+[Reverse Proxies](/reverse-proxies/caddy).
+
+Temporal listens on `7233` (gRPC) and the Temporal UI on `8080` in
+either mode.
+
+## Mounting the uploads volume
+
+If `STORAGE_PROVIDER=local`, point `UPLOAD_DIRECTORY` at the path Postiz
+should write to, mount that path into your container, and also set
+`NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY` so the frontend knows where the
+files are served from. The Next.js config rewrites `/uploads/:path*` to
+`/api/uploads/:path*` when local storage is active. See
+[Uploads & storage](/configuration/uploads).
+
+For multi-container deployments, either share the same volume across all
+containers that need to read or write, or move to [Cloudflare R2](/configuration/r2).
+
+## Can I deploy Postiz on Vercel?
+
+**Frontend:** yes — it's a standard Next.js app and deploys cleanly to
+Vercel.
+
+**Backend:** no. The Postiz backend is a NestJS server that also embeds
+a Temporal worker. It needs a long-running Node host (Fly.io, Render,
+Railway, a VM, a Kubernetes pod, etc.) — serverless functions won't
+work.
+
+## Email isn't sending
+
+By default, Postiz uses Resend (`EMAIL_PROVIDER=resend`) and only
+becomes active when `RESEND_API_KEY` is set. To use SMTP instead, set
+`EMAIL_PROVIDER=nodemailer` and provide `EMAIL_HOST`, `EMAIL_PORT`,
+`EMAIL_USER`, `EMAIL_PASS`, `EMAIL_SECURE`. See
+[Email configuration](/configuration/emails).
+
+If no email provider is configured, user activation emails won't go
+out — but Postiz auto-activates users in that mode, so signup still
+works.
+
+## Temporal isn't reachable
+
+Since v2.12.0, Postiz schedules posts through Temporal. The backend
+needs to reach the Temporal frontend on `TEMPORAL_ADDRESS`. If you're
+upgrading from v1.x, follow the [migration guide](/installation/migration)
+— it walks through running both stacks side by side while you copy
+Postgres data over.

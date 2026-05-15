@@ -11,6 +11,10 @@ This integration requires that you have setup a Meta for Developers account alre
 This is a complex integration, and it may take some time to get it right. If you have any issues, please reach out to us on the Postiz Discord.
 </Note>
 
+<Warning>
+Threads requires the `THREADS_APP_ID` and `THREADS_APP_SECRET` environment variables on the **backend**. If either is missing or unset when the backend starts, Threads will not appear in the channel list at all — you'll think the provider is broken when really the env vars never got loaded. After adding them, **restart Postiz** and confirm Threads is offered in the Add Channel dialog before troubleshooting further.
+</Warning>
+
 <Steps>
   <Step title="Create an app">
     Go to Meta for Developers and [create a new app](https://developers.facebook.com/apps/creation/). Give your app a name and email.

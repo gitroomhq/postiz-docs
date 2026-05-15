@@ -24,11 +24,13 @@
           {
             "group": "Installation",
             "pages": [
+              "installation/system-requirements",
               "installation/docker-compose",
               "installation/docker",
               "installation/kubernetes-helm",
               "installation/development",
-              "installation/devcontainer"
+              "installation/devcontainer",
+              "installation/migration"
             ]
           },
           {
@@ -37,6 +39,7 @@
               "configuration/reference",
               "configuration/docker",
               "configuration/emails",
+              "configuration/uploads",
               "configuration/r2",
               "configuration/oauth",
               "configuration/chrome-extension"
@@ -47,7 +50,21 @@
             "pages": [
               "reverse-proxies/caddy",
               "reverse-proxies/nginx",
-              "reverse-proxies/traefik"
+              "reverse-proxies/traefik",
+              "reverse-proxies/websockets-and-dev"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "troubleshooting/overview",
+              "troubleshooting/oauth-connect",
+              "troubleshooting/uploads",
+              "troubleshooting/activation-and-login",
+              "troubleshooting/billing",
+              "troubleshooting/channel-limits",
+              "troubleshooting/known-issues",
+              "troubleshooting/self-host"
             ]
           },
           {
@@ -68,7 +85,8 @@
                   "providers/bluesky",
                   "providers/mastodon",
                   "providers/google-my-business",
-                  "providers/mewe"
+                  "providers/mewe",
+                  "providers/farcaster"
                 ]
               },
               {

@@ -3,70 +3,330 @@ title: Configuration Reference
 description: 'Environment variables reference for Postiz'
 ---
 
-At the moment, Postiz is entirely configured by environment variables. It is 
-important to understand that any configuration change to environment variables
-will require an application restart.
+Postiz is configured entirely through environment variables. Any change requires
+an application restart.
 
-An example file of the most used configuration settings can be found here; [example postiz.env file](https://raw.githubusercontent.com/gitroomhq/postiz-app/main/.env.example)
+The canonical list lives in the [example postiz.env file](https://raw.githubusercontent.com/gitroomhq/postiz-app/main/.env.example).
+This page documents every variable Postiz reads, grouped by purpose.
 
-## Required Settings
+<Info>
+Variables marked **Required** are validated on boot — Postiz will fail to start
+if they're missing or malformed.
+</Info>
 
-### `DATABASE_URL`
+## Required core
 
-eg: `postgresql://postiz-user:postiz-password@localhost:5432/postiz-db-local`
+These six variables are non-optional for any deployment.
 
-Postgres is not strictly necessary, Postiz uses Prisma to connect to the database, so technically mariadb or other databases could be used.
+### `DATABASE_URL` <sup>Required</sup>
 
-### `REDIS_URL`
+PostgreSQL connection string used by Prisma.
 
-eg: `redis://localhost:6379`
+```
+DATABASE_URL="postgresql://postiz-user:postiz-password@localhost:5432/postiz-db-local"
+```
 
-### `JWT_SECRET`
+### `REDIS_URL` <sup>Required</sup>
 
-A random string that should be unique for every installation, this is used to secure your JWT auth tokens.
+Redis connection string used for queues, rate limiting, and short-lived caches.
 
-### `FRONTEND_URL`
+```
+REDIS_URL="redis://localhost:6379"
+```
 
-eg: `http://postiz.example.lan:4200`
+### `JWT_SECRET` <sup>Required</sup>
 
-### `NEXT_PUBLIC_BACKEND_URL`
+A long random string used to sign session JWTs. Rotating this invalidates every existing session.
 
-eg: `http://postiz.example.lan:3000`
+### `FRONTEND_URL` <sup>Required</sup>
 
-### `BACKEND_INTERNAL_URL`
+The URL the **browser** uses to reach the Postiz frontend. Used as the OAuth redirect base and for email links.
 
-If running everything in the same host/container: `http://localhost:3000`
+```
+FRONTEND_URL="https://postiz.example.com"
+```
 
-## Optional settings
+### `NEXT_PUBLIC_BACKEND_URL` <sup>Required</sup>
 
-Refer to the [example postiz.env file](https://raw.githubusercontent.com/gitroomhq/postiz-app/main/.env.example) for additional configuration options.
+The URL the **browser** uses to reach the Postiz backend.
 
-### OAUTH
+```
+NEXT_PUBLIC_BACKEND_URL="https://api.postiz.example.com"
+```
 
-See [this page](/configuration/oauth) for reference.
+### `BACKEND_INTERNAL_URL` <sup>Required</sup>
 
-### DISABLE_REGISTRATION
+The URL the **frontend SSR server** uses to reach the backend from inside your network. If everything runs in the same container/host, this is usually `http://localhost:3000`.
 
-eg: `true`
+---
 
-This will only allow a single user registration, and then after that the sign-up page will be disabled. Useful for self-hosting where you want complete control over users.
+## Application behaviour
+
+### `DISABLE_REGISTRATION`
+
+Set to `true` to allow only a single user signup and then disable the sign-up page. Useful for self-host where you want full control.
 
 <Warning>
-This will disable OIDC / OAuth!
+This also disables OIDC / OAuth sign-in.
 </Warning>
 
-### DISABLE_IMAGE_COMPRESSION
+### `API_LIMIT`
 
-This will disable the image compression if set to "true".
+Per-hour limit on the public-API create-post endpoint. Defaults to `90`. Postiz Cloud uses `100`. Channel and post quotas are tiered separately by plan.
 
-### EXTENSION_ID
+### `RUN_CRON`
 
-The Chrome Extension ID for cookie-based platform integrations (e.g., Skool). Required if you want to use platforms that don't offer OAuth APIs.
+When set, the backend process runs the scheduled-task workers. Leave unset on API-only instances when workers are deployed separately.
 
-See the [Chrome Extension guide](/configuration/chrome-extension) for setup instructions.
+### `RESTRICT_UPLOAD_DOMAINS`
 
-## Social Media keys
+Comma-separated allowlist of domains for `/public/v1/upload-from-url`. If set, only URLs whose hostname matches an entry are accepted.
 
-See the "providers" section of the documentation for the provider you want to configure,
-for details about how to set that up.
+### `DISALLOW_PLUS`
 
+When set, blocks the upgrade UI elements pointing to paid plans. Used for self-host deployments that don't want to surface cloud-only billing.
+
+### `IS_GENERAL`
+
+Switches the frontend between routes available to the open-source build (`/launches`) and the hosted build (`/analytics`). Set to `"true"` on self-host. Leave unset on Postiz Cloud.
+
+### `DISABLE_IMAGE_COMPRESSION`
+
+When truthy, the frontend skips client-side image compression on upload. Set this if you need pixel-exact originals at the cost of larger uploads.
+
+### `NOT_SECURED`
+
+<Warning>
+Dev only. Never set in production — it disables security checks that exist for a reason.
+</Warning>
+
+### `MAIN_URL`
+
+Primary application URL used for absolute links in some emails and SEO metadata. Falls back to `FRONTEND_URL` when not set.
+
+### `EXTENSION_ID`
+
+The Chrome Extension ID for cookie-based platform integrations (e.g. Skool). See the [Chrome Extension guide](/configuration/chrome-extension).
+
+### `MOBILE_APP_SCHEME`
+
+URL scheme used for deep-linking from emails into the mobile app.
+
+---
+
+## Storage
+
+See also: [Cloudflare R2](/configuration/r2) and [Uploads & Storage](/configuration/uploads).
+
+| Variable | Purpose |
+|---|---|
+| `STORAGE_PROVIDER` | `local` or `cloudflare`. Defaults to `local`. |
+| `UPLOAD_DIRECTORY` | Filesystem path for `local` storage writes. |
+| `NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY` | Public URL prefix the frontend uses to reference uploaded files. |
+| `CLOUDFLARE_ACCOUNT_ID` | R2 account ID. |
+| `CLOUDFLARE_ACCESS_KEY` | R2 access key. |
+| `CLOUDFLARE_SECRET_ACCESS_KEY` | R2 secret access key. |
+| `CLOUDFLARE_BUCKETNAME` | R2 bucket name. |
+| `CLOUDFLARE_BUCKET_URL` | Public-facing URL the bucket is served from. |
+| `CLOUDFLARE_REGION` | R2 region (usually `auto`). |
+
+---
+
+## Email
+
+See also: [Email configuration](/configuration/emails).
+
+| Variable | Purpose |
+|---|---|
+| `EMAIL_PROVIDER` | `resend` (default) or `nodemailer`. |
+| `RESEND_API_KEY` | Resend API key — required when `EMAIL_PROVIDER=resend`. Presence of this variable also gates whether user activation is required (set → required; unset → users are auto-activated). |
+| `EMAIL_HOST` | SMTP host — required when `EMAIL_PROVIDER=nodemailer`. |
+| `EMAIL_PORT` | SMTP port. |
+| `EMAIL_USER` | SMTP user. |
+| `EMAIL_PASS` | SMTP password. |
+| `EMAIL_SECURE` | `true` for SMTPS / implicit TLS. |
+| `EMAIL_FROM_ADDRESS` | From-address used on all outgoing email. |
+| `EMAIL_FROM_NAME` | From-name used on all outgoing email. |
+
+---
+
+## OAuth sign-in (OIDC)
+
+See also: [OAuth configuration](/configuration/oauth).
+
+| Variable | Purpose |
+|---|---|
+| `POSTIZ_GENERIC_OAUTH` | `true` to enable a generic OIDC sign-in provider. |
+| `POSTIZ_OAUTH_URL` | Base URL of the IdP. |
+| `POSTIZ_OAUTH_AUTH_URL` | Authorization endpoint. |
+| `POSTIZ_OAUTH_TOKEN_URL` | Token endpoint. |
+| `POSTIZ_OAUTH_USERINFO_URL` | UserInfo endpoint. |
+| `POSTIZ_OAUTH_CLIENT_ID` | Client ID issued by the IdP. |
+| `POSTIZ_OAUTH_CLIENT_SECRET` | Client secret issued by the IdP. |
+| `POSTIZ_OAUTH_SCOPE` | OIDC scope. Defaults to `openid profile email`. |
+| `NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME` | Label shown on the sign-in button. |
+| `NEXT_PUBLIC_POSTIZ_OAUTH_LOGO_URL` | Icon shown on the sign-in button. |
+
+---
+
+## Temporal (workflow orchestration)
+
+Since v2.12.0, Postiz uses Temporal for scheduled posts and background workflows.
+Self-host deployments need to run a Temporal stack (the official docker-compose
+ships with one). See the [Temporal migration guide](/installation/migration).
+
+| Variable | Purpose |
+|---|---|
+| `TEMPORAL_ADDRESS` | host:port of the Temporal frontend. |
+| `TEMPORAL_NAMESPACE` | Temporal namespace to run workflows in. |
+| `TEMPORAL_API_KEY` | API key for Temporal Cloud. Leave unset for self-host. |
+| `TEMPORAL_TLS` | `true` to require TLS to the Temporal frontend. |
+| `ORCHESTRATOR_PORT` | Port the in-process orchestrator binds to. |
+
+---
+
+## Public API & MCP
+
+| Variable | Purpose |
+|---|---|
+| `MCP_URL` | URL the frontend uses to advertise the MCP endpoint to clients. |
+| `AGENT_API_KEY` | Shared secret used by the agent runtime to call privileged endpoints. |
+| `AGENT_MEDIA_SSO_KEY` | Signing key for short-lived agent-media SSO tokens. |
+| `BACKEND_URL` | Legacy alias for `NEXT_PUBLIC_BACKEND_URL` in a few server contexts. |
+
+---
+
+## AI / generation
+
+| Variable | Purpose |
+|---|---|
+| `OPENAI_API_KEY` | OpenAI key used for the copilot and AI image generation. |
+| `OPENAI_APP_CHALLANGE` | Verification challenge string for the OpenAI custom GPT integration. |
+| `ELEVENSLABS_API_KEY` | ElevenLabs API key for voice generation. |
+| `FAL_KEY` | fal.ai API key for image/video models. |
+| `TAVILY_API_KEY` | Tavily search API key used by the research tool. |
+| `KIEAI_API_KEY` | KieAI API key. |
+| `TRANSLOADIT_AUTH` | Transloadit auth key for video pipelines. |
+| `TRANSLOADIT_SECRET` | Transloadit signing secret. |
+| `TRANSLOADIT_TEMPLATE` | Transloadit template ID used by the video generator. |
+
+---
+
+## Short-link providers
+
+If a Postiz user configures short-link replacement, Postiz proxies link
+shortening through one of the configured providers. Pick one set.
+
+### Dub.co
+
+```env
+DUB_TOKEN=""
+DUB_API_ENDPOINT="https://api.dub.co"
+DUB_SHORT_LINK_DOMAIN="dub.sh"
+```
+
+### Short.io
+
+```env
+SHORT_IO_SECRET_KEY=""
+```
+
+### Kutt.it
+
+```env
+KUTT_API_KEY=""
+KUTT_API_ENDPOINT="https://kutt.it/api/v2"
+KUTT_SHORT_LINK_DOMAIN="kutt.it"
+```
+
+### LinkDrip
+
+```env
+LINK_DRIP_API_KEY=""
+LINK_DRIP_API_ENDPOINT="https://api.linkdrip.com/v1/"
+LINK_DRIP_SHORT_LINK_DOMAIN="dripl.ink"
+```
+
+---
+
+## Payments
+
+| Variable | Purpose |
+|---|---|
+| `STRIPE_PUBLISHABLE_KEY` | Stripe publishable key. |
+| `STRIPE_SECRET_KEY` | Stripe secret key. |
+| `STRIPE_SIGNING_KEY` | Stripe webhook signing key for subscription events. |
+| `STRIPE_SIGNING_KEY_CONNECT` | Stripe Connect webhook signing key. |
+| `STRIPE_DISCOUNT_ID` | Default Stripe discount applied to new subscriptions. |
+| `FEE_AMOUNT` | Platform fee fraction (e.g. `0.05`). |
+| `NOWPAYMENTS_API_KEY` | NOWPayments API key for crypto checkout. |
+| `NOWPAYMENTS_AMOUNT` | Default NOWPayments invoice amount. |
+
+---
+
+## Analytics & tracking (frontend)
+
+All of these are optional. Frontend reads `NEXT_PUBLIC_*` at build time.
+
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_SENTRY_DSN` | Frontend Sentry DSN. |
+| `NEXT_PUBLIC_GTM_ID` | Google Tag Manager container ID. |
+| `NEXT_PUBLIC_FACEBOOK_PIXEL` | Facebook Pixel ID. |
+| `FACEBOOK_PIXEL_ACCESS_TOKEN` | Server-side Pixel Conversions API token. |
+| `NEXT_PUBLIC_POSTHOG_HOST` | PostHog host (e.g. `https://eu.posthog.com`). |
+| `NEXT_PUBLIC_POSTHOG_KEY` | PostHog project API key. |
+| `NEXT_PUBLIC_TRACKING_TRIAL` | When set, enables trial-funnel tracking events. |
+| `DATAFAST_API_KEY` | Datafast analytics API key. |
+| `DATAFAST_WEBSITE_ID` | Datafast website ID. |
+| `SENTRY_AUTH_TOKEN` | Build-time Sentry token for sourcemap upload. |
+| `SENTRY_ORG` | Sentry org slug. |
+| `SENTRY_PROJECT` | Sentry project slug. |
+| `SENTRY_SPOTLIGHT` | Enable Sentry Spotlight in dev. |
+
+---
+
+## Misc frontend
+
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_DISCORD_SUPPORT` | Discord invite URL shown in the support widget. |
+| `NEXT_PUBLIC_POLOTNO` | Polotno API key for the image editor. |
+| `NEXT_PUBLIC_VERSION` | Version string shown in the footer. |
+| `NEXT_PUBLIC_APP_VERSION` | Mobile/web version label. |
+| `NEXT_PUBLIC_OVERRIDE_BACKEND_URL` | When set, overrides `NEXT_PUBLIC_BACKEND_URL` at runtime. Useful for tunnel-based dev. |
+
+---
+
+## Social provider keys
+
+Each social provider has its own env-var block. See the per-provider setup
+pages under [Providers](/providers/overview) for the exact OAuth steps; this
+table is just a lookup so you can find which page documents which variable.
+
+| Provider | Variables | Setup |
+|---|---|---|
+| X (Twitter) | `X_API_KEY`, `X_API_SECRET`, `X_URL`, `DISABLE_X_ANALYTICS`, `STRIP_LINKS_FROM_X_POSTS` | [/providers/x-twitter](/providers/x-twitter) |
+| LinkedIn | `LINKEDIN_CLIENT_ID`, `LINKEDIN_CLIENT_SECRET` | [/providers/linkedin](/providers/linkedin), [/providers/linkedin-page](/providers/linkedin-page) |
+| Facebook / Instagram (FB) | `FACEBOOK_APP_ID`, `FACEBOOK_APP_SECRET` | [/providers/facebook](/providers/facebook), [/providers/instagram](/providers/instagram) |
+| Instagram (Standalone) | `INSTAGRAM_APP_ID`, `INSTAGRAM_APP_SECRET` | [/providers/instagram](/providers/instagram) |
+| Threads | `THREADS_APP_ID`, `THREADS_APP_SECRET` | [/providers/threads](/providers/threads) |
+| YouTube | `YOUTUBE_CLIENT_ID`, `YOUTUBE_CLIENT_SECRET` | [/providers/youtube](/providers/youtube) |
+| Google My Business | `GOOGLE_GMB_CLIENT_ID`, `GOOGLE_GMB_CLIENT_SECRET` | [/providers/google-my-business](/providers/google-my-business) |
+| TikTok | `TIKTOK_CLIENT_ID`, `TIKTOK_CLIENT_SECRET` | [/providers/tiktok](/providers/tiktok) |
+| Reddit | `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET` | [/providers/reddit](/providers/reddit) |
+| Pinterest | `PINTEREST_CLIENT_ID`, `PINTEREST_CLIENT_SECRET` | [/providers/pinterest](/providers/pinterest) |
+| Discord | `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, `DISCORD_BOT_TOKEN_ID` | [/providers/discord](/providers/discord) |
+| Slack | `SLACK_ID`, `SLACK_SECRET`, `SLACK_SIGNING_SECRET` | [/providers/slack](/providers/slack) |
+| Telegram | `TELEGRAM_TOKEN`, `TELEGRAM_BOT_NAME` | [/providers/telegram](/providers/telegram) |
+| Mastodon | `MASTODON_URL`, `MASTODON_CLIENT_ID`, `MASTODON_CLIENT_SECRET` | [/providers/mastodon](/providers/mastodon) |
+| Dribbble | `DRIBBBLE_CLIENT_ID`, `DRIBBBLE_CLIENT_SECRET` | [/providers/dribbble](/providers/dribbble) |
+| Farcaster | `NEYNAR_CLIENT_ID`, `NEYNAR_SECRET_KEY`, `NEYNAR_LOGIN_URL` | [/providers/farcaster](/providers/farcaster) |
+| MeWe | `MEWE_HOST`, `MEWE_APP_ID`, `MEWE_API_KEY` | [/providers/mewe](/providers/mewe) |
+| Twitch | `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET` | API only — see [/public-api/providers/twitch](/public-api/providers/twitch) |
+| Kick | `KICK_CLIENT_ID`, `KICK_SECRET` | API only — see [/public-api/providers/kick](/public-api/providers/kick) |
+| VK | `VK_ID` | API only — see [/public-api/providers/vk](/public-api/providers/vk) |
+| Whop | `WHOP_CLIENT_ID` | [/providers/whop](/providers/whop) |
+| GitHub (sign-in) | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | [/configuration/oauth](/configuration/oauth) |
+| Beehiiv | `BEEHIIVE_API_KEY`, `BEEHIIVE_PUBLICATION_ID` | Newsletter provider |
+| Listmonk | `LISTMONK_DOMAIN`, `LISTMONK_USER`, `LISTMONK_API_KEY`, `LISTMONK_LIST_ID`, `LISTMONK_WELCOME_TEMPLATE_ID` | Newsletter provider |

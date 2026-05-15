@@ -24,6 +24,7 @@
           {
             "group": "Installation",
             "pages": [
+              "installation/system-requirements",
               "installation/docker-compose",
               "installation/docker",
               "installation/kubernetes-helm",
@@ -38,6 +39,7 @@
               "configuration/reference",
               "configuration/docker",
               "configuration/emails",
+              "configuration/uploads",
               "configuration/r2",
               "configuration/oauth",
               "configuration/chrome-extension"
@@ -48,7 +50,8 @@
             "pages": [
               "reverse-proxies/caddy",
               "reverse-proxies/nginx",
-              "reverse-proxies/traefik"
+              "reverse-proxies/traefik",
+              "reverse-proxies/websockets-and-dev"
             ]
           },
           {

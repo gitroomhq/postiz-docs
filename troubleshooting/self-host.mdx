@@ -42,18 +42,20 @@ connected. We're tracking the request — see the GitHub issues tagged
 
 ## Default ports
 
-Postiz uses these ports out of the box:
+It depends on how you're running Postiz.
 
-| Service | Port |
-|---|---|
-| Backend (Nest) | `3000` (override via `PORT`) |
-| Frontend (Next.js) | `4200` |
-| Temporal frontend | `7233` |
+**Official Docker image** (`ghcr.io/gitroomhq/postiz-app`): the
+container bundles frontend + backend and exposes a single port `5000`.
+The official compose maps that to host `4007:5000` — so you reach Postiz
+at `http://localhost:4007/`.
 
-There is **no** hard requirement on port `5000`. You may see it as a
-legacy fallback in one provider integration (Telegram), but it is not
-enforced anywhere else. Don't reserve it just because you saw it in an
-old screenshot.
+**Running from source** (`pnpm dev` / `pnpm start`): frontend listens
+on `4200`, backend on `3000` (overridable via `PORT`). Connect a reverse
+proxy in front to give your users a single URL — see
+[Reverse Proxies](/reverse-proxies/caddy).
+
+Temporal listens on `7233` (gRPC) and the Temporal UI on `8080` in
+either mode.
 
 ## Mounting the uploads volume
 

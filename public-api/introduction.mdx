@@ -69,7 +69,7 @@ The rate limit is a single global value for the whole instance — it doesn't ti
 | `429 Too Many Requests` | You exceeded `API_LIMIT` per hour on the create-post endpoint. |
 | `5xx` | Server error — retry with exponential backoff. |
 
-For `DELETE` endpoints, treat both `404` and `500` as "already deleted" — see [Known Issues](/troubleshooting/known-issues) for the current 500 behaviour on missing IDs.
+For `DELETE` endpoints, `404` always means "already deleted" and is safe to ignore. A `500` *can* mean the same thing today because of a [known issue](/troubleshooting/known-issues) where a missing post ID surfaces as 500 instead of 404 — but only if the error matches that specific signature. Treat other `500` responses as real server errors: log them, retry with exponential backoff, and don't silently suppress them.
 
 ## Terminology
 

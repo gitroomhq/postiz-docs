@@ -76,8 +76,11 @@ output resolutions assemble faster and are less likely to expire.
 Deleting a post that's already been removed currently surfaces a 500
 instead of a clean 404.
 
-**Workaround:** treat 500 from this endpoint as effectively "already
-deleted." Filter your retry logic on `404 || 500`.
+**Workaround:** match on the specific error signature for this bug
+(a Prisma `undefined.integrationId` error in the response body) before
+treating the 500 as "already deleted." Other 500 responses from this
+endpoint indicate real server errors — log and retry them normally
+rather than swallowing every 500.
 
 ### `PUT /public/v1/posts/:id/release-id` validation 500
 

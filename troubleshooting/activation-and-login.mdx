@@ -34,9 +34,13 @@ talk to the backend (mismatched protocols/ports break the session cookie).
 `JWT_SECRET` controls signing for session tokens. If you regenerate it,
 every existing session becomes invalid.
 
-**Fix:** set `JWT_SECRET` once during initial deployment, store it
-somewhere persistent (Docker secret, env file in version control of the
-deploy repo, password manager) and never rotate it lightly.
+**Fix:** set `JWT_SECRET` once during initial deployment and never
+rotate it lightly. Store it in a secret manager (Docker / Kubernetes
+secret, AWS/GCP Secret Manager, Doppler, 1Password, etc.) or an
+untracked `.env` file on the host. **Don't commit it to version
+control** — that includes "private" deploy repos, since anyone with
+repo access ends up with the signing key for every session token Postiz
+has ever issued.
 
 ## Self-host: "Origin not allowed" on launches
 

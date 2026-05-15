@@ -5,12 +5,19 @@ description: 'Running Postiz behind ngrok or a reverse proxy with WebSocket supp
 
 ## Production reverse proxy
 
-In production, the frontend and backend run on separate ports:
+How you reverse-proxy depends on how you're running Postiz:
 
-- Frontend (Next.js): `4200`
-- Backend (Nest): `3000`
+- **Official Docker image** (`ghcr.io/gitroomhq/postiz-app`): frontend
+  and backend are bundled inside one container and exposed on a single
+  port (`5000` internally; the official compose maps it to host `4007`).
+  Your reverse proxy only needs to forward one upstream. Most users on
+  this image don't need anything beyond standard HTTPS termination.
+- **Source / multi-container deployments** (`pnpm dev`, `pnpm start`,
+  or splitting frontend and backend into separate containers): frontend
+  runs on `4200`, backend on `3000`, and you need to route the paths
+  below correctly.
 
-A reverse proxy in front of both is the recommended setup. Forward:
+For the split setup, forward:
 
 | Path | Upstream | Notes |
 |---|---|---|
@@ -20,7 +27,7 @@ A reverse proxy in front of both is the recommended setup. Forward:
 | `/auth/*` | Backend `:3000` | Sign-in flow. |
 | `/integrations/*` | Backend `:3000` | OAuth callbacks. |
 | `/mcp/*`, `/sse/*`, `/message/*` | Backend `:3000` | MCP transport — must support streaming HTTP. |
-| `/webhooks/*` | Backend `:3000` | Outbound webhook callbacks. |
+| `/webhooks/*` | Backend `:3000` | Inbound webhook callbacks from providers (Stripe, social platforms). |
 
 For configured examples, see [Caddy](/reverse-proxies/caddy),
 [Nginx](/reverse-proxies/nginx), and [Traefik](/reverse-proxies/traefik).

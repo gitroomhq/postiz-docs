@@ -17,7 +17,16 @@ Drafts are how you stage content via the API without committing to a publish tim
 
 ## Duplicating a post
 
-There is no dedicated duplicate / clone endpoint. To copy an existing post, fetch it with `GET /posts` and submit the returned content as a new `POST /posts` request.
+There is no dedicated duplicate / clone endpoint. To copy an existing post, fetch it with `GET /posts` and submit the content as a new `POST /posts` request.
+
+Before re-submitting, strip the server-managed fields from the fetched object — re-sending them either causes validation errors or, worse, accidentally updates the original. At minimum drop:
+
+- `id` and any nested post IDs
+- `createdAt`, `updatedAt`, and any other timestamps
+- `state` / `status` / `releaseId` (these are assigned by the scheduler)
+- Anything else the API didn't ask you to provide when you originally created the post
+
+Then set a fresh `type` (`now`, `schedule`, or `draft`) and `date`, and `POST` the cleaned object.
 
 ## Provider-Specific Settings
 

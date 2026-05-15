@@ -7,21 +7,26 @@ description: 'Hardware, services, ports, and network requirements for self-hosti
 
 Recommended starting point for a small team (≤ 20 users):
 
-| Component | Minimum | Recommended |
+| Component | Supported floor | Recommended |
 |---|---|---|
 | CPU | 2 vCPU | 4 vCPU |
-| RAM | 4 GB | 8 GB |
+| RAM | 2 GB (all-in-one, light use) | 8 GB |
 | Disk | 20 GB | 50 GB + persistent volume for uploads |
 
-The build step is the most memory-intensive part. If `pnpm install` or
-`pnpm build` OOMs on a small VM, bump the Node heap:
+The official Docker Compose has been tested on a 2 GB / 2 vCPU Ubuntu
+VM running everything on one host (see [Docker Compose](/installation/docker-compose)).
+That works for a single-user install with occasional posting, but
+leaves no headroom — once you have multiple users, scheduled
+workflows, or external Postgres/Redis on the same host, plan for
+**4 GB or more**.
+
+The build step (`pnpm install` / `pnpm build` from source) is the most
+memory-hungry part and can OOM on 2 GB VMs. Bump the Node heap if it
+fails:
 
 ```bash
 NODE_OPTIONS="--max-old-space-size=4096" pnpm install
 ```
-
-For production: 2 GB RAM is the absolute floor and only works if you
-run Postgres/Redis externally. Below that you'll hit OOM kills under load.
 
 ## Recommended install path
 

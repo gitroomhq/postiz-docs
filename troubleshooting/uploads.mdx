@@ -5,9 +5,11 @@ description: 'Payload limits, upload-from-url, video, and cancel-in-flight behav
 
 ## Body size limit
 
-The Postiz backend accepts JSON bodies up to **50 MB** on `/posts` and
-`/copilot/*`. Other endpoints fall back to the framework default and are
-much smaller — do not inline base64-encoded images in arbitrary endpoints.
+The Postiz backend accepts JSON bodies up to **50 MB** on the post-creation
+routes (`POST /public/v1/posts` for the public API, plus the internal
+`/posts` and `/copilot/*` endpoints used by the web UI). Other endpoints
+fall back to the framework default and are much smaller — don't inline
+base64-encoded images in arbitrary endpoints.
 
 ## Accepted MIME types (Public API)
 
@@ -35,7 +37,7 @@ through the public API.
 You sent a request body larger than 50 MB to `POST /public/v1/posts` —
 almost always because you inlined image data instead of uploading first.
 
-**Fix:** upload media via `/public/v1/upload` (or `/upload-from-url`),
+**Fix:** upload media via `/public/v1/upload` (or `/public/v1/upload-from-url`),
 then reference the returned `id` and `path` in the post body's
 `image` array.
 

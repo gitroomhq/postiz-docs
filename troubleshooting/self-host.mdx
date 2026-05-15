@@ -14,9 +14,12 @@ overflow during `pnpm install` on small VMs.
 NODE_OPTIONS="--max-old-space-size=4096" pnpm install
 ```
 
-Bump to `--max-old-space-size=8192` on really small instances. See
-[System requirements](/installation/system-requirements) for minimum
-RAM.
+If 4 GB still isn't enough and your host has the RAM to spare, raise it
+to `--max-old-space-size=8192`. Don't set the heap higher than your VM's
+available memory — that just trades OOM in Node for OOM-killed by the
+kernel. If you're stuck on a 2 GB VM, build the image elsewhere and
+deploy the prebuilt artifact instead. See
+[System requirements](/installation/system-requirements) for minimum RAM.
 
 ## `postgres ECONNREFUSED`
 

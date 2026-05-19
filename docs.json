@@ -41,6 +41,7 @@
               "configuration/emails",
               "configuration/uploads",
               "configuration/r2",
+              "configuration/polotno",
               "configuration/oauth",
               "configuration/chrome-extension"
             ]

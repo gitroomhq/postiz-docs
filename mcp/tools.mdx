@@ -7,7 +7,11 @@ description: 'Complete reference for all Postiz MCP tools'
 
 List all connected social media accounts (channels) for your organization.
 
-**Parameters:** None
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `group` | string | No | Group (customer) ID from `groupList`. When provided, only channels belonging to that group are returned |
 
 **Returns:**
 
@@ -17,6 +21,22 @@ List all connected social media accounts (channels) for your organization.
 | `name` | string | Display name of the account |
 | `picture` | string | Profile picture URL |
 | `platform` | string | Platform identifier (e.g., `x`, `linkedin`, `facebook`) |
+| `customer` | object | The group (customer) this channel belongs to, as `{ id, name }` — omitted if the channel is not assigned to a group |
+
+---
+
+## groupList
+
+List all groups (customers) for your organization. Use a group's `id` with `integrationList` to filter channels down to a single group.
+
+**Parameters:** None
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Group (customer) ID (pass to `integrationList` as `group`) |
+| `name` | string | Group (customer) display name |
 
 ---
 

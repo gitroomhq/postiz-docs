@@ -62,3 +62,15 @@ MASTODON_URL="https://mastodon.social" # Change this if connecting to a differen
   </Step>
 </Steps>
 
+## Troubleshooting
+
+### "Failed to fetch" / "fetch failed" when connecting
+
+The Postiz backend needs network access to reach your Mastodon instance. If the connect call fails at this stage, the backend container couldn't resolve or reach the `MASTODON_URL` host.
+
+**Fix**
+
+1. From inside the backend container, run `curl -I https://your-instance.example.com/`. If that fails, fix DNS/egress before retrying.
+2. If you're behind a corporate proxy, set `HTTPS_PROXY` on the backend.
+3. Confirm `MASTODON_URL` exactly matches your instance — protocol included, no trailing slash issues.
+

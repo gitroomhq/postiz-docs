@@ -1,0 +1,64 @@
+---
+title: LinkedIn Page Settings
+description: 'API settings for posting to LinkedIn company pages'
+---
+
+LinkedIn Page posts use the same settings schema as personal LinkedIn
+profiles. The only difference is the `__type` value - everything else
+(carousel options, image arrays, content) is identical.
+
+## Settings Schema
+
+```json
+{
+  "settings": {
+    "__type": "linkedin-page",
+    "post_as_images_carousel": false
+  }
+}
+```
+
+For the full field reference (including `post_as_images_carousel` and
+`carousel_name`), see the [LinkedIn settings page](/public-api/providers/linkedin).
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `linkedin-page` |
+| `post_as_images_carousel` | `boolean` | No | Display multiple images as a carousel |
+| `carousel_name` | `string` | No | Name for the carousel document. Only used when `post_as_images_carousel` is `true`. |
+
+---
+
+## Complete Example
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-linkedin-page-integration-id"
+      },
+      "value": [
+        {
+          "content": "We're hiring! Join our team and help us build the future.",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "linkedin-page",
+        "post_as_images_carousel": false
+      }
+    }
+  ]
+}
+```
+
+For a carousel example, see the
+[LinkedIn carousel example](/public-api/providers/linkedin#carousel-post) -
+swap `__type: "linkedin"` for `__type: "linkedin-page"`.

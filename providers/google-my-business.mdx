@@ -102,3 +102,11 @@ Make sure all three required APIs are enabled:
 
 Ensure your Google Business Profile is verified and that you're logging in with the Google account that owns or manages the business profile.
 
+### Analytics returns empty or filter errors
+
+The GMB performance API restricts which metric combinations and date ranges it will return data for. If Postiz shows an empty analytics chart, double-check the date range you've selected covers periods after the profile was verified. Some metrics aren't available for newer or unverified profiles at all — the API returns no data rather than an error.
+
+### Known issue: connect page surfaces session-recording errors
+
+The `/integrations/social/gmb` page can surface session-replay overlay errors that mask the actual OAuth flow. The handshake usually still completes — refresh the Channels page after authorising on Google's side. See [Known Issues](/troubleshooting/known-issues).
+

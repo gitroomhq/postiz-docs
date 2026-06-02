@@ -87,3 +87,21 @@ Here's what a typical interaction looks like when an AI agent uses Postiz MCP:
 All of this happens automatically when you tell your AI agent something like:
 
 > "Schedule a post to X for tomorrow at 10am: Excited to announce our new feature!"
+
+## FAQ
+
+### Do I need an OpenAI key to use Postiz MCP?
+
+No. The MCP server just exposes Postiz's tools — your AI client (Claude, ChatGPT, Cursor, etc.) provides the model. Postiz only needs an `OPENAI_API_KEY` if you use Postiz's own AI features (image generation, copilot) which are separate from the MCP tools surfaced to your client.
+
+### What happens when my API key expires or is rotated?
+
+Postiz API keys don't auto-rotate, but if you regenerate one in Settings → Developers → Public API, every MCP client using the old key stops working until you update its config. Update the URL or the `Authorization` header in your client config and reconnect.
+
+### Self-hosted: how do I expose the MCP endpoint?
+
+The MCP server starts as part of the Postiz backend and is reachable at `/mcp` (Bearer auth), `/mcp/:apiKey` (key in URL), and `/mcp-oauth` (OAuth-protected). Your reverse proxy must forward these paths to the backend and support streaming HTTP (`Transfer-Encoding: chunked`). See [Reverse Proxies](/reverse-proxies/caddy).
+
+### Can MCP read or reply to comments?
+
+Not today. The current tool set is read-only on integrations and write-only on posts/media — there's no `getComments` or `replyToComment` exposed via MCP. Comment replies must be triggered through the Postiz UI.

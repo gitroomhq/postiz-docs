@@ -1,0 +1,99 @@
+---
+title: Known Issues
+description: 'Live tracker of bugs we are aware of, with workarounds where possible'
+---
+
+Bugs we've confirmed and are tracking. Each entry lists a workaround if
+one exists. Once a fix ships, the entry will be removed (or moved into
+release notes).
+
+If you hit something that isn't here, please report it on
+[Discord](https://discord.postiz.com) or [GitHub](https://github.com/gitroomhq/postiz-app/issues).
+
+## Channel connect
+
+### TikTok connect page sometimes crashes
+
+The `/integrations/social/tiktok` page can fail with `cannot read
+properties of undefined` for a subset of accounts.
+
+**Workaround:** retry; if it persists, open the connect flow in a fresh
+incognito window. Once the channel is added the rest of the TikTok UI
+works normally.
+
+### X (Twitter) connect page sometimes crashes
+
+The X connect screen can throw a `t/r is not a function` error after the
+provider redirect.
+
+**Workaround:** start the connect flow over from the Channels page rather
+than refreshing the broken screen.
+
+### GMB connect page shows session-recording errors
+
+The Google My Business connect page surfaces session-replay errors that
+mask the underlying flow.
+
+**Workaround:** ignore the overlay error; the OAuth handshake usually
+still completes. Refresh the Channels page after authorising on
+Google's side.
+
+## Posting
+
+### `/launches` page null-deref during loading
+
+The launches view can throw null-reference errors while data is still
+loading, briefly showing a broken state.
+
+**Workaround:** refresh the page once data arrives. State usually
+settles within a couple of seconds.
+
+## Media generation
+
+### AI image generation returns 400 "Unknown parameter: 'response_format'"
+
+`/media/generate-image-with-prompt`, `/posts/generator`, and
+`/media/generate-image` can fail against newer OpenAI API versions
+because the request uses a parameter that has since changed names.
+
+**Workaround:** no client-side workaround. A fix is needed in the
+Postiz backend. Use externally-generated images and the
+[`/public/v1/upload`](/public-api/uploads/upload-file) endpoint in the
+meantime.
+
+### "Failed to generate video" via Transloadit
+
+Long-running video assemblies can hit Transloadit's assembly expiry
+window.
+
+**Workaround:** retry the generation. Shorter prompts and smaller
+output resolutions assemble faster and are less likely to expire.
+
+## Public API
+
+### `DELETE /public/v1/posts/:id` 500 on non-existent ID
+
+Deleting a post that's already been removed currently surfaces a 500
+instead of a clean 404.
+
+**Workaround:** match on the specific error signature for this bug
+(a Prisma `undefined.integrationId` error in the response body) before
+treating the 500 as "already deleted." Other 500 responses from this
+endpoint indicate real server errors — log and retry them normally
+rather than swallowing every 500.
+
+### `PUT /public/v1/posts/:id/release-id` validation 500
+
+Sending malformed input to the release-id endpoint surfaces a Prisma
+validation error as 500.
+
+**Workaround:** validate input shape client-side before sending.
+
+## Uploads
+
+### Cannot cancel an in-flight upload
+
+The uploader does not support mid-flight cancellation.
+
+**Workaround:** wait for the upload to finish, then delete the asset
+from the post.

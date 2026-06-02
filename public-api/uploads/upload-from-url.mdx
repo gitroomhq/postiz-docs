@@ -3,3 +3,31 @@ title: 'Upload from URL'
 openapi: 'POST /upload-from-url'
 ---
 
+Fetch a remote URL and store the result as a Postiz media asset. Useful when your media already lives on a CDN or external storage and you don't want to round-trip it through your client.
+
+## Requirements for the source URL
+
+- Must be reachable from the Postiz backend (publicly resolvable HTTPS, no auth required).
+- Detected MIME type must be in the allowlist documented on [Upload File](/public-api/uploads/upload-file).
+- Postiz performs an [SSRF-safe fetch](https://github.com/nodejs/undici) — private IP ranges, link-local addresses, and `localhost` are rejected.
+
+## Example
+
+```bash
+curl -X POST "https://api.postiz.com/public/v1/upload-from-url" \
+  -H "Authorization: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://example.com/photo.jpg"}'
+```
+
+Response shape matches [Upload File](/public-api/uploads/upload-file).
+
+## When to prefer multipart upload
+
+If your source URLs are slow or unreliable, the round-trip through Postiz can fail or take a long time. For best results:
+
+- Cache stable, fast HTTPS source URLs (S3, R2, Cloudflare Images, etc.).
+- For one-off uploads, pre-download the file locally and POST it to [`/public/v1/upload`](/public-api/uploads/upload-file) instead.
+- Don't link to signed URLs that may expire before Postiz fetches them.
+
+See [Uploads troubleshooting](/troubleshooting/uploads) for common failure modes.

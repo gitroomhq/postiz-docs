@@ -1,0 +1,92 @@
+---
+title: VK Settings
+description: 'API settings for posting to VK (VKontakte)'
+---
+
+## Settings Schema
+
+When creating a post for VK, use the following settings schema:
+
+```json
+{
+  "settings": {
+    "__type": "vk"
+  }
+}
+```
+
+<Note>
+VK has no provider-specific settings beyond `__type`. The wall or community
+the post publishes to is determined by the connected integration, not the
+settings block. Post content, images, and the schedule are configured at
+the post level - see the [Create Post](/public-api/posts/create) reference.
+</Note>
+
+## Fields
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `__type` | `string` | Yes | Must be `vk` |
+
+---
+
+## Complete Example
+
+### Text Post
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-vk-integration-id"
+      },
+      "value": [
+        {
+          "content": "Hello from the Postiz API!",
+          "image": []
+        }
+      ],
+      "settings": {
+        "__type": "vk"
+      }
+    }
+  ]
+}
+```
+
+### Post with Image
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-vk-integration-id"
+      },
+      "value": [
+        {
+          "content": "Sharing today's launch screenshot",
+          "image": [
+            {
+              "id": "image-id",
+              "path": "https://uploads.postiz.com/launch.png"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "vk"
+      }
+    }
+  ]
+}
+```

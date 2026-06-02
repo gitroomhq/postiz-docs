@@ -1,0 +1,97 @@
+---
+title: System Requirements
+description: 'Hardware, services, ports, and network requirements for self-hosting Postiz'
+---
+
+## Hardware
+
+Recommended starting point for a small team (≤ 20 users):
+
+| Component | Supported floor | Recommended |
+|---|---|---|
+| CPU | 2 vCPU | 4 vCPU |
+| RAM | 2 GB (all-in-one, light use) | 8 GB |
+| Disk | 20 GB | 50 GB + persistent volume for uploads |
+
+The official Docker Compose has been tested on a 2 GB / 2 vCPU Ubuntu
+VM running everything on one host (see [Docker Compose](/installation/docker-compose)).
+That works for a single-user install with occasional posting, but
+leaves no headroom — once you have multiple users, scheduled
+workflows, or external Postgres/Redis on the same host, plan for
+**4 GB or more**.
+
+The build step (`pnpm install` / `pnpm build` from source) is the most
+memory-hungry part and can OOM on 2 GB VMs. Bump the Node heap if it
+fails:
+
+```bash
+NODE_OPTIONS="--max-old-space-size=4096" pnpm install
+```
+
+## Recommended install path
+
+The canonical self-host setup is the official Docker Compose repo:
+
+<Card title="postiz-docker-compose" icon="docker" href="https://github.com/gitroomhq/postiz-docker-compose">
+  Pre-wired Postiz + Postgres + Redis + Temporal. The fastest way to a working install.
+</Card>
+
+If you'd rather build from source or use Kubernetes, see [Docker Compose](/installation/docker-compose), [Docker](/installation/docker), or [Kubernetes / Helm](/installation/kubernetes-helm).
+
+## Required services
+
+Postiz needs four external services:
+
+| Service | Minimum version |
+|---|---|
+| PostgreSQL | 14 |
+| Redis | 6 |
+| Temporal | bundled with official docker-compose; required since v2.12.0 |
+| Object storage | Optional — local filesystem works (`STORAGE_PROVIDER=local`), Cloudflare R2 supported (`STORAGE_PROVIDER=cloudflare`) |
+
+The official [docker-compose](https://github.com/gitroomhq/postiz-docker-compose)
+ships Postgres, Redis, and Temporal pre-wired. If you're running them
+externally, point Postiz at them via `DATABASE_URL`, `REDIS_URL`, and
+`TEMPORAL_ADDRESS`.
+
+## Default ports
+
+| Service | Port | When |
+|---|---|---|
+| Postiz container (bundled FE + BE) | `5000` | Official Docker image (`ghcr.io/gitroomhq/postiz-app`) — exposed for you to map. The bundled compose maps host `4007:5000`. |
+| Backend (Nest) | `3000` | Running from source (`pnpm dev` / `pnpm start`). Override via `PORT`. |
+| Frontend (Next.js) | `4200` | Running from source. |
+| Temporal frontend | `7233` | gRPC; both modes. |
+| Temporal UI | `8080` | If bundled compose is used. |
+
+## Filesystem
+
+If `STORAGE_PROVIDER=local`, set `UPLOAD_DIRECTORY` to a host path and
+mount that path into the backend container. The frontend serves the
+same files through `/uploads/:path*`. See [Uploads & storage](/configuration/uploads).
+
+If you'd rather offload media: configure [Cloudflare R2](/configuration/r2).
+
+## Outbound network
+
+Postiz initiates outbound HTTPS to every social provider you connect.
+Strict egress firewalls **will** break OAuth — make sure the backend
+can reach:
+
+- `api.twitter.com`, `upload.twitter.com`
+- `graph.facebook.com`, `graph.instagram.com`, `graph.threads.net`
+- `linkedin.com`, `api.linkedin.com`
+- `openapi.tiktok.com`, `open.tiktokapis.com`
+- `googleapis.com` (YouTube + GMB)
+- the Mastodon instance you configure via `MASTODON_URL`
+- any other provider you intend to use
+
+If your environment requires a proxy, set `HTTPS_PROXY` and `HTTP_PROXY`
+on the backend.
+
+## Inbound network
+
+The frontend talks to the backend from the browser, so
+`NEXT_PUBLIC_BACKEND_URL` must be **reachable from your users' browsers**,
+not just from the frontend SSR server. A reverse proxy in front of both
+ports is the typical setup — see [Reverse Proxies](/reverse-proxies/caddy).

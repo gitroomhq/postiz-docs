@@ -81,7 +81,16 @@ CLI                        Auth Server                    Postiz
  |<-- access_token ------------|                           |
 ```
 
-### 1. Create an OAuth App in Postiz
+### 1. Clone the Repository
+
+The auth server lives in the [postiz-agent](https://github.com/gitroomhq/postiz-agent) repository:
+
+```bash
+git clone https://github.com/gitroomhq/postiz-agent.git
+cd postiz-agent/server
+```
+
+### 2. Create an OAuth App in Postiz
 
 Go to **Postiz Settings > Developer > OAuth Apps** and create a new app. Set the callback URL to:
 
@@ -89,11 +98,11 @@ Go to **Postiz Settings > Developer > OAuth Apps** and create a new app. Set the
 https://your-server-domain.com/device/callback
 ```
 
-### 2. Set Up Postgres
+### 3. Set Up Postgres
 
 Create a database. The server auto-creates the `device_requests` table on startup.
 
-### 3. Configure Environment
+### 4. Configure Environment
 
 ```bash
 export DATABASE_URL="postgresql://user:password@localhost:5432/postiz_auth"
@@ -112,10 +121,9 @@ export SERVER_URL="https://your-server-domain.com"
 | `POSTIZ_FRONTEND_URL` | No | `https://platform.postiz.com` | Postiz frontend URL for OAuth redirects |
 | `POSTIZ_API_URL` | No | `https://api.postiz.com` | Postiz API URL for token exchange |
 
-### 4. Run the Server
+### 5. Run the Server
 
 ```bash
-cd server
 pnpm install
 
 # Development
@@ -126,7 +134,7 @@ pnpm build
 pnpm start:prod
 ```
 
-### 5. Point the CLI to Your Server
+### 6. Point the CLI to Your Server
 
 ```bash
 export POSTIZ_AUTH_SERVER="https://your-server-domain.com"

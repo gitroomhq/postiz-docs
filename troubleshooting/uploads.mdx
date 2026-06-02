@@ -1,0 +1,91 @@
+---
+title: Uploads & Media
+description: 'Payload limits, upload-from-url, video, and cancel-in-flight behaviour'
+---
+
+## Body size limit
+
+The Postiz backend accepts JSON bodies up to **50 MB** on the post-creation
+routes (`POST /public/v1/posts` for the public API, plus the internal
+`/posts` and `/copilot/*` endpoints used by the web UI). Other endpoints
+fall back to the framework default and are much smaller — don't inline
+base64-encoded images in arbitrary endpoints.
+
+## Accepted MIME types (Public API)
+
+The `/public/v1/upload` and `/public/v1/upload-from-url` endpoints validate
+the uploaded file's detected MIME type against this allowlist:
+
+| Type | MIME |
+|---|---|
+| JPEG | `image/jpeg` |
+| PNG | `image/png` |
+| GIF | `image/gif` |
+| WebP | `image/webp` |
+| AVIF | `image/avif` |
+| BMP | `image/bmp` |
+| TIFF | `image/tiff` |
+| MP4 video | `video/mp4` |
+
+PDFs are **not** accepted by the public API. The only PDF flow Postiz
+supports is LinkedIn document carousels, which are produced internally
+by converting an image carousel to PDF — you can't post a PDF directly
+through the public API.
+
+## "PayloadTooLargeError" when creating a post
+
+You sent a request body larger than 50 MB to `POST /public/v1/posts` —
+almost always because you inlined image data instead of uploading first.
+
+**Fix:** upload media via `/public/v1/upload` (or `/public/v1/upload-from-url`),
+then reference the returned `id` and `path` in the post body's
+`image` array.
+
+```bash
+# Step 1: upload the file
+curl -X POST "https://api.postiz.com/public/v1/upload" \
+  -H "Authorization: your-api-key" \
+  -F "file=@photo.jpg"
+
+# Step 2: pass id + path into the post
+```
+
+## `upload-from-url` timeouts or "fetch failed"
+
+`/upload-from-url` proxies the source URL through the Postiz backend.
+If the source server is slow, unreachable, blocks Postiz's user agent,
+or sits behind authentication, the upload fails.
+
+**Fix**
+
+- Make sure the source URL is publicly reachable HTTPS, with no auth.
+- Don't link to private S3 URLs, signed URLs that have expired, or
+  intranet hosts.
+- If the source is consistently slow, pre-download the file locally and
+  use the multipart `/upload` endpoint instead.
+
+## "Failed to load video metadata"
+
+Postiz inspects uploaded videos for duration, dimensions, and codec
+before passing them to the social provider. Files outside the supported
+range fail here.
+
+**Recommended video format**
+
+- Container: MP4
+- Video codec: H.264 (baseline or main profile)
+- Audio codec: AAC
+- Frame rate: 30 fps or less
+- Resolution: ≤ 1920×1080 for most providers; TikTok and YouTube
+  Shorts prefer portrait 1080×1920.
+
+Other formats may upload but get rejected by the social provider
+downstream.
+
+## "uploader plugin does not allow removing files during an upload"
+
+You hit Cancel on a file that was already being uploaded. Postiz's
+uploader doesn't support mid-flight cancellation — wait for the upload
+to complete, then delete the asset from the post.
+
+This is a known UX limitation; see [Known Issues](/troubleshooting/known-issues).

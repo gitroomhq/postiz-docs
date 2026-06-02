@@ -1,0 +1,90 @@
+---
+title: Uploads & Storage
+description: 'Local filesystem vs Cloudflare R2 for media uploads'
+---
+
+Postiz writes user-uploaded media (post images, avatars, generated
+content) through a single storage abstraction. Pick one of two backends.
+
+## Pick a backend
+
+```env
+STORAGE_PROVIDER="local"      # default — write to local filesystem
+# or
+STORAGE_PROVIDER="cloudflare" # write to Cloudflare R2
+```
+
+## Local filesystem
+
+Set the path where Postiz should write:
+
+```env
+STORAGE_PROVIDER="local"
+UPLOAD_DIRECTORY="/data/postiz/uploads"
+NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY="/uploads"
+```
+
+- `UPLOAD_DIRECTORY` — where the backend writes files on disk.
+- `NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY` — the URL prefix the frontend
+  uses to reference those files. Default `/uploads`.
+
+The Next.js frontend rewrites `/uploads/:path*` to `/api/uploads/:path*`
+on the backend (only active when `STORAGE_PROVIDER=local`), so the
+public URL stays `/uploads/...` while the actual file is served from
+the backend.
+
+### Docker volume mount
+
+In `docker-compose.yaml`:
+
+```yaml
+services:
+  postiz:
+    environment:
+      STORAGE_PROVIDER: "local"
+      UPLOAD_DIRECTORY: "/uploads"
+      NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY: "/uploads"
+    volumes:
+      - postiz-uploads:/uploads
+
+volumes:
+  postiz-uploads:
+```
+
+If you scale beyond one backend replica, you need a shared volume — or
+switch to Cloudflare R2.
+
+### Caveat: some providers need public HTTPS URLs
+
+TikTok (and a few others) fetch media via "pull from URL" rather than
+multipart upload. Your local `/uploads` path must therefore be
+reachable from the public internet over HTTPS for those providers to
+work. If your deployment is internet-facing through a reverse proxy
+with TLS, you're fine. If Postiz is on a private network, those
+providers will fail and you should use [Cloudflare R2](/configuration/r2)
+or a CDN instead.
+
+## Cloudflare R2
+
+Set `STORAGE_PROVIDER=cloudflare` and configure the R2 credentials. See
+the dedicated [R2 setup guide](/configuration/r2) for the OAuth and
+bucket-permissions walkthrough.
+
+```env
+STORAGE_PROVIDER="cloudflare"
+CLOUDFLARE_ACCOUNT_ID="…"
+CLOUDFLARE_ACCESS_KEY="…"
+CLOUDFLARE_SECRET_ACCESS_KEY="…"
+CLOUDFLARE_BUCKETNAME="…"
+CLOUDFLARE_BUCKET_URL="https://your-bucket-url.r2.cloudflarestorage.com/"
+CLOUDFLARE_REGION="auto"
+```
+
+R2 gives you public HTTPS URLs out of the box, so the TikTok caveat
+above doesn't apply.
+
+## Public-API uploads
+
+Both `/public/v1/upload` and `/public/v1/upload-from-url` write through
+the configured `STORAGE_PROVIDER`. The accepted MIME types and body-size
+limits are documented in [troubleshooting/uploads](/troubleshooting/uploads).

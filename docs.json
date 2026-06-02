@@ -24,11 +24,13 @@
           {
             "group": "Installation",
             "pages": [
+              "installation/system-requirements",
               "installation/docker-compose",
               "installation/docker",
               "installation/kubernetes-helm",
               "installation/development",
-              "installation/devcontainer"
+              "installation/devcontainer",
+              "installation/migration"
             ]
           },
           {
@@ -37,7 +39,9 @@
               "configuration/reference",
               "configuration/docker",
               "configuration/emails",
+              "configuration/uploads",
               "configuration/r2",
+              "configuration/polotno",
               "configuration/oauth",
               "configuration/chrome-extension"
             ]
@@ -47,7 +51,21 @@
             "pages": [
               "reverse-proxies/caddy",
               "reverse-proxies/nginx",
-              "reverse-proxies/traefik"
+              "reverse-proxies/traefik",
+              "reverse-proxies/websockets-and-dev"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "troubleshooting/overview",
+              "troubleshooting/oauth-connect",
+              "troubleshooting/uploads",
+              "troubleshooting/activation-and-login",
+              "troubleshooting/billing",
+              "troubleshooting/channel-limits",
+              "troubleshooting/known-issues",
+              "troubleshooting/self-host"
             ]
           },
           {
@@ -68,7 +86,8 @@
                   "providers/bluesky",
                   "providers/mastodon",
                   "providers/google-my-business",
-                  "providers/mewe"
+                  "providers/mewe",
+                  "providers/farcaster"
                 ]
               },
               {
@@ -161,9 +180,16 @@
             "pages": [
               "public-api/providers/x",
               "public-api/providers/linkedin",
+              "public-api/providers/linkedin-page",
               "public-api/providers/facebook",
               "public-api/providers/instagram",
+              "public-api/providers/instagram-standalone",
+              "public-api/providers/threads",
+              "public-api/providers/bluesky",
+              "public-api/providers/mastodon",
               "public-api/providers/warpcast",
+              "public-api/providers/nostr",
+              "public-api/providers/vk",
               "public-api/providers/youtube",
               "public-api/providers/tiktok",
               "public-api/providers/reddit",
@@ -171,6 +197,7 @@
               "public-api/providers/pinterest",
               "public-api/providers/discord",
               "public-api/providers/slack",
+              "public-api/providers/telegram",
               "public-api/providers/dribbble",
               "public-api/providers/medium",
               "public-api/providers/devto",
@@ -306,7 +333,6 @@
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/neaborleon",
       "github": "https://github.com/gitroomhq/postiz-app",
       "discord": "https://discord.postiz.com"
     }

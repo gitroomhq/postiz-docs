@@ -91,3 +91,13 @@ FACEBOOK_APP_SECRET="app secret"
   </Step>
 </Steps>
 
+## Troubleshooting
+
+### Image is missing from the published post
+
+Check the **App Mode** of your Facebook app. In **Development** mode, posts with media are only visible to app developers/testers — everyone else sees the post without the image. Switch the app to **Live** mode to make the image visible to all users.
+
+### Facebook posts work for you but not for other users
+
+Same root cause as above — the app is in Development mode. Only roles you've explicitly added (developers, testers, admins) can see content published via the API. Set the app to Live.
+

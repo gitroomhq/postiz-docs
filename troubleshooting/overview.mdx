@@ -1,0 +1,48 @@
+---
+title: Troubleshooting
+description: 'Common Postiz problems and how to resolve them'
+---
+
+The most common issues people run into when using Postiz, with concrete
+fixes. If your problem isn't covered here, try the [Discord](https://discord.postiz.com)
+or open an issue on [GitHub](https://github.com/gitroomhq/postiz-app/issues).
+
+## Cloud users
+
+<CardGroup cols={2}>
+  <Card title="Connecting a social channel" icon="link" href="/troubleshooting/oauth-connect">
+    "Invalid state", "invalid_grant", "fetch failed" — what they mean and how to recover.
+  </Card>
+  <Card title="Uploads & media" icon="cloud-arrow-up" href="/troubleshooting/uploads">
+    Payload-too-large, upload-from-url timeouts, video failures, cancel-in-flight.
+  </Card>
+  <Card title="Activation & login" icon="key" href="/troubleshooting/activation-and-login">
+    Expired activation links, "jwt malformed", login API 404/204.
+  </Card>
+  <Card title="Billing" icon="credit-card" href="/troubleshooting/billing">
+    Stripe.js blocked, billing page broken in incognito, discount apply errors.
+  </Card>
+  <Card title="Channel limits" icon="user-group" href="/troubleshooting/channel-limits">
+    "You have reached the maximum number of channels".
+  </Card>
+  <Card title="Known issues" icon="circle-exclamation" href="/troubleshooting/known-issues">
+    Live tracker of bugs we're aware of, with workarounds.
+  </Card>
+</CardGroup>
+
+## Self-hosted
+
+<CardGroup cols={2}>
+  <Card title="Self-host gotchas" icon="server" href="/troubleshooting/self-host">
+    pnpm OOM, Postgres ECONNREFUSED, port confusion, hiding providers, Vercel.
+  </Card>
+  <Card title="System requirements" icon="microchip" href="/installation/system-requirements">
+    Minimum CPU/RAM, required services, default ports.
+  </Card>
+  <Card title="WebSockets & dev tunnels" icon="bolt" href="/reverse-proxies/websockets-and-dev">
+    HMR over ngrok, allowedDevOrigins, redirectmeto OAuth proxy.
+  </Card>
+  <Card title="Uploads & storage" icon="folder" href="/configuration/uploads">
+    Mounting UPLOAD_DIRECTORY, local vs Cloudflare R2.
+  </Card>
+</CardGroup>

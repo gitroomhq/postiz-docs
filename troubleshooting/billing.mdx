@@ -1,0 +1,42 @@
+---
+title: Billing (Cloud)
+description: 'Stripe.js blocked, billing page in incognito, discount errors'
+---
+
+These apply to Postiz Cloud only.
+
+## "Failed to load Stripe.js"
+
+The billing page loads Stripe.js from `js.stripe.com`. If your browser
+or an extension blocks it, the page can't render the checkout form.
+
+**Fix**
+
+- Whitelist `*.stripe.com` in your ad blocker / privacy extension.
+- Allow third-party scripts on `platform.postiz.com`.
+- Try a clean Chrome/Firefox profile to confirm it's an extension issue.
+
+## Billing page is blank or throws errors
+
+The billing page uses `localStorage` to cache plan state. In some private
+/ incognito modes (Safari, Firefox strict mode) `localStorage` is null
+and the page crashes on access.
+
+**Fix:** open the billing page in a normal browser window.
+
+## Discount code doesn't apply
+
+Postiz validates discount codes server-side against Stripe. If apply
+fails, double-check:
+
+1. Spelling and case — codes are case-sensitive.
+2. The code hasn't already been used or expired.
+3. The code applies to the plan you're trying to upgrade to.
+
+## Refunds & contact
+
+For refund requests, billing questions, or anything that needs a human:
+
+- **Discord:** [discord.postiz.com](https://discord.postiz.com) — `#support` channel.
+- **GitHub:** [open an issue](https://github.com/gitroomhq/postiz-app/issues) for product bugs.
+- **Email:** see the contact section on [postiz.com](https://postiz.com).

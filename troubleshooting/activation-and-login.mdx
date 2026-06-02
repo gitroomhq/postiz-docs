@@ -1,0 +1,52 @@
+---
+title: Activation & Login
+description: 'Expired activation links, "jwt malformed", and login API responses'
+---
+
+## Activation link doesn't work
+
+Activation links are short-lived JWTs. If you click an old one, or click
+it twice, you'll see one of these:
+
+- `jwt malformed` — the link is corrupted or truncated (a mail client
+  inserted a line break, or you copied only part of the URL).
+- `jwt expired` / abort error on `/auth/activate` — the link has
+  passed its lifetime.
+
+**Fix**
+
+1. Request a new activation email from the login page.
+2. Copy the link directly from the email rather than typing it.
+3. Open it in the same browser you originally signed up in.
+
+## Login API returns 404 or 204
+
+When you're not logged in, calls like `GET /api/health` or
+`GET /auth/me` return `204` or `404` by design — that's how the frontend
+detects "no session." It is not an error.
+
+If you're already logged in and still see 404 on these endpoints, check
+that `NEXT_PUBLIC_BACKEND_URL` matches the URL your browser is using to
+talk to the backend (mismatched protocols/ports break the session cookie).
+
+## Self-host: everyone is logged out after a restart
+
+`JWT_SECRET` controls signing for session tokens. If you regenerate it,
+every existing session becomes invalid.
+
+**Fix:** set `JWT_SECRET` once during initial deployment and never
+rotate it lightly. Store it in a secret manager (Docker / Kubernetes
+secret, AWS/GCP Secret Manager, Doppler, 1Password, etc.) or an
+untracked `.env` file on the host. **Don't commit it to version
+control** — that includes "private" deploy repos, since anyone with
+repo access ends up with the signing key for every session token Postiz
+has ever issued.
+
+## Self-host: "Origin not allowed" on launches
+
+The backend's CORS allowlist is built from `FRONTEND_URL` (and
+`MAIN_URL` if set). If you access Postiz on a hostname or port not in
+that list, the backend rejects the call.
+
+**Fix:** make sure `FRONTEND_URL` exactly matches the URL you're using
+in the browser, including protocol and port.

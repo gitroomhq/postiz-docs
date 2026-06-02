@@ -110,6 +110,7 @@
             "group": "Integrations",
             "pages": [
               "public-api/integrations/list",
+              "public-api/integrations/groups",
               "public-api/integrations/connect",
               "public-api/integrations/delete",
               "public-api/integrations/is-connected",

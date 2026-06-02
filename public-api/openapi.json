@@ -92,6 +92,48 @@
               }
             }
           }
+        },
+        "parameters": [
+          {
+            "name": "group",
+            "in": "query",
+            "required": false,
+            "description": "Filter integrations by customer (group) ID. Returns only channels assigned to the given group.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/groups": {
+      "get": {
+        "tags": [
+          "Integrations"
+        ],
+        "summary": "List all groups (customers)",
+        "description": "Returns all customers (groups) for your organization. Use a group ID to filter the integrations list.",
+        "operationId": "listGroups",
+        "responses": {
+          "200": {
+            "description": "List of groups",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Group"
+                  }
+                },
+                "example": [
+                  {
+                    "id": "customer-id",
+                    "name": "My Company"
+                  }
+                ]
+              }
+            }
+          }
         }
       }
     },
@@ -1370,7 +1412,7 @@
           "Posts"
         ],
         "summary": "Change post status",
-        "description": "Moves a post between `draft` and `schedule` state.\n\n- `schedule` → sets the post state to `QUEUE` and (re)starts the publishing workflow so it will be published at its stored date.\n- `draft` → sets the post state to `DRAFT` and terminates any currently running publishing workflow for the post, so it will not be published.\n\nThe post keeps its stored date; only the state (and the workflow) changes.",
+        "description": "Moves a post between `draft` and `schedule` state.\n\n- `schedule` \u2192 sets the post state to `QUEUE` and (re)starts the publishing workflow so it will be published at its stored date.\n- `draft` \u2192 sets the post state to `DRAFT` and terminates any currently running publishing workflow for the post, so it will not be published.\n\nThe post keeps its stored date; only the state (and the workflow) changes.",
         "operationId": "changePostStatus",
         "parameters": [
           {
@@ -1957,6 +1999,19 @@
                 "type": "string"
               }
             }
+          }
+        }
+      },
+      "Group": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique group (customer) ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Group (customer) display name"
           }
         }
       },

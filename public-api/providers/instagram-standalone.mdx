@@ -8,6 +8,14 @@ Business-linked Instagram. The only difference is the `__type` value -
 everything else (post type, trial reels, collaborators, image arrays) is
 identical.
 
+<Warning>
+The [`audio` setting](/public-api/providers/instagram#audio) (attaching music
+or original sounds to Reels) is **not** available on standalone channels - the
+Instagram Audio API only works with Facebook Login. The `audio` setting is
+ignored when posting, and the `audioSearch` tool is not exposed for
+`instagram-standalone` integrations.
+</Warning>
+
 ## Settings Schema
 
 ```json

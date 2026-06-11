@@ -126,12 +126,32 @@ postiz posts:create \
 
 ### Reel
 
+A single video with `post_type: "post"` is published as a Reel:
+
 ```bash
 postiz posts:create \
   -c "Reel caption" \
   -m "$VIDEO_URL" \
   -s "2025-01-15T10:00:00Z" \
-  --settings '{"post_type":"reel"}' \
+  --settings '{"post_type":"post"}' \
+  -i "instagram-id"
+```
+
+### Reel with Audio
+
+Search the Instagram audio catalog and attach a track to the Reel
+(Facebook Business-linked channels only — an empty `q` returns trending audio):
+
+```bash
+# Find an audio ID
+AUDIO_ID=$(postiz integrations:trigger instagram-id audioSearch \
+  -d '{"q":"summer vibes","type":"music"}' | jq -r '.output[0].id')
+
+postiz posts:create \
+  -c "Reel with trending audio" \
+  -m "$VIDEO_URL" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings "{\"post_type\":\"post\",\"audio\":{\"id\":\"$AUDIO_ID\",\"audio_volume\":80,\"video_volume\":20}}" \
   -i "instagram-id"
 ```
 

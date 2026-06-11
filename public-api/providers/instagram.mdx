@@ -13,13 +13,18 @@ When creating a post for Instagram, use the following settings schema:
     "__type": "instagram",
     "post_type": "post",
     "is_trial_reel": false,
-    "collaborators": []
+    "collaborators": [],
+    "audio": {
+      "id": "587784541076604",
+      "audio_volume": 100,
+      "video_volume": 100
+    }
   }
 }
 ```
 
 <Note>
-Use `__type: "instagram"` for Facebook Business-linked accounts and `__type: "instagram-standalone"` for standalone Instagram accounts. Both use the same settings schema.
+Use `__type: "instagram"` for Facebook Business-linked accounts and `__type: "instagram-standalone"` for standalone Instagram accounts. Both use the same settings schema, except `audio`, which is only available for Facebook Business-linked accounts.
 </Note>
 
 ## Fields
@@ -31,6 +36,7 @@ Use `__type: "instagram"` for Facebook Business-linked accounts and `__type: "in
 | `is_trial_reel` | `boolean` | No | Whether to post as a trial reel |
 | `graduation_strategy` | `string` | No | Graduation strategy for trial reels |
 | `collaborators` | `array` | No | List of collaborator usernames |
+| `audio` | `object` | No | Audio to attach to a Reel (single video only) |
 
 ### `post_type`
 
@@ -64,6 +70,49 @@ Array of collaborator objects. Each collaborator will receive an invite to be ad
   ]
 }
 ```
+
+### `audio`
+
+Attach music or an original sound to a Reel, based on the
+[Instagram Audio API](https://developers.facebook.com/docs/instagram-platform/content-publishing/audio-api/).
+
+<Warning>
+Audio can only be attached to a Reel — a single video with `post_type: "post"`.
+It is not supported on Stories, carousels, image posts, or on
+`instagram-standalone` channels (the Audio API requires Facebook Login).
+</Warning>
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | `string` | Yes | The audio asset ID |
+| `title` | `string` | No | Audio title (display only) |
+| `artist` | `string` | No | Artist or creator name (display only) |
+| `image` | `string` | No | Cover artwork URL (display only) |
+| `audio_volume` | `number` | No | Volume of the attached audio, `0`-`100` (default `100`) |
+| `video_volume` | `number` | No | Volume of the original video audio, `0`-`100` (default `100`) |
+
+To find audio IDs, use the [trigger endpoint](/public-api/integrations/trigger)
+with the `audioSearch` tool:
+
+```bash
+curl -X POST https://api.postiz.com/public/v1/integration-trigger/{integrationId} \
+  -H "Authorization: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{"methodName": "audioSearch", "data": {"q": "summer vibes", "type": "music"}}'
+```
+
+| Parameter | Description |
+|-----------|-------------|
+| `q` | Search query — leave empty to get trending audio |
+| `type` | `music` (royalty-free catalog) or `original_sound` (user-generated), defaults to `music` |
+
+The response contains `{ output: [{ id, title, artist, image, duration, previewUrl }] }` —
+pass the chosen `id` into `settings.audio.id`.
+
+<Note>
+Only audio authorized for third-party use is returned, so the catalog can be
+smaller than what you see in the Instagram app.
+</Note>
 
 ---
 
@@ -167,6 +216,46 @@ Array of collaborator objects. Each collaborator will receive an invite to be ad
         "collaborators": [
           { "label": "partner_username" }
         ]
+      }
+    }
+  ]
+}
+```
+
+### Reel with Audio
+
+Attach audio found with `audioSearch` to a single-video Reel:
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-instagram-integration-id"
+      },
+      "value": [
+        {
+          "content": "New reel with trending audio! 🎵",
+          "image": [
+            {
+              "id": "video-id",
+              "path": "https://uploads.postiz.com/reel.mp4"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "instagram",
+        "post_type": "post",
+        "audio": {
+          "id": "587784541076604",
+          "audio_volume": 80,
+          "video_volume": 20
+        }
       }
     }
   ]

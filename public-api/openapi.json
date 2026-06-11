@@ -235,6 +235,197 @@
         }
       }
     },
+    "/integration-settings/{id}": {
+      "get": {
+        "tags": [
+          "Integrations"
+        ],
+        "summary": "Get integration settings and tools",
+        "description": "Returns the posting rules, maximum content length, settings schema, and available provider tools for a connected channel. Use this to discover which tools can be executed with the trigger endpoint.",
+        "operationId": "getIntegrationSettings",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The integration ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Settings and tools for the integration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "output": {
+                      "type": "object",
+                      "properties": {
+                        "rules": {
+                          "type": "string",
+                          "description": "Platform-specific posting rules"
+                        },
+                        "maxLength": {
+                          "type": "number",
+                          "description": "Maximum content length"
+                        },
+                        "settings": {
+                          "description": "JSON schema of the provider settings, or a string when no settings are required"
+                        },
+                        "tools": {
+                          "type": "array",
+                          "description": "Provider tools that can be executed via the trigger endpoint",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "methodName": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "dataSchema": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "output": {
+                    "rules": "Instagram should have at least one attachment, if it's a story, it can have only one picture",
+                    "maxLength": 2200,
+                    "settings": {
+                      "type": "object"
+                    },
+                    "tools": [
+                      {
+                        "methodName": "audioSearch",
+                        "description": "Search audio (music or original sounds) to attach to a Reel via the \"audio\" setting, an empty query returns trending audio",
+                        "dataSchema": [
+                          {
+                            "key": "q",
+                            "type": "string",
+                            "description": "Search query, leave empty for trending audio"
+                          },
+                          {
+                            "key": "type",
+                            "type": "string",
+                            "description": "Either \"music\" or \"original_sound\", defaults to \"music\""
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Integration not found"
+          }
+        }
+      }
+    },
+    "/integration-trigger/{id}": {
+      "post": {
+        "tags": [
+          "Integrations"
+        ],
+        "summary": "Trigger an integration tool",
+        "description": "Executes a provider-specific tool on a connected channel, for example searching Instagram audio for Reels, listing Discord channels, or fetching Reddit flairs. Discover available tools with the integration settings endpoint.",
+        "operationId": "triggerIntegrationTool",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The integration ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "methodName"
+                ],
+                "properties": {
+                  "methodName": {
+                    "type": "string",
+                    "description": "The tool method name, as returned by the integration settings endpoint"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "Key-value parameters for the tool",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "methodName": "audioSearch",
+                "data": {
+                  "q": "summer vibes",
+                  "type": "music"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tool executed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "output": {
+                      "description": "The tool result, shape depends on the tool"
+                    }
+                  }
+                },
+                "example": {
+                  "output": [
+                    {
+                      "id": "587784541076604",
+                      "title": "Summer Vibes",
+                      "artist": "Some Artist",
+                      "image": "https://scontent.cdninstagram.com/cover.jpg",
+                      "duration": 30000,
+                      "previewUrl": "https://scontent.cdninstagram.com/preview.mp4"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Channel disconnected due to expired token"
+          },
+          "404": {
+            "description": "Integration or tool not found"
+          }
+        }
+      }
+    },
     "/is-connected": {
       "get": {
         "tags": [
@@ -1412,7 +1603,7 @@
           "Posts"
         ],
         "summary": "Change post status",
-        "description": "Moves a post between `draft` and `schedule` state.\n\n- `schedule` \u2192 sets the post state to `QUEUE` and (re)starts the publishing workflow so it will be published at its stored date.\n- `draft` \u2192 sets the post state to `DRAFT` and terminates any currently running publishing workflow for the post, so it will not be published.\n\nThe post keeps its stored date; only the state (and the workflow) changes.",
+        "description": "Moves a post between `draft` and `schedule` state.\n\n- `schedule` → sets the post state to `QUEUE` and (re)starts the publishing workflow so it will be published at its stored date.\n- `draft` → sets the post state to `DRAFT` and terminates any currently running publishing workflow for the post, so it will not be published.\n\nThe post keeps its stored date; only the state (and the workflow) changes.",
         "operationId": "changePostStatus",
         "parameters": [
           {

@@ -117,6 +117,77 @@ Platforms like Discord require selecting a channel first:
   </Step>
 </Steps>
 
+## Schedule an Instagram Reel with Trending Audio
+
+Instagram (Facebook Business-linked) exposes an `audioSearch` tool for finding
+music or original sounds to attach to a Reel:
+
+<Steps>
+  <Step title="Search for audio">
+    The agent calls `triggerTool` (an empty `q` returns trending audio):
+
+    ```json
+    {
+      "integrationId": "instagram-123",
+      "methodName": "audioSearch",
+      "dataSchema": [
+        { "key": "q", "value": "summer vibes" },
+        { "key": "type", "value": "music" }
+      ]
+    }
+    ```
+
+    Returns audio assets with their IDs:
+
+    ```json
+    {
+      "output": [
+        {
+          "id": "587784541076604",
+          "title": "Summer Vibes",
+          "artist": "Some Artist",
+          "duration": 30000,
+          "previewUrl": "https://..."
+        }
+      ]
+    }
+    ```
+  </Step>
+  <Step title="Schedule the Reel">
+    The agent includes the chosen audio in settings — the post must be a single
+    video with `post_type: "post"`:
+
+    ```json
+    {
+      "socialPost": [
+        {
+          "integrationId": "instagram-123",
+          "isPremium": false,
+          "date": "2025-01-15T10:00:00.000Z",
+          "shortLink": false,
+          "type": "schedule",
+          "postsAndComments": [
+            {
+              "content": "<p>New reel with trending audio!</p>",
+              "attachments": ["https://uploads.postiz.com/reel.mp4"]
+            }
+          ],
+          "settings": [
+            { "key": "post_type", "value": "post" },
+            { "key": "audio", "value": { "id": "587784541076604", "audio_volume": 80, "video_volume": 20 } }
+          ]
+        }
+      ]
+    }
+    ```
+  </Step>
+</Steps>
+
+<Note>
+Audio is not available on `instagram-standalone` channels — the Instagram Audio
+API requires Facebook Login.
+</Note>
+
 ## Post with an AI-Generated Image
 
 <Steps>

@@ -101,6 +101,11 @@ postiz integrations:trigger linkedin-id getCompanies
 postiz integrations:trigger pinterest-id getBoards
 ```
 
+**Search Instagram audio for a Reel** (Facebook Business-linked channels only, empty `q` returns trending audio):
+```bash
+postiz integrations:trigger instagram-id audioSearch -d '{"q":"summer vibes","type":"music"}'
+```
+
 ## Discovery Workflow
 
 When working with a new platform, follow this workflow:

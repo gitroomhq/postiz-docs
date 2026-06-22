@@ -37,7 +37,7 @@ flowchart LR;
 
 - [Temporal](#temporal) - A durable workflow engine that manages scheduling, retries, and task distribution.
 - [Redis](#redis) - Used for session state management and caching.
-- [SQL Database](#db) - Stores all the data, Postgres is typically used, but any SQL database can be used.
+- [SQL Database](#sql-database) - Stores all the data, Postgres is typically used, but any SQL database can be used.
 - [Storage](#storage) - Stores all the files, this used to be CloudFlare R2 as the default, but now it's just a local file system.
 
 ### Frontend
@@ -73,3 +73,14 @@ Temporal is a durable workflow execution engine. It provides:
 - **Workflow visibility** - A built-in UI for monitoring and debugging workflow execution.
 - **Durable state** - Workflow state is persisted, so nothing is lost if a service restarts.
 
+### Redis
+
+Redis stores short-lived application state such as sessions and cache data.
+
+### SQL Database
+
+The SQL database stores Postiz data. Postgres is typically used, but any compatible SQL database can be used.
+
+### Storage
+
+Storage keeps uploaded media and generated files. Local file storage is the default for new setups.

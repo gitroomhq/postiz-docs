@@ -176,14 +176,14 @@ If validation fails, returns `{ errors: string }` with details about what went w
 
 ## postsListTool
 
-List the organization's posts scheduled between two dates — the same data as the [List Posts](/public-api/posts/list) API endpoint. Each item includes the post's current provider settings.
+List the organization's posts scheduled between two dates, the same data as the [List Posts](/public-api/posts/list) API endpoint. Each item includes the post's current provider settings.
 
 **Parameters:**
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `startDate` | string | Yes | UTC ISO datetime for the start of the range (e.g., `2026-07-20T00:00:00`) |
-| `endDate` | string | Yes | UTC ISO datetime for the end of the range (e.g., `2026-07-27T00:00:00`) |
+| `startDate` | string | Yes | UTC ISO datetime for the start of the range (e.g. `2026-07-20T00:00:00Z`) |
+| `endDate` | string | Yes | UTC ISO datetime for the end of the range (e.g. `2026-07-27T00:00:00Z`) |
 | `customer` | string | No | Group (customer) ID from `groupList` to filter channels down to a single group |
 
 **Returns:**

@@ -2262,6 +2262,14 @@
           "content": {
             "type": "string"
           },
+          "settings": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "The post's current provider-specific settings (the same shape used when creating the post). Keys depend on the channel's platform.",
+            "example": {
+              "content_posting_method": "DIRECT_POST"
+            }
+          },
           "publishDate": {
             "type": "string",
             "format": "date-time"

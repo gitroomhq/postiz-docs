@@ -204,6 +204,35 @@ An object with a `posts` array. Each item has:
 
 ---
 
+## postSettingsTool
+
+Update only the provider settings of a not-yet-published post (scheduled or draft). Merges the given keys into the post's existing settings — content and publish date are unchanged.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | Yes | The post ID |
+| `settings` | array | Yes | The settings keys to change (only those are updated). Get valid keys from `integrationSchema` |
+
+Each item in `settings`:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `key` | string | Setting name |
+| `value` | any | Setting value (prefer IDs over labels when available) |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `postId` | string | The updated post ID |
+| `publishDate` | string | The post's publish date (unchanged) |
+
+If the update fails, returns `{ errors: string }` with details (e.g., post not found, already published, a comment id was passed instead of the root post, or the merged settings failed validation).
+
+---
+
 ## generateImageTool
 
 Generate an AI image to use as a post attachment.

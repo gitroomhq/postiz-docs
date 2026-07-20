@@ -9,7 +9,7 @@ This means you can connect Claude, ChatGPT, Cursor, or any MCP-compatible client
 
 ## How It Works
 
-Postiz exposes an MCP server that provides **10 tools** to AI agents. The agent discovers these tools, understands their schemas, and calls them on your behalf.
+Postiz exposes an MCP server that provides **11 tools** to AI agents. The agent discovers these tools, understands their schemas, and calls them on your behalf.
 
 ```mermaid
 sequenceDiagram
@@ -35,6 +35,7 @@ sequenceDiagram
 | `triggerTool` | Execute platform-specific helpers (e.g., list Discord channels) |
 | `schedulePostTool` | Schedule, draft, or immediately publish posts |
 | `postsListTool` | List the organization's posts scheduled between two dates (with their current settings) |
+| `postSettingsTool` | Update the provider settings of a scheduled post or draft that was not published yet |
 | `generateImageTool` | Generate AI images for posts |
 | `generateVideoOptions` | List available video generation options |
 | `videoFunctionTool` | Get video generator settings (e.g., available voices) |

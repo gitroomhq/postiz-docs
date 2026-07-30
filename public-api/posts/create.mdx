@@ -56,6 +56,8 @@ When creating posts, each social media platform requires different settings. The
     |----------|----------|-------------------|
     | YouTube | `youtube` | `title`, `type` |
     | TikTok | `tiktok` | `privacy_level`, `duet`, `stitch`, `comment`, `autoAddMusic`, `brand_content_toggle`, `brand_organic_toggle`, `content_posting_method` |
+
+    TikTok honors these settings only when `content_posting_method` is `DIRECT_POST`, with `UPLOAD` it keeps only the post content/title. `duet`, `stitch`, and `video_made_with_ai` apply to video posts only; `autoAddMusic` to photo posts only. See [TikTok settings](/public-api/providers/tiktok).
   </Tab>
   <Tab title="Community Platforms">
     | Platform | `__type` | Required Settings |

@@ -73,3 +73,5 @@ postiz posts:create \
   --settings '{"privacy_level":"PUBLIC_TO_EVERYONE"}' \
   -i "tiktok-integration-id"
 ```
+
+`privacy_level` and the other TikTok settings apply only when `content_posting_method` is `"DIRECT_POST"`, with `"UPLOAD"` (send to the TikTok app inbox instead of publishing) TikTok keeps only the post content.

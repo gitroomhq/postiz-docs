@@ -126,6 +126,8 @@ When creating posts, each social media platform has its own settings schema. The
     |----------|----------|--------------|
     | YouTube | `youtube` | `title`, `type`, `selfDeclaredMadeForKids`, `thumbnail`, `tags` |
     | TikTok | `tiktok` | `privacy_level`, `duet`, `stitch`, `comment`, `autoAddMusic`, `brand_content_toggle`, `brand_organic_toggle`, `content_posting_method` |
+
+    TikTok applies every setting except the title only when `content_posting_method` is `DIRECT_POST`; `duet`/`stitch` are video-only and `autoAddMusic` photo-only, see [TikTok settings](/public-api/providers/tiktok).
   </Tab>
   <Tab title="Community">
     | Platform | `__type` | Key settings |

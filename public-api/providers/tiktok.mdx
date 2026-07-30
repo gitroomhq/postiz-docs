@@ -30,16 +30,22 @@ When uploading a video to TikTok, use the following settings schema:
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `__type` | `string` | Yes | Must be `tiktok` |
-| `title` | `string` | No | Video title (max 90 characters) |
-| `privacy_level` | `string` | Yes | Who can view the video |
-| `duet` | `boolean` | Yes | Allow duets |
-| `stitch` | `boolean` | Yes | Allow stitches |
-| `comment` | `boolean` | Yes | Allow comments |
-| `autoAddMusic` | `string` | Yes | Auto-add music to video |
-| `brand_content_toggle` | `boolean` | Yes | Branded content disclosure |
-| `brand_organic_toggle` | `boolean` | Yes | Organic branded content |
-| `video_made_with_ai` | `boolean` | No | AI-generated content disclosure |
-| `content_posting_method` | `string` | Yes | How to post the content |
+| `title` | `string` | No | Video title (max 90 characters). The only setting TikTok keeps when `content_posting_method` is `UPLOAD` |
+| `privacy_level` | `string` | Yes | Who can view the video. `DIRECT_POST` only |
+| `duet` | `boolean` | Yes | Allow duets. Video posts only; `DIRECT_POST` only |
+| `stitch` | `boolean` | Yes | Allow stitches. Video posts only; `DIRECT_POST` only |
+| `comment` | `boolean` | Yes | Allow comments. `DIRECT_POST` only |
+| `autoAddMusic` | `string` | Yes | Auto-add music. Photo posts only; `DIRECT_POST` only |
+| `brand_content_toggle` | `boolean` | Yes | Branded content disclosure. `DIRECT_POST` only |
+| `brand_organic_toggle` | `boolean` | Yes | Organic branded content. `DIRECT_POST` only |
+| `video_made_with_ai` | `boolean` | No | AI-generated content disclosure. Video posts only; `DIRECT_POST` only |
+| `content_posting_method` | `string` | Yes | Whether to publish directly or send to the TikTok app inbox, see below |
+
+**`DIRECT_POST` only**: TikTok applies the setting only when `content_posting_method` is
+`DIRECT_POST`. With `UPLOAD` the field is still required by the Postiz API, but TikTok silently
+discards it. **Video posts only**: TikTok's photo posts have no duet, stitch, or AI-generated
+label, so these settings are discarded when the post is a picture. **Photo posts only**:
+`autoAddMusic` has no effect on videos.
 
 ### `privacy_level`
 
@@ -61,8 +67,12 @@ When uploading a video to TikTok, use the following settings schema:
 
 | Value | Description |
 |-------|-------------|
-| `DIRECT_POST` | Post directly to TikTok |
-| `UPLOAD` | Upload for manual posting |
+| `DIRECT_POST` | Publishes the post to TikTok. **Use this unless the user explicitly wants to review the post in the TikTok app first.** |
+| `UPLOAD` | Does **not** publish. Sends the media to the account's TikTok app inbox, where the user must manually finish and publish it within 24 hours or it is discarded. TikTok keeps only the title/content in this mode, every other setting is silently discarded. |
+
+<Warning>
+A post created with `UPLOAD` is reported as **successfully published** by the Postiz API, because the upload to TikTok did succeed. It will not appear on the TikTok profile until the account owner opens the TikTok app, finds the draft in their inbox, and publishes it manually. Choose `UPLOAD` only when that manual step is what the user asked for.
+</Warning>
 
 ---
 
@@ -150,7 +160,7 @@ When uploading a video to TikTok, use the following settings schema:
 }
 ```
 
-### Private Video (Draft)
+### Private Video (visible only to you)
 
 ```json
 {
@@ -164,10 +174,15 @@ When uploading a video to TikTok, use the following settings schema:
     "autoAddMusic": "no",
     "brand_content_toggle": false,
     "brand_organic_toggle": false,
-    "content_posting_method": "UPLOAD"
+    "content_posting_method": "DIRECT_POST"
   }
 }
 ```
+
+This publishes a video that only the account owner can see. To send the media to the account's
+TikTok app inbox instead of publishing, use `content_posting_method: "UPLOAD"`, but TikTok then
+keeps only the title/content: every other setting above is still required by the API, yet
+silently discarded, see [`content_posting_method`](#content_posting_method) above.
 
 <Warning>
 **Important:** TikTok requires media files to be publicly accessible via HTTPS. Local files or private URLs will fail. Use [Cloudflare R2](/configuration/r2) or similar storage with public access.

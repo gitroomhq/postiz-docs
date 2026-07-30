@@ -9,7 +9,7 @@ Fetch a remote URL and store the result as a Postiz media asset. Useful when you
 
 - Must be reachable from the Postiz backend (publicly resolvable HTTPS, no auth required).
 - Detected MIME type must be in the allowlist documented on [Upload File](/public-api/uploads/upload-file).
-- Postiz performs an [SSRF-safe fetch](https://github.com/nodejs/undici) — private IP ranges, link-local addresses, and `localhost` are rejected. Self-hosted deployments on a trusted private network can disable this with [`DISABLE_SSRF_PROTECTION`](/configuration/reference#disable_ssrf_protection).
+- Postiz performs an [SSRF-safe fetch](https://github.com/nodejs/undici), private IP ranges, link-local addresses, and `localhost` are rejected. Self-hosted deployments on a trusted private network can disable this with [`DISABLE_SSRF_PROTECTION`](/configuration/reference#disable_ssrf_protection).
 
 ## Example
 

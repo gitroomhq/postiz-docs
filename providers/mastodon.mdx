@@ -86,5 +86,7 @@ Text posts publish fine, but posts with images fail with `fetch failed`, and the
 1. Set `DISABLE_SSRF_PROTECTION=true` on the backend and orchestrator containers.
 2. Restart the containers.
 
+Alternatively, fix resolution instead: make the media hostname resolve to a reachable address from inside the container (e.g. a Docker DNS alias or split-horizon DNS entry) and keep the protection on.
+
 Note this disables SSRF protection globally — only do it when Postiz runs on a trusted private network. See [`DISABLE_SSRF_PROTECTION`](/configuration/reference#disable_ssrf_protection).
 

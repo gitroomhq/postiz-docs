@@ -94,6 +94,14 @@ Switches the frontend between routes available to the open-source build (`/launc
 
 When truthy, the frontend skips client-side image compression on upload. Set this if you need pixel-exact originals at the cost of larger uploads.
 
+### `DISABLE_SSRF_PROTECTION`
+
+When connecting providers that take a self-hosted URL (WordPress, Mastodon, Lemmy, Listmonk, Bluesky PDS, etc.), posting media to such providers, fetching webhooks, or handling `/public/v1/upload-from-url`, Postiz fetches the URL server-side and blocks requests that resolve to private, internal, loopback, or link-local IPs to prevent SSRF. Blocked requests surface as `fetch failed` with `Error: Blocked IP` in the backend or orchestrator logs. Set to `true` to disable the guard. Set it on both the backend and orchestrator containers.
+
+<Warning>
+This disables SSRF protection globally, not per provider. Only set it if your Postiz instance must reach those services on a trusted private network (e.g. same Docker network, VPC, or homelab LAN).
+</Warning>
+
 ### `NOT_SECURED`
 
 <Warning>

@@ -1675,6 +1675,82 @@
         }
       }
     },
+    "/posts/{id}/settings": {
+      "put": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Update post settings",
+        "description": "Merges the given keys into the post's existing provider settings. Only the keys you pass are changed; content and publish date are untouched, so a running publishing workflow is not restarted. The merged settings are re-validated. Works only on not-yet-published posts (scheduled or draft).",
+        "operationId": "updatePostSettings",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Post ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "settings"
+                ],
+                "properties": {
+                  "settings": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "description": "Provider settings to merge into the post's existing settings. Only the keys you pass are changed; everything else stays. Keys depend on the channel's platform."
+                  }
+                }
+              },
+              "example": {
+                "settings": {
+                  "content_posting_method": "DIRECT_POST"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Post settings updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "postId": {
+                      "type": "string"
+                    },
+                    "publishDate": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "postId": "post-123",
+                  "publishDate": "2026-08-01T10:00:00"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The id belongs to a comment (pass the root post id), the post is already published or its publish time passed, or the merged settings failed validation"
+          },
+          "404": {
+            "description": "Post not found"
+          }
+        }
+      }
+    },
     "/analytics/{integration}": {
       "get": {
         "tags": [
@@ -2261,6 +2337,14 @@
           },
           "content": {
             "type": "string"
+          },
+          "settings": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "The post's current provider-specific settings (the same shape used when creating the post). Keys depend on the channel's platform.",
+            "example": {
+              "content_posting_method": "DIRECT_POST"
+            }
           },
           "publishDate": {
             "type": "string",

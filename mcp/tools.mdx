@@ -174,6 +174,65 @@ If validation fails, returns `{ errors: string }` with details about what went w
 
 ---
 
+## postsListTool
+
+List the organization's posts scheduled between two dates. It returns the same posts as the [List Posts](/public-api/posts/list) API endpoint, but with the channel details flattened into `integrationId`, `platform`, and `integrationName` fields instead of the API's nested `integration` object. Each item includes the post's current provider settings.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `startDate` | string | Yes | UTC ISO datetime for the start of the range (e.g. `2026-07-20T00:00:00Z`) |
+| `endDate` | string | Yes | UTC ISO datetime for the end of the range (e.g. `2026-07-27T00:00:00Z`) |
+| `customer` | string | No | Group (customer) ID from `groupList` to filter channels down to a single group |
+
+**Returns:**
+
+An object with a `posts` array. Each item has:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Post ID |
+| `publishDate` | string | UTC datetime the post is scheduled for |
+| `state` | string | Post state (`QUEUE`, `DRAFT`, `PUBLISHED`, or `ERROR`) |
+| `content` | string | The post content |
+| `settings` | object | The post's current provider-specific settings |
+| `group` | string | The post group ID (shared across a post and its per-channel variations) |
+| `integrationId` | string | ID of the channel the post is scheduled to |
+| `platform` | string | Platform identifier (e.g., `x`, `linkedin`, `facebook`) |
+| `integrationName` | string | Display name of the channel |
+
+---
+
+## postSettingsTool
+
+Update only the provider settings of a not-yet-published post (scheduled or draft). Merges the given keys into the post's existing settings. Content and publish date are unchanged.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | Yes | The post ID |
+| `settings` | array | Yes | The settings keys to change (only those are updated). Get valid keys from `integrationSchema` |
+
+Each item in `settings`:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `key` | string | Setting name |
+| `value` | any | Setting value (prefer IDs over labels when available) |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `postId` | string | The updated post ID |
+| `publishDate` | string | The post's publish date (unchanged) |
+
+If the update fails, returns `{ errors: string }` with details (e.g., post not found, already published, a comment id was passed instead of the root post, or the merged settings failed validation).
+
+---
+
 ## generateImageTool
 
 Generate an AI image to use as a post attachment.

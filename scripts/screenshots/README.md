@@ -46,5 +46,20 @@ calendar`.
 ## What cannot be captured here
 
 Anything that needs a real Postiz Cloud subscription: the plan picker, the
-billing page, proration previews, and analytics with real platform data. Those
-have to come from a cloud account.
+billing page, proration previews, and analytics with real platform data.
+
+**Capturing those from a real cloud account has been tried and rejected.** Two
+problems, neither of them fixable by cropping alone:
+
+1. A superadmin account renders a debug toolbar across the top of every page
+   (Import Debug Post, Add Announcement, View Errors, View Stats), and the
+   account name sits in the header.
+2. The analytics page shows real connected channels, which are named after real
+   clients and personal accounts.
+
+If a cloud screenshot is ever genuinely needed, capture it from a **non-admin
+account on a demo organisation**, not from a staff account.
+
+For plans and limits specifically, no screenshot is wanted at all: those are
+tables, and the generated tables in `cloud/plans` and `cloud/limits` stay
+current automatically while an image would not.

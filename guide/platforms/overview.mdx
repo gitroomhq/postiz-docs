@@ -1,0 +1,154 @@
+---
+title: Posting rules by platform
+sidebarTitle: All platforms
+description: 'Every supported platform, what it can carry, and what each one is called in the API'
+icon: 'table-list'
+keywords: ['platforms', 'providers', 'limits', 'character limit', 'twitter', 'warpcast', 'gmb']
+---
+
+Postiz supports 34 platforms. They disagree about almost everything: how many
+images a post can carry, whether a thread is a thread or a comment, whether
+text alone is allowed. This page is the reference for all of it.
+
+## Every platform
+
+**How you connect it** is what happens when you click the platform in
+**Add Channel**:
+
+- **OAuth**: you are redirected to the platform and authorise there.
+- **Credentials in Postiz**: you paste your own API key or app password into a
+  dialog. Nothing to register anywhere.
+- **In-app dialog**: a platform-specific connect step inside Postiz.
+- **Browser extension**: the Postiz extension reads your existing session.
+
+**Needs a developer app** only matters if you self-host: it means the platform
+requires API keys that the person running the instance has to register and
+configure. On Postiz Cloud this is already done for every platform.
+
+{/* GENERATED:platforms */}
+| Platform | API `__type` | How you connect it | Self-hosted: needs a developer app | Characters |
+|---|---|---|---|---|
+| X | `x` | OAuth | Yes | varies |
+| LinkedIn | `linkedin` | OAuth | Yes | 3,000 |
+| LinkedIn Page | `linkedin-page` | OAuth | Yes | 3,000 |
+| Reddit | `reddit` | OAuth | Yes | 10,000 |
+| Instagram (Facebook Business) | `instagram` | OAuth | Yes | 2,200 |
+| Instagram (Standalone) | `instagram-standalone` | OAuth | Yes | 2,200 |
+| Facebook Page | `facebook` | OAuth | Yes | 63,206 |
+| Threads | `threads` | OAuth | Yes | 500 |
+| YouTube | `youtube` | OAuth | Yes | 5,000 |
+| Google My Business | `gmb` | OAuth | Yes | 1,500 |
+| Tiktok | `tiktok` | OAuth | Yes | 2,000 |
+| Pinterest | `pinterest` | OAuth | Yes | 500 |
+| Dribbble | `dribbble` | OAuth | Yes | 40,000 |
+| Discord | `discord` | OAuth | Yes | 1,980 |
+| Slack | `slack` | OAuth | Yes | 400,000 |
+| Kick | `kick` | OAuth | Yes | 500 |
+| Twitch | `twitch` | OAuth | Yes | 500 |
+| Mastodon | `mastodon` | OAuth | Yes | 500 |
+| Bluesky | `bluesky` | Credentials in Postiz | No | 300 |
+| Lemmy | `lemmy` | Credentials in Postiz | No | 10,000 |
+| Farcaster | `wrapcast` | In-app dialog | Yes | 800 |
+| Telegram | `telegram` | In-app dialog | Yes | 4,096 |
+| Nostr | `nostr` | Credentials in Postiz | No | 100,000 |
+| VK | `vk` | OAuth | Yes | 2,048 |
+| Medium | `medium` | Credentials in Postiz | No | 100,000 |
+| Dev.to | `devto` | Credentials in Postiz | No | 100,000 |
+| Hashnode | `hashnode` | Credentials in Postiz | No | 10,000 |
+| WordPress | `wordpress` | Credentials in Postiz | No | 100,000 |
+| ListMonk | `listmonk` | Credentials in Postiz | No | 300,000 |
+| Moltbook | `moltbook` | In-app dialog | No | 300 |
+| Whop | `whop` | OAuth | Yes | 50,000 |
+| Skool | `skool` | Browser extension | No | 50,000 |
+| MeWe | `mewe` | OAuth | Yes | 63,206 |
+| Tumblr | `tumblr` | OAuth | Yes | 32,768 |
+{/* /GENERATED:platforms */}
+
+<Note>
+**X is the exception in that table.** Its limit depends on the post: 280
+characters normally, 4,000 if the account is verified, and 100,000 in long-form
+article mode.
+</Note>
+
+## Names that differ between the app and the API
+
+Four platforms are called one thing in the interface and another in the API.
+If you are working with the Public API, the CLI or MCP, use the right-hand
+column.
+
+| In the app | In the API `__type` |
+|---|---|
+| Farcaster | `wrapcast` |
+| X | `x` |
+| Google My Business | `gmb` |
+| Dev.to | `devto` |
+
+## Media rules
+
+The composer blocks a post that breaks these before it ever reaches the
+platform.
+
+| Platform | Media rules |
+|---|---|
+| X | Up to 4 images **or** 1 video. Text-only is fine. In article mode, images only, and a draft article cannot have thread replies |
+| LinkedIn, LinkedIn Page | One attachment if it is a video. A carousel needs at least 2 images and no video. Comments can only contain text |
+| Bluesky | Up to 4 images **or** 1 video. Text-only is fine |
+| Instagram, Instagram Standalone | At least one attachment is required. A story takes a single picture. A trial reel is exactly one video |
+| Facebook Page | Text-only, photos, or a video. A story needs at least one attachment, and each attachment publishes as its own story |
+| YouTube | Exactly one attachment, and it must be a video |
+| TikTok | At least one attachment. One video **or** several pictures, never mixed |
+| Pinterest | At least one media, maximum 5 images. A video pin needs two attachments: the video and a cover image |
+| Dribbble | Exactly one attachment, images only |
+| Google My Business | Text-only or exactly one image. No video |
+| Farcaster | Images only |
+| Reddit | A media-type subreddit post needs exactly one attachment. Video posts need a thumbnail |
+| Tumblr | Up to 30 images, up to 1 video |
+| Everything else | No specific restriction enforced by Postiz |
+
+## Threads and comments
+
+Postiz lets you add extra parts to a post. What those parts become depends on
+the platform: a genuine thread, a comment on your own post, or nothing.
+
+| Support | Platforms |
+|---|---|
+| Threads and comments | Most platforms |
+| Comments cannot carry media | Instagram, Kick, Twitch |
+| No extra parts at all | YouTube, TikTok, Pinterest, MeWe, Tumblr |
+| Comments are text-only | LinkedIn, LinkedIn Page |
+
+See [Threads and comments](/guide/composer/threads-and-comments) for how to add
+them and set delays between parts.
+
+## Editors
+
+The composer changes what it offers per platform, because platforms accept
+different content.
+
+| Editor | What you get | Platforms |
+|---|---|---|
+| Plain | No formatting | Platforms that render text as-is |
+| Standard | Bold, underline, emoji | Most social platforms |
+| Markdown | Adds links, lists and headings | Discord, Medium, Dev.to, Hashnode, Whop |
+| HTML | Rich formatting | X, WordPress, Listmonk |
+
+## Analytics support
+
+Only 10 platforms report account-level analytics back to Postiz. See
+[Analytics](/guide/analytics) for the metric list and date ranges.
+
+## Platforms with no connect button
+
+Some platforms are fully supported for scheduling and publishing through the
+[Public API](/public-api/introduction) but have no in-app connect flow yet:
+Twitch, Kick, VK, Nostr, Lemmy, Medium, Dev.to, Hashnode, WordPress, Listmonk
+and Moltbook.
+
+<CardGroup cols={2}>
+  <Card title="Per-post settings" icon="sliders" href="/public-api/providers/x">
+    The full settings schema for each platform, with examples.
+  </Card>
+  <Card title="Self-hosting: provider keys" icon="key" href="/providers/overview">
+    Which platforms need a developer app, and how to register one.
+  </Card>
+</CardGroup>

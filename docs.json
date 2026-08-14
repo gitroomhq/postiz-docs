@@ -30,6 +30,12 @@
             ]
           },
           {
+            "group": "Platforms",
+            "pages": [
+              "guide/platforms/overview"
+            ]
+          },
+          {
             "group": "Troubleshooting",
             "pages": [
               "troubleshooting/overview",
@@ -149,7 +155,8 @@
                   "providers/telegram",
                   "providers/dribbble",
                   "providers/skool",
-                  "providers/whop"
+                  "providers/whop",
+                  "providers/tumblr"
                 ]
               }
             ]

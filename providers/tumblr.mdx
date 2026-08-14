@@ -1,0 +1,57 @@
+---
+title: Tumblr
+description: 'How to add Tumblr to your Postiz instance'
+---
+
+<Snippet file="never-share.mdx" />
+
+Tumblr connects over OAuth 2.0. After authorising, Postiz asks which of your
+blogs to post to, so one Tumblr account can become several channels.
+
+<Steps>
+  <Step title="Register an application">
+    Go to [tumblr.com/oauth/apps](https://www.tumblr.com/oauth/apps) and click
+    **Register application**.
+
+    Fill in the application name, description and your website. Tumblr
+    requires all of them.
+  </Step>
+
+  <Step title="Set the callback URL">
+    <Snippet file="oauth2redirect.mdx" />
+
+    **Your Tumblr redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/tumblr`
+    - Local development: `http://localhost:4200/integrations/social/tumblr`
+    - Docker: `http://localhost:4007/integrations/social/tumblr`
+  </Step>
+
+  <Step title="Copy the keys">
+    Tumblr shows an **OAuth Consumer Key** and, behind **Show secret key**, an
+    **OAuth Consumer Secret**. Add both to your environment:
+
+```env
+TUMBLR_CLIENT_ID=""
+TUMBLR_CLIENT_SECRET=""
+```
+  </Step>
+
+  <Step title="Restart and connect">
+    <Snippet file="env-restart.mdx" />
+
+    In Postiz, click **Add Channel**, pick Tumblr, authorise, then choose the
+    blog you want this channel to post to.
+  </Step>
+</Steps>
+
+## Scopes
+
+Postiz requests `write` and `offline_access`. The second one is what lets
+Postiz refresh its access token, so without it the channel stops working after
+the first token expires.
+
+## Post settings
+
+Tumblr posts accept a title, a link URL, a source URL and tags. Media limits
+are up to 30 images or a single video. See
+[Posting rules by platform](/guide/platforms/overview).

@@ -18,13 +18,13 @@ There are two ways to connect to an Instagram account: by using a Facebook Busin
 
 - Feed posts (single image, carousel, video / Reels).
 - Stories (image and video).
-- Attaching audio (music or original sounds) to Reels — Facebook Business connection only, the [Instagram Audio API](https://developers.facebook.com/docs/instagram-platform/content-publishing/audio-api/) is not available for standalone connections.
+- Attaching audio (music or original sounds) to Reels, Facebook Business connection only. The [Instagram Audio API](https://developers.facebook.com/docs/instagram-platform/content-publishing/audio-api/) is not available for standalone connections.
 - Replying to comments via an explicit user action.
 
 **What Postiz does not support:**
 
-- Story link stickers / swipe-up links — the Instagram Graph API doesn't expose interactive sticker payloads, so Postiz can only upload the story media.
-- Automatic comment auto-reply — there is no agent that watches for incoming comments and replies on your behalf. You can post a reply through the API, but each reply is an explicit action.
+- Story link stickers / swipe-up links: the Instagram Graph API doesn't expose interactive sticker payloads, so Postiz can only upload the story media.
+- Automatic comment auto-reply: there is no agent that watches for incoming comments and replies on your behalf. You can post a reply through the API, but each reply is an explicit action.
 </Info>
 
 ## Setting up Meta Application
@@ -197,5 +197,5 @@ This means the Instagram account you're trying to connect hasn't been added as a
 
 ### Channel connects, but posts fail with permission errors
 
-The advanced permissions on the Meta app must be approved (or your account must be a developer/tester on the app). Submit the app for review with the required scopes — until then, only roles you've added can publish.
+The advanced permissions on the Meta app must be approved (or your account must be a developer/tester on the app). Submit the app for review with the required scopes, until then, only roles you've added can publish.
 

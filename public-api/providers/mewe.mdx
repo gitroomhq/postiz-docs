@@ -1,0 +1,90 @@
+---
+title: 'MeWe Settings'
+description: 'Provider settings for MeWe posts'
+---
+
+<Card title="What MeWe supports in Postiz" icon="table-list" href="/guide/platforms/overview">
+  Character limits, media rules and how these settings appear in the app.
+</Card>
+
+## Overview
+
+MeWe posts go either to your own timeline or to a group you belong to.
+
+## Settings Schema
+
+```json
+{
+  "__type": "mewe",
+  "postType": "timeline"
+}
+```
+
+## Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `__type` | string | ✅ | Must be `"mewe"` |
+| `postType` | string | ✅ | `timeline` or `group` |
+| `group` | string | Conditional | Group ID. Required when `postType` is `group` |
+
+### `postType`
+
+| Value | Description |
+|-------|-------------|
+| `timeline` | Post to your own MeWe timeline |
+| `group` | Post to a group. `group` must then hold the group's ID |
+
+<Note>
+`group` takes the group **ID**, not its name. Select the group once in the
+Postiz composer to find the ID, then reuse it over the API.
+</Note>
+
+## Examples
+
+### Post to your timeline
+
+```json
+{
+  "type": "now",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": { "id": "your-mewe-integration-id" },
+      "value": [
+        { "content": "Hello from Postiz", "image": [] }
+      ],
+      "settings": {
+        "__type": "mewe",
+        "postType": "timeline"
+      }
+    }
+  ]
+}
+```
+
+### Post to a group
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": { "id": "your-mewe-integration-id" },
+      "value": [
+        { "content": "Sharing this with the group", "image": [] }
+      ],
+      "settings": {
+        "__type": "mewe",
+        "postType": "group",
+        "group": "your-group-id"
+      }
+    }
+  ]
+}
+```

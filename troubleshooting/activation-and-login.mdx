@@ -1,6 +1,7 @@
 ---
-title: Activation & Login
+title: Activation and login
 description: 'Expired activation links, "jwt malformed", and login API responses'
+icon: 'key'
 ---
 
 ## Activation link doesn't work
@@ -8,9 +9,9 @@ description: 'Expired activation links, "jwt malformed", and login API responses
 Activation links are short-lived JWTs. If you click an old one, or click
 it twice, you'll see one of these:
 
-- `jwt malformed` — the link is corrupted or truncated (a mail client
+- `jwt malformed`: the link is corrupted or truncated (a mail client
   inserted a line break, or you copied only part of the URL).
-- `jwt expired` / abort error on `/auth/activate` — the link has
+- `jwt expired` or an abort error on `/auth/activate`: the link has
   passed its lifetime.
 
 **Fix**
@@ -21,32 +22,30 @@ it twice, you'll see one of these:
 
 ## Login API returns 404 or 204
 
-When you're not logged in, calls like `GET /api/health` or
-`GET /auth/me` return `204` or `404` by design — that's how the frontend
-detects "no session." It is not an error.
+When you're not logged in, calls like `GET /api/health` or `GET /auth/me`
+return `204` or `404` by design. That's how the frontend detects "no
+session", and it is not an error.
 
-If you're already logged in and still see 404 on these endpoints, check
-that `NEXT_PUBLIC_BACKEND_URL` matches the URL your browser is using to
-talk to the backend (mismatched protocols/ports break the session cookie).
+<Note>
+**On self-hosted Postiz:** if you are logged in and still see 404 on these
+endpoints, your backend URL is misconfigured. See
+[Login endpoints return 404](/troubleshooting/self-host#login-endpoints-return-404-when-logged-in).
+</Note>
 
-## Self-host: everyone is logged out after a restart
+## No activation email arrived
 
-`JWT_SECRET` controls signing for session tokens. If you regenerate it,
-every existing session becomes invalid.
+<Tabs>
+  <Tab title="Postiz Cloud">
+    Check spam, then request a new link from the login page. If nothing
+    arrives, ask in [Discord](https://discord.postiz.com) and include the
+    address you signed up with.
+  </Tab>
+  <Tab title="Self-hosted">
+    An install with no email provider configured does not send activation
+    emails at all. Postiz detects this and activates new accounts
+    immediately instead, so you can log in right away.
 
-**Fix:** set `JWT_SECRET` once during initial deployment and never
-rotate it lightly. Store it in a secret manager (Docker / Kubernetes
-secret, AWS/GCP Secret Manager, Doppler, 1Password, etc.) or an
-untracked `.env` file on the host. **Don't commit it to version
-control** — that includes "private" deploy repos, since anyone with
-repo access ends up with the signing key for every session token Postiz
-has ever issued.
-
-## Self-host: "Origin not allowed" on launches
-
-The backend's CORS allowlist is built from `FRONTEND_URL` (and
-`MAIN_URL` if set). If you access Postiz on a hostname or port not in
-that list, the backend rejects the call.
-
-**Fix:** make sure `FRONTEND_URL` exactly matches the URL you're using
-in the browser, including protocol and port.
+    If you configured a provider and mail still isn't arriving, see
+    [Email configuration](/configuration/emails).
+  </Tab>
+</Tabs>

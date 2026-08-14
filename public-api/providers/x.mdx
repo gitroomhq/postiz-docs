@@ -3,6 +3,10 @@ title: X (Twitter) Settings
 description: 'API settings for posting to X/Twitter'
 ---
 
+<Card title="What X supports in Postiz" icon="table-list" href="/guide/platforms/overview">
+  Character limits, media rules and how these settings appear in the app.
+</Card>
+
 ## Settings Schema
 
 When creating a post for X (Twitter), use the following settings schema:
@@ -28,6 +32,48 @@ When creating a post for X (Twitter), use the following settings schema:
 | `community` | `string` | No | X Community URL |
 | `made_with_ai` | `boolean` | No | Mark the post as containing AI-generated content. Defaults to `false` |
 | `paid_partnership` | `boolean` | No | Mark the post as a paid promotion. Defaults to `false` |
+| `post_type` | `string` | No | `post` (default) or `article` |
+| `article_title` | `string` | Conditional | Required when `post_type` is `article` |
+| `article_status` | `string` | Conditional | `draft` or `published`. Required when `post_type` is `article` |
+| `article_cover` | `object` | No | Cover image for the article. Only used when `post_type` is `article` |
+
+<Note>
+`who_can_reply_post` is required for a normal post but ignored for an article,
+since X articles do not carry a reply setting.
+</Note>
+
+### `post_type`
+
+| Value | Description |
+|-------|-------------|
+| `post` | A regular short post. This is the default |
+| `article` | A long-form X article |
+
+## Long-form articles
+
+Setting `post_type` to `article` publishes an X article instead of a post. The
+content is then treated as **HTML** rather than plain text, and these tags are
+kept: `p`, `h1`, `h2`, `h3`, `ul`, `ol`, `li`, `strong`, `u`, `a`.
+
+```json
+{
+  "settings": {
+    "__type": "x",
+    "post_type": "article",
+    "article_title": "Why we rebuilt our scheduler",
+    "article_status": "published",
+    "article_cover": { "id": "img-123", "path": "https://uploads.postiz.com/cover.jpg" }
+  }
+}
+```
+
+Constraints worth knowing:
+
+- The character limit rises to 100,000 in article mode.
+- Articles take images only, no video.
+- An article saved as a `draft` cannot have thread replies attached.
+- `article_title` and `article_status` are both required once `post_type` is
+  `article`. Omitting either is a validation error.
 
 ### `who_can_reply_post`
 

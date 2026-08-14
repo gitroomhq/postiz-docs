@@ -1,0 +1,92 @@
+---
+title: Managing your subscription
+sidebarTitle: Subscription
+description: 'Upgrade, downgrade, switch billing period, cancel, and find invoices'
+icon: 'credit-card'
+---
+
+<Snippet file="audience/cloud-only.mdx" />
+
+**Where:** the Billing section
+
+<Note>
+Billing is visible to organisation admins only, and is hidden entirely for
+accounts on a lifetime deal.
+</Note>
+
+## Changing plan
+
+Pick the new plan on the billing page. Before you confirm, Postiz shows a
+**Pay Today** figure: a live calculation of what the change costs right now,
+accounting for what you have already paid in the current period.
+
+- **Upgrading** charges the prorated difference immediately and the new limits
+  apply at once.
+- **Downgrading** credits the unused portion and the new limits apply at once.
+  Read [Downgrades](/cloud/downgrades) first, since lower plans disable things
+  rather than asking.
+
+If the change cannot be charged, you are sent to the payment portal to fix the
+payment method first.
+
+## Switching between monthly and yearly
+
+The same mechanism. Toggle the billing period, and the plan buttons become
+available for the period you are not currently on. Proration applies in the
+same way.
+
+## Payment method and invoices
+
+Both live in the payment portal, reachable from the billing page. Card updates,
+billing address, and the full invoice history are there rather than in Postiz
+itself.
+
+## Cancelling
+
+Cancelling asks for a reason, and requires a real one: at least 20 characters.
+
+Before the form, you may be offered a retention discount, currently **50% off
+for three months**. It appears only if you are on a monthly plan, have been
+paying for a while, and have no discount already.
+
+What cancelling does:
+
+- Your subscription stays active until the end of the period you have paid for.
+  Nothing stops immediately.
+- Cancelling again before the period ends reverses it and the subscription
+  continues.
+
+<Warning>
+If your most recent invoice already failed to charge, cancelling takes effect
+**immediately** rather than at period end.
+</Warning>
+
+## What happens when the subscription ends
+
+This is the part worth reading twice.
+
+**Publishing stops.** Scheduled posts stay on your calendar but are not
+published while the organisation has no active subscription, and they are not
+published retroactively when you subscribe again. If you resubscribe after a
+gap, review the posts that were scheduled during it.
+
+The API stops too: requests return an error saying no subscription was found.
+
+Your data, channels, posts, media and settings, remains in the account.
+
+## Two accounts, one email
+
+Checkout refuses if another account using the same email address already has an
+active subscription. Consolidate onto one account, or use a different email for
+the second organisation.
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Downgrades" icon="arrow-down" href="/cloud/downgrades">
+    Exactly what a smaller plan changes.
+  </Card>
+  <Card title="Refunds and support" icon="life-ring" href="/cloud/refunds-and-support">
+    Getting money back, and reaching a person.
+  </Card>
+</CardGroup>

@@ -1,0 +1,50 @@
+---
+title: Moving and rescheduling posts
+sidebarTitle: Moving posts
+description: 'Drag and drop on the calendar, and what happens to a published post'
+icon: 'arrows-up-down-left-right'
+---
+
+**Where:** the Calendar, drag any post card
+
+## Dragging a scheduled post
+
+Drag a scheduled post or a draft to a different slot and it reschedules. There
+is no confirmation, because nothing has been published yet.
+
+## Dragging a published post
+
+This is the case that needs care. When you move a post that has already
+published, Postiz asks what you actually mean:
+
+| Choice | What it does |
+|---|---|
+| **Just update the post details** | Moves the card on the calendar. The live post is untouched |
+| **Reschedule the post** | Publishes it **again** at the new time |
+
+The warning is explicit:
+
+> This post was already published. Republishing will publish it again
+
+Pick **Just update the post details** when you are tidying the calendar. Pick
+**Reschedule** only when you genuinely want the content posted a second time.
+
+The same question applies to a queued post whose time has already passed.
+
+## Recurring posts
+
+Moving a post that repeats affects **all future occurrences**, not just the one
+you dragged. Postiz warns you. If you only want to move one instance, remove
+the repeat first, or duplicate the post and cancel the repeat on the copy.
+
+## Duplicating instead of moving
+
+**Duplicate** on the post card gives you a copy to place elsewhere, leaving the
+original where it is. That is usually what you want when repurposing content
+rather than correcting a schedule.
+
+## Bulk changes
+
+There is no multi-select on the calendar. For bulk rescheduling, work through
+List view, or drive it through the
+[Public API](/public-api/posts/create), which can update posts programmatically.

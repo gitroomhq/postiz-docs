@@ -1,0 +1,110 @@
+# Isolated Postiz stack used only to capture documentation screenshots.
+# Deliberately does NOT reuse the postiz-app project's volumes or container
+# names, so nothing here touches an existing local install.
+name: postiz-docs-shots
+
+services:
+  app:
+    image: ghcr.io/gitroomhq/postiz-app:latest
+    container_name: shots-postiz
+    restart: unless-stopped
+    environment:
+      MAIN_URL: 'http://localhost:4009'
+      FRONTEND_URL: 'http://localhost:4009'
+      NEXT_PUBLIC_BACKEND_URL: 'http://localhost:4009/api'
+      JWT_SECRET: 'docs-screenshots-only-not-a-real-secret'
+      DATABASE_URL: 'postgresql://shots:shots@shots-postgres:5432/shots'
+      REDIS_URL: 'redis://shots-redis:6379'
+      BACKEND_INTERNAL_URL: 'http://localhost:3000'
+      TEMPORAL_ADDRESS: 'shots-temporal:7233'
+      IS_GENERAL: 'true'
+      DISABLE_REGISTRATION: 'false'
+      NOT_SECURED: 'true'
+      STORAGE_PROVIDER: 'local'
+      UPLOAD_DIRECTORY: '/uploads'
+      NEXT_PUBLIC_UPLOAD_DIRECTORY: '/uploads'
+      API_LIMIT: 3000
+    volumes:
+      - config:/config/
+      - uploads:/uploads/
+    ports:
+      - '4009:5000'
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:17-alpine
+    container_name: shots-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: shots
+      POSTGRES_PASSWORD: shots
+      POSTGRES_DB: shots
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U shots -d shots
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  redis:
+    image: redis:7.2
+    container_name: shots-redis
+    restart: unless-stopped
+    healthcheck:
+      test: redis-cli ping
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  temporal-postgres:
+    image: postgres:16-alpine
+    container_name: shots-temporal-pg
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: temporal
+      POSTGRES_PASSWORD: temporal
+    healthcheck:
+      test: pg_isready -U temporal
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Postiz registers more than 3 Text search attributes, which Temporal only
+  # allows with Elasticsearch as the visibility store.
+  temporal-elasticsearch:
+    image: elasticsearch:7.17.27
+    container_name: shots-temporal-es
+    restart: unless-stopped
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms256m -Xmx256m
+      - cluster.routing.allocation.disk.threshold_enabled=false
+
+  temporal:
+    image: temporalio/auto-setup:1.28.1
+    container_name: shots-temporal
+    restart: unless-stopped
+    depends_on:
+      temporal-postgres:
+        condition: service_healthy
+    environment:
+      DB: postgres12
+      DB_PORT: 5432
+      POSTGRES_USER: temporal
+      POSTGRES_PWD: temporal
+      POSTGRES_SEEDS: shots-temporal-pg
+      TEMPORAL_NAMESPACE: default
+      ENABLE_ES: 'true'
+      ES_SEEDS: shots-temporal-es
+      ES_VERSION: v7
+
+volumes:
+  pgdata:
+  config:
+  uploads:

@@ -1,19 +1,24 @@
 ---
-title: Chrome Extension
-description: 'Set up the Postiz browser extension for cookie-based integrations'
+title: Browser extension
+description: 'Configure the Postiz browser extension on a self-hosted instance'
 ---
 
-Some platforms (like Skool) do not offer public OAuth APIs. Postiz connects to these platforms using a browser extension that securely extracts session cookies from your browser.
+<Snippet file="audience/self-host-only.mdx" />
 
-## How It Works
+Platforms with no public posting API, Skool being the current one, connect
+through the Postiz browser extension: it reads your existing session cookies
+for that platform and passes them to your backend, where they are stored
+encrypted and refreshed every 24 hours.
 
-1. You install the Postiz Chrome Extension in your browser.
-2. When adding a cookie-based channel, the extension reads your session cookies for that platform.
-3. The cookies are sent to your Postiz backend and stored securely as an encrypted JWT.
-4. The extension automatically refreshes cookies every 24 hours to keep connections alive.
+<Note>
+Connecting a channel this way is covered in
+[Connect a channel](/guide/channels/connect). This page is the instance-side
+configuration: the extension ID, and building the extension yourself.
+</Note>
 
 <Warning>
-Using cookies to interact with platforms may violate their terms of service. Use this feature at your own risk.
+Using cookies to interact with platforms may violate their terms of service.
+Use this feature at your own risk.
 </Warning>
 
 ## Installation
@@ -89,7 +94,7 @@ Then rebuild the extension and load it as an unpacked extension in Chrome.
 
 ## Troubleshooting
 
-- **"Extension not found"** — Make sure the `EXTENSION_ID` environment variable is set and Postiz has been restarted.
-- **"Extension not reachable"** — The extension may be disabled. Check `chrome://extensions/` and make sure Postiz is enabled.
-- **"Could not get cookies"** — You must be logged in to the platform in the same Chrome browser where the extension is installed.
-- **Cookies expire** — The extension automatically refreshes cookies every 24 hours. If a connection drops, try reconnecting the channel.
+- **"Extension not found"**: Make sure the `EXTENSION_ID` environment variable is set and Postiz has been restarted.
+- **"Extension not reachable"**: The extension may be disabled. Check `chrome://extensions/` and make sure Postiz is enabled.
+- **"Could not get cookies"**: You must be logged in to the platform in the same Chrome browser where the extension is installed.
+- **Cookies expire**: The extension automatically refreshes cookies every 24 hours. If a connection drops, try reconnecting the channel.

@@ -1,0 +1,88 @@
+---
+title: Developer settings
+sidebarTitle: Developers
+description: 'API keys, OAuth apps, and connecting the CLI or an AI client'
+icon: 'code'
+---
+
+**Where:** Settings, **Developers**
+
+<Note>
+**Availability:** Postiz Cloud, Standard plan and above. Self-hosted installs
+have it on every install.
+</Note>
+
+This tab is the entry point to everything programmatic. The reference
+documentation lives in its own tabs; this page is about the controls in the UI.
+
+## Access
+
+### Your API key
+
+<Snippet file="api-key-where.mdx" />
+
+<Snippet file="never-share-postiz-key.mdx" />
+
+Rotating is the fix if a key leaks, and the only fix: keys do not expire on
+their own.
+
+### MCP client configuration
+
+Postiz generates the configuration block for connecting an AI client through
+[MCP](/mcp/introduction). Pick your client and whether you are using a local
+CLI or a remote client, then copy the block.
+
+### CLI and skills
+
+The same section offers the setup for the [CLI](/cli/introduction), for local
+use or for CI.
+
+## Apps
+
+This is where you register an OAuth application, for building something other
+Postiz users will authorise, rather than something that acts as you.
+
+<Steps>
+  <Step title="Create OAuth App">
+    Name and redirect URL are required. Description and icon are optional, and
+    both are shown to users on the consent screen, so they are worth filling
+    in.
+  </Step>
+  <Step title="Copy the credentials">
+    You get a client ID and a client secret.
+  </Step>
+  <Step title="Implement the flow">
+    See [OAuth2 for developers](/public-api/oauth).
+  </Step>
+</Steps>
+
+<Warning>
+**Rotating the client secret invalidates the old one immediately.** Every token
+exchange using the old secret starts failing, so deploy the new secret first.
+</Warning>
+
+## API key or OAuth app?
+
+| | API key | OAuth app |
+|---|---|---|
+| Acts as | You | Whoever authorises it |
+| Good for | Your own scripts, automations, self-hosted tools | A product other Postiz users will use |
+| Setup | Copy the key | Register an app, implement the flow |
+| Revoking | Rotate the key | The user revokes in Approved Apps |
+
+If you are automating your own posting, use the API key. Build an OAuth app
+only when other people's accounts are involved.
+
+## Where to go next
+
+<CardGroup cols={3}>
+  <Card title="Public API" icon="code" href="/public-api/introduction">
+    Endpoints, payloads and per-platform settings.
+  </Card>
+  <Card title="CLI" icon="terminal" href="/cli/introduction">
+    Post from your terminal or from CI.
+  </Card>
+  <Card title="MCP" icon="robot" href="/mcp/introduction">
+    Connect Claude, Cursor or ChatGPT to Postiz.
+  </Card>
+</CardGroup>

@@ -1,0 +1,111 @@
+---
+title: Plans and limits
+sidebarTitle: Plans
+description: 'Every Postiz Cloud tier, what it costs and what it includes'
+icon: 'table-list'
+---
+
+<Snippet file="audience/cloud-only.mdx" />
+
+## The plans
+
+Yearly billing works out cheaper than paying monthly for the same year.
+
+{/* GENERATED:pricing */}
+| | Standard | Team | Pro | Ultimate |
+|---|---|---|---|---|
+| **Per month** | $29 | $39 | $49 | $99 |
+| **Per year** | $278 | $374 | $470 | $950 |
+| **Channels** | 5 | 10 | 30 | 100 |
+| **Posts per month** | Unlimited | Unlimited | Unlimited | Unlimited |
+| **AI image credits** | 20 | 100 | 300 | 500 |
+| **AI video credits** | 3 | 10 | 30 | 60 |
+| **Webhooks** | 2 | 10 | 30 | 10,000 |
+| **Team members** | No | Yes | Yes | Yes |
+| **RSS auto-posting** | No | Yes | Yes | Yes |
+| **Public API, CLI and MCP** | Yes | Yes | Yes | Yes |
+| **AI features** | Yes | Yes | Yes | Yes |
+| **Image generator** | No | Yes | Yes | Yes |
+| **Import from channels** | Yes | Yes | Yes | Yes |
+{/* /GENERATED:pricing */}
+
+<Note>
+Prices and allowances above are read directly from the Postiz source. The
+[pricing page](https://postiz.com) is the commercial source of truth if the two
+ever disagree.
+</Note>
+
+## What the rows mean
+
+**Channels** is the number of connected social accounts. One X profile is one
+channel; one Discord server is one channel. This is the limit people hit first,
+and it is the main reason to move up a plan. See
+[Concepts](/guide/concepts#channel).
+
+**Posts per month** is effectively unlimited on every paid plan. Plans tier on
+channels, not on volume.
+
+**AI image and video credits** are consumed one per generation, and reset
+monthly on the anniversary of your subscription rather than on the first of the
+month. A generation that fails does not spend a credit. See
+[AI generation](/guide/composer/ai-and-imports).
+
+**Webhooks** is how many HTTP callbacks you can register. See
+[Webhooks](/guide/automations/webhooks).
+
+**Team members** adds other people to your organisation. Seats are not counted:
+plans that include team members include as many as you need. See
+[Team](/guide/settings/team).
+
+**RSS auto-posting** turns feeds into scheduled posts. See
+[RSS auto-posting](/guide/automations/auto-post-rss).
+
+**Public API, CLI and MCP** covers everything programmatic. See
+[Developer settings](/guide/settings/developers).
+
+## There is no free plan
+
+An organisation without a subscription cannot use the app: the interface is
+replaced by the plan picker. Most new organisations are offered a
+[7 day trial](/cloud/trial) instead.
+
+## Billed separately
+
+The UGC video product (Agent Media) is its own subscription with its own credit
+allowance, not part of a Postiz plan. It appears in the left rail when your
+account has access.
+
+## Choosing a plan
+
+| If you | Look at |
+|---|---|
+| Run your own accounts | Standard |
+| Work with colleagues, or want RSS automation | Team |
+| Run social for several clients | Pro |
+| Run a lot of client accounts | Ultimate |
+
+Channel count is the honest deciding factor. Count the accounts you need
+connected, then pick the plan that fits, since everything else can be worked
+around and the channel cap cannot.
+
+## Hitting a limit
+
+Every cap produces a specific error and a specific fix. See
+[Limits](/cloud/limits).
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="The free trial" icon="clock" href="/cloud/trial">
+    How the 7 day trial works.
+  </Card>
+  <Card title="Managing your subscription" icon="credit-card" href="/cloud/subscription">
+    Upgrade, downgrade, cancel.
+  </Card>
+  <Card title="Downgrades" icon="arrow-down" href="/cloud/downgrades">
+    What changes in your account when a plan shrinks.
+  </Card>
+  <Card title="Codes and offers" icon="tag" href="/cloud/codes-and-offers">
+    Lifetime codes, promo codes, the affiliate programme.
+  </Card>
+</CardGroup>

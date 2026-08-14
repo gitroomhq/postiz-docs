@@ -16,7 +16,7 @@ Recommended starting point for a small team (≤ 20 users):
 The official Docker Compose has been tested on a 2 GB / 2 vCPU Ubuntu
 VM running everything on one host (see [Docker Compose](/installation/docker-compose)).
 That works for a single-user install with occasional posting, but
-leaves no headroom — once you have multiple users, scheduled
+leaves no headroom, once you have multiple users, scheduled
 workflows, or external Postgres/Redis on the same host, plan for
 **4 GB or more**.
 
@@ -47,7 +47,7 @@ Postiz needs four external services:
 | PostgreSQL | 14 |
 | Redis | 6 |
 | Temporal | bundled with official docker-compose; required since v2.12.0 |
-| Object storage | Optional — local filesystem works (`STORAGE_PROVIDER=local`), Cloudflare R2 supported (`STORAGE_PROVIDER=cloudflare`) |
+| Object storage | Optional, local filesystem works (`STORAGE_PROVIDER=local`), Cloudflare R2 supported (`STORAGE_PROVIDER=cloudflare`) |
 
 The official [docker-compose](https://github.com/gitroomhq/postiz-docker-compose)
 ships Postgres, Redis, and Temporal pre-wired. If you're running them
@@ -58,7 +58,7 @@ externally, point Postiz at them via `DATABASE_URL`, `REDIS_URL`, and
 
 | Service | Port | When |
 |---|---|---|
-| Postiz container (bundled FE + BE) | `5000` | Official Docker image (`ghcr.io/gitroomhq/postiz-app`) — exposed for you to map. The bundled compose maps host `4007:5000`. |
+| Postiz container (bundled FE + BE) | `5000` | Official Docker image (`ghcr.io/gitroomhq/postiz-app`), exposed for you to map. The bundled compose maps host `4007:5000`. |
 | Backend (Nest) | `3000` | Running from source (`pnpm dev` / `pnpm start`). Override via `PORT`. |
 | Frontend (Next.js) | `4200` | Running from source. |
 | Temporal frontend | `7233` | gRPC; both modes. |
@@ -75,7 +75,7 @@ If you'd rather offload media: configure [Cloudflare R2](/configuration/r2).
 ## Outbound network
 
 Postiz initiates outbound HTTPS to every social provider you connect.
-Strict egress firewalls **will** break OAuth — make sure the backend
+Strict egress firewalls **will** break OAuth. Make sure the backend
 can reach:
 
 - `api.twitter.com`, `upload.twitter.com`
@@ -94,4 +94,4 @@ on the backend.
 The frontend talks to the backend from the browser, so
 `NEXT_PUBLIC_BACKEND_URL` must be **reachable from your users' browsers**,
 not just from the frontend SSR server. A reverse proxy in front of both
-ports is the typical setup — see [Reverse Proxies](/reverse-proxies/caddy).
+ports is the typical setup. See [Reverse Proxies](/reverse-proxies/caddy).

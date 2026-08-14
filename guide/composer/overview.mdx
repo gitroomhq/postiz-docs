@@ -1,0 +1,72 @@
+---
+title: The post composer
+sidebarTitle: Overview
+description: 'How the composer is laid out and what each part does'
+icon: 'pen-to-square'
+---
+
+**Where:** Calendar, **Create Post**, or click any empty slot
+
+The composer is where nearly all of Postiz happens. It is one modal with three
+columns and a footer.
+
+## The layout
+
+| Area | What lives there |
+|---|---|
+| **Top** | The channel picker: which channels this post goes to |
+| **Left** | The editor, plus a collapsible **Settings** panel for the selected channel |
+| **Right** | A live preview of the post as each selected channel will render it |
+| **Footer** | Tags, repeat, the date and time, and the publish buttons |
+
+The preview column is the part people underuse. It renders the post per
+platform, so a line break that collapses on one platform or a title that
+truncates on another is visible before you schedule rather than after.
+
+## The flow
+
+<Steps>
+  <Step title="Pick channels">
+    Click the avatars at the top. Picking a **customer** selects all of that
+    client's channels at once.
+  </Step>
+  <Step title="Write once">
+    The **Global** tab is the default. What you write there goes to every
+    selected channel. See
+    [Global vs per-channel](/guide/composer/global-vs-per-channel) when one
+    channel needs different text.
+  </Step>
+  <Step title="Add media">
+    Drag a file in, paste an image, or open the media library. See
+    [Media](/guide/composer/media).
+  </Step>
+  <Step title="Fill in per-channel settings">
+    Some are required: YouTube needs a title, Reddit a subreddit, Pinterest a
+    board. The composer will not let you save without them.
+  </Step>
+  <Step title="Schedule">
+    Pick a time, then **Save as Draft**, **Add to calendar**, or **Post Now**.
+    See [Scheduling](/guide/composer/scheduling).
+  </Step>
+</Steps>
+
+## Starting from a set
+
+If you have saved [sets](/guide/settings/reusables), Postiz offers them when
+you open a new post. A set restores a channel selection and its settings, which
+saves rebuilding the same combination every time. **Continue without set**
+skips it.
+
+## Starting from a signature
+
+If one of your [signatures](/guide/settings/reusables) is marked auto-add, it
+is already in the editor when the composer opens.
+
+## Leaving without saving
+
+Closing the composer asks for confirmation, because nothing is kept:
+
+> Are you sure you want to close this modal? (all data will be lost)
+
+If a post is half-written and you need to step away, **Save as Draft** instead.
+Drafts sit on the calendar and never publish.

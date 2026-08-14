@@ -26,7 +26,9 @@ There are two ways to authenticate with the Postiz API:
 
 ### API Key
 
-Get your API key from **Settings > Developers > Public API**. Include it in the `Authorization` header:
+<Snippet file="api-key-where.mdx" />
+
+Include it in the `Authorization` header:
 
 ```bash
 curl -H "Authorization: your-api-key" https://api.postiz.com/public/v1/integrations
@@ -42,20 +44,17 @@ curl -H "Authorization: pos_your-oauth-token" https://api.postiz.com/public/v1/i
 
 ## Base URL
 
-| Environment | Base URL |
-|-------------|----------|
-| Postiz Cloud | `https://api.postiz.com/public/v1` |
-| Self-hosted | `https://{NEXT_PUBLIC_BACKEND_URL}/public/v1` |
+<Snippet file="base-url.mdx" />
 
 ## Rate Limits
 
 <Info>
 **90 requests per hour** (100 for the cloud) limit applies to only the create post endpoint.
 
-This doesn't mean you can only post 90 times per hour—each API call counts as one request. Schedule multiple posts in a single request to maximize throughput.
+This doesn't mean you can only post 90 times per hour: each API call counts as one request. Schedule multiple posts in a single request to maximize throughput.
 </Info>
 
-The rate limit is a single global value for the whole instance — it doesn't tier by subscription plan. Plans tier on channel and post-per-month quotas instead. Self-hosters can adjust the per-hour limit with the `API_LIMIT` env var (see [Configuration Reference](/configuration/reference)).
+The rate limit is a single global value for the whole instance. It does not tier by subscription plan. Plans tier on channel and post-per-month quotas instead. Self-hosters can adjust the per-hour limit with the `API_LIMIT` env var (see [Configuration Reference](/configuration/reference)).
 
 ## Errors
 
@@ -65,16 +64,16 @@ The rate limit is a single global value for the whole instance — it doesn't ti
 | `401 Unauthorized` | `Authorization` header is missing or the API key is unrecognised. |
 | `403 Forbidden` | The API key is valid but doesn't own the resource (e.g. you tried to delete a post in another organisation). |
 | `404 Not Found` | The endpoint doesn't exist, or the path parameter (integration ID, post ID) was correct format but no row matched. |
-| `413 Payload Too Large` | Your request body exceeded 50 MB on `/posts` — usually because images were base64-inlined instead of pre-uploaded. See [Uploads troubleshooting](/troubleshooting/uploads). |
+| `413 Payload Too Large` | Your request body exceeded 50 MB on `/posts`, usually because images were base64-inlined instead of pre-uploaded. See [Uploads troubleshooting](/troubleshooting/uploads). |
 | `429 Too Many Requests` | You exceeded `API_LIMIT` per hour on the create-post endpoint. |
-| `5xx` | Server error — retry with exponential backoff. |
+| `5xx` | Server error, retry with exponential backoff. |
 
-For `DELETE` endpoints, `404` always means "already deleted" and is safe to ignore. A `500` *can* mean the same thing today because of a [known issue](/troubleshooting/known-issues) where a missing post ID surfaces as 500 instead of 404 — but only if the error matches that specific signature. Treat other `500` responses as real server errors: log them, retry with exponential backoff, and don't silently suppress them.
+For `DELETE` endpoints, `404` always means "already deleted" and is safe to ignore. A `500` *can* mean the same thing today because of a [known issue](/troubleshooting/known-issues) where a missing post ID surfaces as 500 instead of 404, but only if the error matches that specific signature. Treat other `500` responses as real server errors: log them, retry with exponential backoff, and don't silently suppress them.
 
 ## Terminology
 
 <Note>
-The Postiz UI uses the term **channel**, while the API uses **integration**. They refer to the same thing—a connected social media account.
+The Postiz UI uses the term **channel**, while the API uses **integration**. They refer to the same thing: a connected social media account.
 </Note>
 
 ## Generate Output

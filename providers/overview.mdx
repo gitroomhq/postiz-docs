@@ -1,96 +1,86 @@
 ---
-title: Providers Overview
-description: 'Configure social media providers for Postiz'
+title: Provider API keys
+sidebarTitle: Overview
+description: 'Which platforms need a developer app, and how to configure them'
+icon: 'key'
 ---
 
-You can see all the providers that Postiz supports documented in the sidebar, under "**Providers**".
+<Snippet file="audience/self-host-only.mdx" />
 
-Please note that no providers are configured by default. You will need to configure them all in your `.env` file, or as environment variables. You will need to restart Postiz whenever you change environment variables. If you are using docker compose, you must run `docker compose down` and then `docker compose up` to rebuild the containers with the updated variables.
+Postiz talks to each platform through that platform's own API, which usually
+means you have to register a developer app with them and give Postiz the
+resulting keys. This section covers that registration, one page per platform.
+
+<Note>
+Looking for what a platform can actually carry, character limits, media rules
+and per-post settings? That is
+[Posting rules by platform](/guide/platforms/overview).
+</Note>
+
+## Ten platforms need no configuration at all
+
+These providers take credentials that **each user supplies in the Postiz
+dialog** when they connect a channel. There is nothing for you to register and
+no environment variable to set. They are the quickest way to confirm a fresh
+install works.
+
+| Platform | What the user provides |
+|---|---|
+| Bluesky | Service URL, handle, app password |
+| Lemmy | Instance URL, username, password |
+| Nostr | Private key |
+| Medium | API key |
+| Dev.to | API key |
+| Hashnode | API key |
+| WordPress | Site domain, username, application password |
+| Listmonk | URL, username, password |
+| Moltbook | Connects in-app, no credentials |
+| Skool | Session cookies, via the [browser extension](/configuration/chrome-extension) |
+
+## Everything else needs a developer app
+
+For the remaining platforms you register an app on the platform's developer
+portal, then set the keys as environment variables on your instance. Each page
+in this section walks through one platform.
+
+<Snippet file="env-restart.mdx" />
 
 <Snippet file="never-share.mdx" />
 
-## Available Providers
+### Redirect URIs
 
-<CardGroup cols={3}>
-  <Card title="X (Twitter)" icon="x-twitter" href="/providers/x-twitter">
-    Post to X/Twitter
-  </Card>
-  <Card title="LinkedIn" icon="linkedin" href="/providers/linkedin">
-    Post to LinkedIn profiles
-  </Card>
-  <Card title="LinkedIn Page" icon="linkedin" href="/providers/linkedin-page">
-    Post to LinkedIn pages
-  </Card>
-  <Card title="Facebook" icon="facebook" href="/providers/facebook">
-    Post to Facebook pages
-  </Card>
-  <Card title="Instagram" icon="instagram" href="/providers/instagram">
-    Post to Instagram
-  </Card>
-  <Card title="Threads" icon="threads" href="/providers/threads">
-    Post to Threads
-  </Card>
-  <Card title="Bluesky" icon="cloud" href="/providers/bluesky">
-    Post to Bluesky
-  </Card>
-  <Card title="Mastodon" icon="mastodon" href="/providers/mastodon">
-    Post to Mastodon
-  </Card>
-  <Card title="YouTube" icon="youtube" href="/providers/youtube">
-    Post to YouTube
-  </Card>
-  <Card title="Google My Business" icon="google" href="/providers/google-my-business">
-    Post to Google Business Profile
-  </Card>
-  <Card title="TikTok" icon="tiktok" href="/providers/tiktok">
-    Post to TikTok
-  </Card>
-  <Card title="Reddit" icon="reddit" href="/providers/reddit">
-    Post to Reddit
-  </Card>
-  <Card title="Pinterest" icon="pinterest" href="/providers/pinterest">
-    Post to Pinterest
-  </Card>
-  <Card title="Discord" icon="discord" href="/providers/discord">
-    Post to Discord
-  </Card>
-  <Card title="Slack" icon="slack" href="/providers/slack">
-    Post to Slack
-  </Card>
-  <Card title="Telegram" icon="telegram" href="/providers/telegram">
-    Post to Telegram
-  </Card>
-  <Card title="Dribbble" icon="dribbble" href="/providers/dribbble">
-    Post to Dribbble
-  </Card>
-  <Card title="Skool" icon="graduation-cap" href="/providers/skool">
-    Post to Skool communities
-  </Card>
-  <Card title="Whop" icon="store" href="/providers/whop">
-    Post to Whop forums
-  </Card>
-  <Card title="MeWe" icon="users" href="/providers/mewe">
-    Post to MeWe
-  </Card>
-  <Card title="Farcaster" icon="hashtag" href="/providers/farcaster">
-    Post to Farcaster / Warpcast
-  </Card>
-</CardGroup>
+Every OAuth provider asks for a redirect URI. Postiz always uses the same
+shape:
 
-## Providers available via Public API only
+```
+{FRONTEND_URL}/integrations/social/{provider}
+```
 
-These platforms are fully supported for scheduling and publishing through the [Public API](/public-api/introduction), but don't currently have an in-app channel-connect UI page. You can still configure their env-var keys (see [Configuration Reference](/configuration/reference)) and use them via the API.
+So an instance at `https://social.example.com` connecting X uses
+`https://social.example.com/integrations/social/x`. The provider identifier is
+the one in the [platform table](/guide/platforms/overview), which is not always
+the name you expect: Farcaster is `wrapcast`, Google My Business is `gmb`.
 
-| Platform | Public API page |
-|---|---|
-| Twitch | [/public-api/providers/twitch](/public-api/providers/twitch) |
-| Kick | [/public-api/providers/kick](/public-api/providers/kick) |
-| VK | [/public-api/providers/vk](/public-api/providers/vk) |
-| Nostr | [/public-api/providers/nostr](/public-api/providers/nostr) |
-| Lemmy | [/public-api/providers/lemmy](/public-api/providers/lemmy) |
-| Medium | [/public-api/providers/medium](/public-api/providers/medium) |
-| Dev.to | [/public-api/providers/devto](/public-api/providers/devto) |
-| Hashnode | [/public-api/providers/hashnode](/public-api/providers/hashnode) |
-| WordPress | [/public-api/providers/wordpress](/public-api/providers/wordpress) |
-| Listmonk | [/public-api/providers/listmonk](/public-api/providers/listmonk) |
+### Keys that are shared between platforms
 
+Three pairs of platforms share credentials, which trips people up:
+
+- **Instagram (Facebook Business)** uses `FACEBOOK_APP_ID` and
+  `FACEBOOK_APP_SECRET`, the same app as Facebook Page. Only **Instagram
+  Standalone** uses `INSTAGRAM_APP_ID` and `INSTAGRAM_APP_SECRET`.
+- **LinkedIn Page** uses the same `LINKEDIN_CLIENT_ID` and
+  `LINKEDIN_CLIENT_SECRET` as LinkedIn.
+- **Google My Business** falls back to the YouTube Google credentials if
+  `GOOGLE_GMB_CLIENT_ID` and `GOOGLE_GMB_CLIENT_SECRET` are not set.
+
+### Unconfigured platforms still appear in the list
+
+Postiz shows every platform in the **Add Channel** dialog whether or not its
+keys are set. Clicking one you have not configured produces a failed connect
+rather than a helpful message, so if a platform will not connect on a fresh
+install, check its keys first.
+
+## Full variable list
+
+Every provider variable, with defaults and notes, is in the
+[Configuration reference](/configuration/reference).

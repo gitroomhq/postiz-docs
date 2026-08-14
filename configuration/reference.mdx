@@ -10,7 +10,7 @@ The canonical list lives in the [example postiz.env file](https://raw.githubuser
 This page documents every variable Postiz reads, grouped by purpose.
 
 <Info>
-Variables marked **Required** are validated on boot — Postiz will fail to start
+Variables marked **Required** are validated on boot: Postiz will fail to start
 if they're missing or malformed.
 </Info>
 
@@ -72,7 +72,9 @@ This also disables OIDC / OAuth sign-in.
 
 ### `API_LIMIT`
 
-Per-hour limit on the public-API create-post endpoint. Defaults to `90`. Postiz Cloud uses `100`. Channel and post quotas are tiered separately by plan.
+Per-hour limit on the public-API create-post endpoint. Defaults to `90`. It is a single value for the whole instance and does not tier by plan: channel and post quotas do that instead.
+
+Note that the shipped `docker-compose.yaml` sets `API_LIMIT: 30`, which is lower than the default. Raise it if you drive Postiz from scripts.
 
 ### `RUN_CRON`
 
@@ -88,7 +90,11 @@ When set, blocks the upgrade UI elements pointing to paid plans. Used for self-h
 
 ### `IS_GENERAL`
 
-Switches the frontend between routes available to the open-source build (`/launches`) and the hosted build (`/analytics`). Set to `"true"` on self-host. Leave unset on Postiz Cloud.
+Branding and product-line switch. It controls page titles, which sign-in providers are offered, the default landing route, and a handful of labels. Set it to `"true"`, which is what the shipped compose file does.
+
+<Warning>
+`IS_GENERAL` is **not** the cloud switch, despite the name. Plans, limits and billing are enabled by the presence of `STRIPE_PUBLISHABLE_KEY`, so an install without a Stripe key has no plan gating at all and behaves as the top tier.
+</Warning>
 
 ### `DISABLE_IMAGE_COMPRESSION`
 
@@ -105,7 +111,7 @@ This disables SSRF protection globally, not per provider. Only set it if your Po
 ### `NOT_SECURED`
 
 <Warning>
-Dev only. Never set in production — it disables security checks that exist for a reason.
+Dev only. Never set in production: it disables security checks that exist for a reason.
 </Warning>
 
 ### `MAIN_URL`
@@ -147,8 +153,8 @@ See also: [Email configuration](/configuration/emails).
 | Variable | Purpose |
 |---|---|
 | `EMAIL_PROVIDER` | `resend` (default) or `nodemailer`. |
-| `RESEND_API_KEY` | Resend API key — required when `EMAIL_PROVIDER=resend`. Presence of this variable also gates whether user activation is required (set → required; unset → users are auto-activated). |
-| `EMAIL_HOST` | SMTP host — required when `EMAIL_PROVIDER=nodemailer`. |
+| `RESEND_API_KEY` | Resend API key, required when `EMAIL_PROVIDER=resend`. Presence of this variable also gates whether user activation is required (set → required; unset → users are auto-activated). |
+| `EMAIL_HOST` | SMTP host, required when `EMAIL_PROVIDER=nodemailer`. |
 | `EMAIL_PORT` | SMTP port. |
 | `EMAIL_USER` | SMTP user. |
 | `EMAIL_PASS` | SMTP password. |
@@ -187,6 +193,8 @@ ships with one). See the [Temporal migration guide](/installation/migration).
 |---|---|
 | `TEMPORAL_ADDRESS` | host:port of the Temporal frontend. |
 | `TEMPORAL_NAMESPACE` | Temporal namespace to run workflows in. |
+| `EXCLUDE_QUEUE` | Comma-separated list of per-platform task queues this worker should **not** handle, for example `"reddit,x,twitch"`. Use it to pin slow or rate-limited platforms to a dedicated worker. |
+| `WORKER_CONCURRENCY_DIVIDER` | Divides each platform's configured concurrency, so several workers can share a queue without exceeding the platform's limits. Defaults to `1`. |
 | `TEMPORAL_API_KEY` | API key for Temporal Cloud. Leave unset for self-host. |
 | `TEMPORAL_TLS` | `true` to require TLS to the Temporal frontend. |
 | `ORCHESTRATOR_PORT` | Port the in-process orchestrator binds to. |
@@ -261,14 +269,20 @@ LINK_DRIP_SHORT_LINK_DOMAIN="dripl.ink"
 
 | Variable | Purpose |
 |---|---|
-| `STRIPE_PUBLISHABLE_KEY` | Stripe publishable key. |
+Almost no self-hosted install needs these. Setting `STRIPE_PUBLISHABLE_KEY` switches the whole application into billed mode, which means plans, channel caps and AI credits start being enforced against subscriptions you have no way to sell. Leave the whole section unset unless you are deliberately running a paid service.
+
+| Variable | Purpose |
+|---|---|
+| `STRIPE_PUBLISHABLE_KEY` | Stripe publishable key. **Presence of this variable is what enables billing, plans and limits.** |
 | `STRIPE_SECRET_KEY` | Stripe secret key. |
 | `STRIPE_SIGNING_KEY` | Stripe webhook signing key for subscription events. |
-| `STRIPE_SIGNING_KEY_CONNECT` | Stripe Connect webhook signing key. |
-| `STRIPE_DISCOUNT_ID` | Default Stripe discount applied to new subscriptions. |
-| `FEE_AMOUNT` | Platform fee fraction (e.g. `0.05`). |
-| `NOWPAYMENTS_API_KEY` | NOWPayments API key for crypto checkout. |
-| `NOWPAYMENTS_AMOUNT` | Default NOWPayments invoice amount. |
+| `STRIPE_DISCOUNT_ID` | Discount offered when a customer starts to cancel. |
+
+### Removed
+
+These appear in older `.env` examples and in the shipped compose file, but nothing in Postiz reads them any more. Delete them.
+
+`STRIPE_SIGNING_KEY_CONNECT`, `FEE_AMOUNT`, `NOWPAYMENTS_API_KEY`, `NOWPAYMENTS_AMOUNT`, `SLACK_SIGNING_SECRET`, `NX_ADD_PLUGINS`
 
 ---
 
@@ -299,6 +313,7 @@ All of these are optional. Frontend reads `NEXT_PUBLIC_*` at build time.
 | Variable | Purpose |
 |---|---|
 | `NEXT_PUBLIC_DISCORD_SUPPORT` | Discord invite URL shown in the support widget. |
+| `CHATBASE_TOKEN` | Enables the in-app AI support chat instead of the Discord button. Cloud only in practice, since the chat can act on billing. |
 | `NEXT_PUBLIC_POLOTNO` | Polotno API key for the image editor. |
 | `NEXT_PUBLIC_VERSION` | Version string shown in the footer. |
 | `NEXT_PUBLIC_APP_VERSION` | Mobile/web version label. |
@@ -325,16 +340,17 @@ table is just a lookup so you can find which page documents which variable.
 | Reddit | `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET` | [/providers/reddit](/providers/reddit) |
 | Pinterest | `PINTEREST_CLIENT_ID`, `PINTEREST_CLIENT_SECRET` | [/providers/pinterest](/providers/pinterest) |
 | Discord | `DISCORD_CLIENT_ID`, `DISCORD_CLIENT_SECRET`, `DISCORD_BOT_TOKEN_ID` | [/providers/discord](/providers/discord) |
-| Slack | `SLACK_ID`, `SLACK_SECRET`, `SLACK_SIGNING_SECRET` | [/providers/slack](/providers/slack) |
+| Slack | `SLACK_ID`, `SLACK_SECRET` | [/providers/slack](/providers/slack) |
 | Telegram | `TELEGRAM_TOKEN`, `TELEGRAM_BOT_NAME` | [/providers/telegram](/providers/telegram) |
 | Mastodon | `MASTODON_URL`, `MASTODON_CLIENT_ID`, `MASTODON_CLIENT_SECRET` | [/providers/mastodon](/providers/mastodon) |
 | Dribbble | `DRIBBBLE_CLIENT_ID`, `DRIBBBLE_CLIENT_SECRET` | [/providers/dribbble](/providers/dribbble) |
 | Farcaster | `NEYNAR_CLIENT_ID`, `NEYNAR_SECRET_KEY`, `NEYNAR_LOGIN_URL` | [/providers/farcaster](/providers/farcaster) |
 | MeWe | `MEWE_HOST`, `MEWE_APP_ID`, `MEWE_API_KEY` | [/providers/mewe](/providers/mewe) |
-| Twitch | `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET` | API only — see [/public-api/providers/twitch](/public-api/providers/twitch) |
-| Kick | `KICK_CLIENT_ID`, `KICK_SECRET` | API only — see [/public-api/providers/kick](/public-api/providers/kick) |
-| VK | `VK_ID` | API only — see [/public-api/providers/vk](/public-api/providers/vk) |
+| Twitch | `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET` | API only. See [/public-api/providers/twitch](/public-api/providers/twitch) |
+| Kick | `KICK_CLIENT_ID`, `KICK_SECRET` | API only. See [/public-api/providers/kick](/public-api/providers/kick) |
+| VK | `VK_ID` | API only. See [/public-api/providers/vk](/public-api/providers/vk) |
 | Whop | `WHOP_CLIENT_ID` | [/providers/whop](/providers/whop) |
+| Tumblr | `TUMBLR_CLIENT_ID`, `TUMBLR_CLIENT_SECRET` | [/providers/tumblr](/providers/tumblr) |
 | GitHub (sign-in) | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | [/configuration/oauth](/configuration/oauth) |
 | Beehiiv | `BEEHIIVE_API_KEY`, `BEEHIIVE_PUBLICATION_ID` | Newsletter provider |
 | Listmonk | `LISTMONK_DOMAIN`, `LISTMONK_USER`, `LISTMONK_API_KEY`, `LISTMONK_LIST_ID`, `LISTMONK_WELCOME_TEMPLATE_ID` | Newsletter provider |
@@ -351,6 +367,6 @@ hosting platform, or framework rather than set by hand.
 | `PORT` | Port the backend HTTP server binds to. Defaults to `3000`. |
 | `TZ` | Process timezone. The backend forces this to `UTC` on boot. |
 | `NODE_ENV` | Standard Node environment flag (`development` / `production`). Toggles dev-only behaviour like sourcemaps. |
-| `NEXT_RUNTIME` | Set by Next.js (`nodejs` / `edge`) to select the instrumentation hook. Framework-injected — do not set manually. |
+| `NEXT_RUNTIME` | Set by Next.js (`nodejs` / `edge`) to select the instrumentation hook. Framework-injected, do not set manually. |
 | `VERCEL_GIT_COMMIT_SHA` | Commit SHA used as the Sentry release tag on the frontend. Injected by Vercel. |
 | `GITHUB_SHA` | Fallback commit SHA for the Sentry release tag when not on Vercel. Injected by GitHub Actions. |

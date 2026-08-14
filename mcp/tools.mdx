@@ -21,7 +21,7 @@ List all connected social media accounts (channels) for your organization.
 | `name` | string | Display name of the account |
 | `picture` | string | Profile picture URL |
 | `platform` | string | Platform identifier (e.g., `x`, `linkedin`, `facebook`) |
-| `customer` | object | The group (customer) this channel belongs to, as `{ id, name }` — omitted if the channel is not assigned to a group |
+| `customer` | object | The group (customer) this channel belongs to, as `{ id, name }`, omitted if the channel is not assigned to a group |
 
 ---
 
@@ -96,7 +96,7 @@ Each item in `dataSchema`:
 - Search for Reddit subreddits
 - List LinkedIn pages you manage
 - Get Facebook page options
-- Search Instagram audio (`audioSearch`) to attach to a Reel — only on Facebook Business-linked Instagram channels
+- Search Instagram audio (`audioSearch`) to attach to a Reel, only on Facebook Business-linked Instagram channels
 
 ---
 
@@ -161,7 +161,7 @@ The `postsAndComments` array behavior depends on the platform:
 
 ### Multiple Posts
 
-To schedule multiple posts (e.g., 20 posts across different days), add multiple items to the `socialPost` array — each with its own `date` and `integrationId`.
+To schedule multiple posts (e.g., 20 posts across different days), add multiple items to the `socialPost` array, each with its own `date` and `integrationId`.
 
 **Returns:**
 

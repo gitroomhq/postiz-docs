@@ -1,0 +1,76 @@
+---
+title: Webhooks
+description: 'Notify another system when Postiz publishes'
+icon: 'webhook'
+---
+
+**Where:** Settings, **Webhooks**
+
+<Note>
+**Availability:** Postiz Cloud, Standard plan and above, with the number of
+webhooks rising by plan. Self-hosted installs are unrestricted.
+</Note>
+
+A webhook is an HTTP callback Postiz fires when a post publishes. Use it to
+mirror content into Slack, log posts into a spreadsheet, trigger a Zapier or
+n8n workflow, or update your own system.
+
+## Adding one
+
+<Steps>
+  <Step title="Name it">
+    For your own reference in the list.
+  </Step>
+  <Step title="Give it a URL">
+    Where Postiz should POST.
+  </Step>
+  <Step title="Choose the scope">
+    **All integrations**, or a specific set of channels. Scoping by channel is
+    how you route a client's posts to that client's system.
+  </Step>
+  <Step title="Send Test">
+    Fires a test call immediately, so you can confirm the endpoint is reachable
+    and see the payload shape before anything real depends on it.
+  </Step>
+  <Step title="Save">
+    The header shows how many webhooks you have against your allowance.
+  </Step>
+</Steps>
+
+## Building the receiver
+
+Always **Send Test** first and capture the body: that is the contract, and it
+is more reliable than any description here.
+
+Two habits worth having:
+
+- **Return 2xx quickly**, then do the work asynchronously. A slow endpoint is
+  indistinguishable from a broken one.
+- **Be idempotent.** Treat a repeated delivery as a no-op rather than posting
+  twice.
+
+## When a webhook stops firing
+
+<AccordionGroup>
+  <Accordion title="The endpoint is not publicly reachable">
+    Postiz calls from its servers, so localhost and private network addresses
+    will not work. Use a tunnel while developing.
+  </Accordion>
+  <Accordion title="The endpoint is returning an error">
+    Check your own logs first, then use **Send Test** to reproduce.
+  </Accordion>
+  <Accordion title="The webhook is scoped to the wrong channels">
+    A webhook scoped to specific integrations stays silent for everything
+    else. Re-check the scope.
+  </Accordion>
+  <Accordion title="Your plan changed">
+    Downgrading below the webhook allowance can take webhooks out of service.
+    See [Downgrades](/cloud/downgrades).
+  </Accordion>
+</AccordionGroup>
+
+## Related
+
+Webhooks tell you when Postiz acted. To make Postiz act, use the
+[Public API](/public-api/introduction), the [CLI](/cli/introduction), or
+[MCP](/mcp/introduction).

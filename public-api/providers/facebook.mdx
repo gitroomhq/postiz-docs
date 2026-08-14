@@ -12,7 +12,8 @@ Facebook integration allows you to post to Facebook pages. You can optionally in
 ```json
 {
   "__type": "facebook",
-  "url": "https://example.com/my-article"
+  "url": "https://example.com/my-article",
+  "post_type": "post"
 }
 ```
 
@@ -22,6 +23,30 @@ Facebook integration allows you to post to Facebook pages. You can optionally in
 |----------|------|----------|-------------|
 | `__type` | string | ✅ | Must be `"facebook"` |
 | `url` | string | ❌ | Optional link URL to include in the post |
+| `post_type` | string | ❌ | `post` (default) or `story` |
+| `text_format_preset_id` | string | ❌ | Background preset for a text-only post |
+
+### `post_type`
+
+| Value | Description |
+|-------|-------------|
+| `post` | A normal Page post. This is the default |
+| `story` | A Facebook story. Requires at least one attachment, and **each attachment publishes as its own story** |
+
+### `text_format_preset_id`
+
+Facebook lets a short text-only post render on a coloured or illustrated
+background. Pass the preset ID to use one.
+
+Constraints, all enforced by Facebook rather than Postiz:
+
+- **Text only.** A post with media ignores the preset.
+- **Pages only.**
+- **130 characters maximum.** Longer text drops the background.
+
+Facebook publishes no API to enumerate the presets, so Postiz ships a fixed
+catalogue of them. Pick one in the app to find the ID you want, then reuse that
+ID over the API.
 
 ## Examples
 

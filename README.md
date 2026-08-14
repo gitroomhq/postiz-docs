@@ -1,97 +1,92 @@
-# Postiz
+# Postiz documentation
 
-Postiz is a tool to schedule social media and chat posts to 28+ channels:
+The source for [docs.postiz.com](https://docs.postiz.com), built with
+[Mintlify](https://mintlify.com).
 
-X, LinkedIn, LinkedIn Page, Reddit, Instagram, Facebook Page, Threads, YouTube, Google My Business, TikTok, Pinterest, Dribbble, Discord, Slack, Kick, Twitch, Mastodon, Bluesky, Lemmy, Farcaster, Telegram, Nostr, VK, Medium, Dev.to, Hashnode, WordPress, ListMonk
-
-## Setup
-
-1. Get your API key: https://platform.postiz.com/settings
-2. Click on "Settings"
-3. Click "Reveal"
-4. Set environment variables:
-   ```bash
-   export POSTIZ_API_KEY="your-api-key"
-   ```
-
-## Get all added channels
+## Running it locally
 
 ```bash
-curl -X GET "https://api.postiz.com/public/v1/integrations" \
-  -H "Authorization: $POSTIZ_API_KEY"
+npx mint dev          # preview at http://localhost:3000
+npm run check         # structural checks (see below)
+npx mint broken-links # internal link checker
 ```
 
-## Get the next available slot for a channel
+`mint dev` also warns about pages that exist on disk but are missing from
+`docs.json`.
+
+## How the docs are organised
+
+Six tabs, three of which are audiences:
+
+| Tab | For | Rule |
+|---|---|---|
+| **Guide** | Everyone | How the product works. Never mentions env vars, Docker or installation |
+| **Cloud** | Postiz Cloud users | Plans, billing, limits. The only place a price appears |
+| **Self-Hosting** | People running their own instance | Install, configure, provider API keys, infrastructure |
+| **Public API** | Developers | Endpoints and per-platform settings schemas |
+| **Automation** | Developers | CLI and MCP |
+| **Contributing** | Contributors | Working on Postiz itself |
+
+**Every page belongs to exactly one tab.** Listing a page in two places breaks
+breadcrumbs and the previous/next pager. Link across tabs with `<Card>`
+instead.
+
+### Writing for a shared page
+
+When something differs between cloud and self-hosted, escalate in this order:
+
+1. A value differs: an inline `<Note>` starting with the words
+   **"On self-hosted Postiz:"**.
+2. Short steps differ: a `<Tabs>` block with tabs named exactly
+   `Postiz Cloud` and `Self-hosted`, cloud first.
+3. A whole procedure differs, or an environment variable is involved: do not
+   inline it. Link to the other tab with a `<Card>`.
+4. The feature does not exist on one side: a `<Warning>`.
+
+Two things a Guide or Cloud page must never contain: `` `.env` `` and a
+`docker` or `pnpm` command. `npm run check` enforces this.
+
+### Style
+
+- **No em-dashes.** Use commas, colons, parentheses or a full stop. Enforced by
+  `npm run check`.
+- Start a product page with a bold **Where:** line giving the path through the
+  interface, so support can link someone straight to the control.
+- Say a tier name ("Team and above"), never a price, outside `cloud/plans`.
+
+## Generated tables
+
+Some tables are derived from the Postiz source so they cannot silently drift.
+They live between markers:
+
+```mdx
+{/* GENERATED:pricing */}
+...
+{/* /GENERATED:pricing */}
+```
+
+Regenerate with a `postiz-app` checkout beside this repo:
 
 ```bash
-curl -X GET "https://api.postiz.com/public/v1/find-slot/:id" \
-  -H "Authorization: $POSTIZ_API_KEY"
+node scripts/sync-facts.mjs           # rewrite the tables
+node scripts/sync-facts.mjs --check   # fail if they are stale
+POSTIZ_APP=/path/to/postiz-app node scripts/sync-facts.mjs
 ```
 
-## Upload a new file (form-data)
+Current regions: `pricing` and `limits` (from `pricing.ts`), `platforms` (from
+the provider registry), `analytics` (from the analytics allowlists). Edit the
+source, not the table.
 
-```bash
-curl -X POST "https://api.postiz.com/public/v1/upload" \
-  -H "Authorization: $POSTIZ_API_KEY" \
-  -F "file=@/path/to/your/file.png"
-```
+## Adding a page
 
-## Upload a new file from an existing URL
+1. Create the `.mdx` file with `title`, `description` and, in the Guide tab, an
+   `icon`.
+2. Add it to `docs.json` under exactly one tab.
+3. Run `npm run check`.
 
-```bash
-curl -X POST "https://api.postiz.com/public/v1/upload-from-url" \
-  -H "Authorization: $POSTIZ_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "url": "https://example.com/image.png"
-  }'
-```
+## Moving a page
 
-## Post list
-
-```bash
-curl -X GET "https://api.postiz.com/public/v1/posts?startDate=2024-12-14T08:18:54.274Z&endDate=2024-12-14T08:18:54.274Z&customer=optionalCustomerId" \
-  -H "Authorization: $POSTIZ_API_KEY"
-```
-
-## Schedule a new post
-
-Settings for different channels can be found in:
-https://docs.postiz.com/public-api/introduction
-On the bottom left menu
-
-```bash
-curl -X POST "https://api.postiz.com/public/v1/posts" \
-  -H "Authorization: $POSTIZ_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-  "type": "schedule",
-  "date": "2024-12-14T10:00:00.000Z",
-  "shortLink": false,
-  "tags": [],
-  "posts": [
-    {
-      "integration": {
-        "id": "your-x-integration-id"
-      },
-      "value": [
-        {
-          "content": "Hello from the Postiz API! 🚀",
-          "image": [{ "id": "img-123", "path": "https://uploads.postiz.com/photo.jpg" }]
-        }
-      ],
-      "settings": {
-        "__type": "provider name",
-        rest of the settings
-      }
-    }
-  ]
-}'
-```
-
-## Delete a post
-
-```bash
-curl -X DELETE "https://api.postiz.com/public/v1/posts/:id" \
-  -H "Authorization: $POSTIZ_API_KEY"
-```
+Existing URLs are linked from Discord, YouTube videos and GitHub issues. If you
+must move one, add a `redirects` entry in `docs.json` in the same change. Never
+rename or reorder an existing `###` heading in
+`configuration/reference.mdx`: those anchors are linked externally.

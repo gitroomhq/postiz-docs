@@ -1,0 +1,13 @@
+{
+  "name": "postiz-docs",
+  "private": true,
+  "description": "Postiz documentation, built with Mintlify",
+  "scripts": {
+    "dev": "mint dev",
+    "check": "node scripts/check-docs.mjs",
+    "check:links": "mint broken-links"
+  },
+  "devDependencies": {
+    "mint": "^4"
+  }
+}

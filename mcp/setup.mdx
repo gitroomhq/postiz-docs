@@ -87,13 +87,14 @@ Or, if your client supports Bearer token authentication:
 - **Transport:** Streamable HTTP
 - **Authorization:** `Bearer your-api-key`
 
-## Self-Hosted
+## Base URL
 
-For self-hosted Postiz instances, replace `https://api.postiz.com` with your `NEXT_PUBLIC_BACKEND_URL`:
+Every URL on this page assumes Postiz Cloud. On a self-hosted instance, swap
+the host:
 
-```
-https://your-postiz-server.com/mcp/your-api-key
-```
+<Snippet file="base-url.mdx" />
+
+So the endpoint becomes `https://your-postiz-server.com/mcp/your-api-key`.
 
 ## Verify Connection
 

@@ -355,7 +355,8 @@
               "cli/integrations",
               "cli/analytics",
               "cli/media-upload",
-              "cli/platform-examples"
+              "cli/platform-examples",
+              "cli/self-hosted-auth-server"
             ]
           },
           {

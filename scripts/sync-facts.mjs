@@ -13,7 +13,7 @@
  *
  * Regions:
  *   pricing    -> cloud/plans.mdx
- *   limits     -> cloud/plans.mdx
+ *   limits     -> cloud/limits.mdx
  *   platforms  -> guide/platforms/overview.mdx
  *   analytics  -> guide/analytics.mdx
  *
@@ -247,7 +247,7 @@ if (process.argv.includes('--print')) {
 
 const results = [
   applyRegion('cloud/plans.mdx', 'pricing', pricingTable(pricing)),
-  applyRegion('cloud/plans.mdx', 'limits', limitsTable(pricing)),
+  applyRegion('cloud/limits.mdx', 'limits', limitsTable(pricing)),
   applyRegion('guide/platforms/overview.mdx', 'platforms', platformsTable(providers)),
   applyRegion('guide/analytics.mdx', 'analytics', analyticsTable(providers)),
 ];

@@ -1,0 +1,80 @@
+---
+title: Refunds and support
+description: 'Getting money back, fixing billing page problems, and reaching a person'
+icon: 'life-ring'
+---
+
+<Snippet file="audience/cloud-only.mdx" />
+
+## Refunds
+
+Postiz can issue a refund through the in-app support chat, without waiting for
+a human. The conditions are fixed and enforced automatically:
+
+- **One refund per customer**, ever.
+- The charge must be a **subscription charge**, not a one-off.
+- It must be **less than 60 days old**.
+- The amount is capped at **one month** of your plan. A yearly charge is
+  refunded at one twelfth.
+- **Your subscription is cancelled** as part of the refund.
+
+If any condition is not met, the chat tells you which one. Those rules are the
+policy: there is no longer window available by asking.
+
+## Billing page problems
+
+<AccordionGroup>
+  <Accordion title='"Failed to load Stripe.js"'>
+    The billing page loads Stripe's script from `js.stripe.com`. An ad blocker
+    or privacy extension blocking it stops the checkout form rendering.
+
+    Allow `*.stripe.com`, allow third-party scripts on the Postiz domain, or
+    try a clean browser profile to confirm it is an extension.
+  </Accordion>
+
+  <Accordion title="The billing page is blank or throws errors">
+    The page uses browser storage that some private and incognito modes
+    disable. Open it in a normal window.
+  </Accordion>
+
+  <Accordion title="A discount code will not apply">
+    Codes are case-sensitive and validated server side. Check the spelling and
+    case, that it has not been used or expired, and that it applies to the plan
+    you are moving to. Promo codes apply to **monthly** plans only, see
+    [Codes and offers](/cloud/codes-and-offers).
+  </Accordion>
+
+  <Accordion title='"Another account already has a subscription"'>
+    Checkout refuses when another account with the same email address already
+    has an active subscription. Consolidate onto one account, or use a
+    different email for the second organisation.
+  </Accordion>
+</AccordionGroup>
+
+## Closing your account
+
+There is no self-serve account deletion or data export in Postiz today. For
+account closure or a copy of your data, use the contact details on
+[postiz.com](https://postiz.com) rather than Discord, since it involves account
+details you should not post publicly.
+
+Cancelling your subscription is not the same as closing your account: see
+[Downgrades and cancellation](/cloud/downgrades).
+
+## Getting help
+
+| What you need | Where to go |
+|---|---|
+| A product question or something not working | [Discord](https://discord.postiz.com) |
+| A bug in the app | [GitHub issues](https://github.com/gitroomhq/postiz-app/issues) |
+| A refund | The in-app support chat |
+| Anything with account or payment details | The contact details on [postiz.com](https://postiz.com) |
+
+<Warning>
+Never post API keys, OAuth secrets or payment details in Discord or a GitHub
+issue. Both are public.
+</Warning>
+
+Before opening a billing ticket, check the accordions above: a large share of
+"I was charged but the page is broken" reports turn out to be a script blocker
+or a private window.

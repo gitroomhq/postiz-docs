@@ -1,0 +1,73 @@
+---
+title: Downgrades and cancellation
+sidebarTitle: Downgrades
+description: 'What actually changes in your account when a plan shrinks'
+icon: 'arrow-down'
+---
+
+<Snippet file="audience/cloud-only.mdx" />
+
+Moving to a smaller plan does not ask you what to keep. Postiz enforces the new
+limits immediately and picks for you. Read this before changing plan.
+
+## Channels over the new cap
+
+Channels above the new limit are **disabled**, not deleted.
+
+Postiz chooses which ones. If the choice matters, disable the channels you can
+live without **before** you downgrade, so the ones that survive are the ones
+you picked.
+
+Nothing is lost: disabled channels keep their history and re-enable in one
+click, as long as you are within the cap.
+
+<Warning>
+Scheduled posts on a disabled channel do not publish. After a downgrade, check
+the calendar for posts on channels that got switched off.
+</Warning>
+
+## Team members
+
+Dropping to a plan without team members **disables every other member** of your
+organisation. They cannot log in to it, though their accounts still exist.
+
+Upgrading back re-enables them. Nothing is deleted in between.
+
+## RSS auto-posting
+
+Losing RSS auto-posting stops the feeds. They are not deleted, but they stop
+producing posts.
+
+## Webhooks
+
+Webhooks above the new allowance stop firing.
+
+## Features that disappear from the interface
+
+Settings tabs vanish when your plan no longer includes them: Teams, Webhooks,
+Auto Post, Sets, Signatures, Developers. The underlying data stays.
+
+Your API key in particular still exists, but API access stops working, so
+anything built on it breaks until you upgrade again.
+
+## Cancelling entirely
+
+Cancelling ends the subscription at the end of the paid period. After that:
+
+- **Publishing stops.** Scheduled posts stay on the calendar but are not
+  published, and are not published retroactively if you subscribe again later.
+- **API access stops.**
+- **Your data stays.** Channels, posts, media and settings are all still there.
+
+## Lifetime deals
+
+Accounts on a lifetime deal are not affected by any of the above. See
+[Codes and offers](/cloud/codes-and-offers).
+
+## Before you downgrade: a checklist
+
+1. Count the channels you actually need, and disable the rest yourself.
+2. Note which team members will lose access.
+3. Check whether anything you have built depends on the API or on webhooks.
+4. Look at scheduled posts on channels that are about to be disabled.
+5. Then change the plan.

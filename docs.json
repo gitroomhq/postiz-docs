@@ -13,6 +13,16 @@
       "source": "/configuration/create-provider",
       "destination": "/contributing/create-provider",
       "permanent": true
+    },
+    {
+      "source": "/troubleshooting/billing",
+      "destination": "/cloud/refunds-and-support",
+      "permanent": true
+    },
+    {
+      "source": "/troubleshooting/channel-limits",
+      "destination": "/cloud/limits",
+      "permanent": true
     }
   ],
   "navigation": {
@@ -116,14 +126,19 @@
           {
             "group": "Postiz Cloud",
             "pages": [
-              "cloud/overview"
+              "cloud/overview",
+              "cloud/plans",
+              "cloud/trial"
             ]
           },
           {
             "group": "Billing",
             "pages": [
-              "troubleshooting/billing",
-              "troubleshooting/channel-limits"
+              "cloud/subscription",
+              "cloud/limits",
+              "cloud/downgrades",
+              "cloud/codes-and-offers",
+              "cloud/refunds-and-support"
             ]
           }
         ]

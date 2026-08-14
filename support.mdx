@@ -1,67 +1,69 @@
 ---
 title: Support
-description: 'Get help with Postiz'
+description: 'Where to go for which kind of problem'
+icon: 'comments-question'
 ---
 
-Sometimes, things can go wrong, or you need some help!
+## Where to go
 
-Note that the Self Hosted version of Postiz is supported by the community in their
-free time, on a best-efforts basis. Please post your question and be patient.
+| What you have | Where to go |
+|---|---|
+| Something in the app is not working | [Discord](https://discord.postiz.com), the fastest route |
+| A reproducible bug | [GitHub issues](https://github.com/gitroomhq/postiz-app/issues/new/choose) |
+| A self-hosting problem | [Discord](https://discord.postiz.com), after checking [self-host troubleshooting](/troubleshooting/self-host) |
+| A billing question or a refund | [Refunds and support](/cloud/refunds-and-support) |
+| Anything involving account or payment details | The contact section on [postiz.com](https://postiz.com), not a public channel |
+
+<Warning>
+Never post API keys, OAuth secrets or payment details in Discord or in a GitHub
+issue. Both are public.
+</Warning>
+
+<Note>
+Self-hosted Postiz is supported by the community in their free time, on a
+best-effort basis. Post your question and be patient, and include the detail
+below so someone can actually help.
+</Note>
+
+## Check first
 
 <CardGroup cols={2}>
-  <Card title="Discord" icon="discord" href="https://discord.com/invite/sf7QjTcX37">
-    Flexible chat, with screenshots and screen sharing, probably the best option for support.
+  <Card title="Troubleshooting" icon="life-ring" href="/troubleshooting/overview">
+    Connect errors, upload failures, login problems, known issues.
   </Card>
-  <Card title="GitHub Issues" icon="github" href="https://github.com/gitroomhq/postiz-app/issues/new/choose">
-    Backup option if you are unable to use Discord.
+  <Card title="Posting rules by platform" icon="table-list" href="/guide/platforms/overview">
+    Most "the platform rejected my post" cases are a platform rule.
   </Card>
 </CardGroup>
 
-## Postiz Cloud: billing & refunds
+## How to ask so you get an answer
 
-For questions specific to a paid Postiz Cloud subscription (refunds,
-invoice changes, plan downgrades, account closure):
-
-- **Discord** is still the fastest route: use the `#support` channel and a
-  team member will reach out. Don't share API keys, OAuth secrets, or
-  payment details in public channels.
-- **GitHub Issues** are for bugs in the open-source app, not for billing.
-- For anything that needs to be handled privately (refunds, account
-  data, GDPR requests), see the contact section on [postiz.com](https://postiz.com).
-
-Before opening a billing ticket, check the [troubleshooting pages](/troubleshooting/billing)
-many "I was charged but X" issues turn out to be a Stripe.js script
-blocker or a private-window localStorage issue.
-
-## How to effectively ask for support
-
-Try to follow this guide when asking for support, in this order; **Goal, Environment, Changes, Results**.
+Follow this order: **goal, environment, changes, results.**
 
 ### Goal
 
-Start off by explaining what you were trying to do:
-- *I want to schedule a post on Reddit at 6pm*
-- *I want to run in a Linux container on a Raspberry Pi*
-- *I want to use a custom domain name*
+What were you trying to do?
+
+- *I want to schedule a post to Reddit at 6pm*
+- *I want to run Postiz in a container on a Raspberry Pi*
+- *I want to use a custom domain*
 
 ### Environment
 
-Share the relevant parts about your environment. Web App issues; Are you using Firefox, Chrome, etc? Installation/Other issues; a Mac, Linux, Windows, how did you install?
-- *I'm using Firefox on Windows 10*
-- *I'm using a Raspberry Pi 4 with Ubuntu 20.04, and Node version 18*
-- *This is a new installation on a Mac*
+- Cloud, or self-hosted? If self-hosted, how did you install it and which
+  version?
+- Which browser and operating system?
 
 ### Changes
 
-Most likely something has changed, what is it?
-- *I updated my browser to the latest version and now ...*
-- *I found a change in the latest version and now ...*
-- *I think this used to work, but now...*
+What changed just before it broke? An upgrade, a new browser, a config edit, a
+plan change. "It used to work" is useful information, but "it used to work
+until I upgraded to X" is far more useful.
 
 ### Results
 
-What happened? What did you expect to happen?
-- *I see a blank screen*
-- *I see an error message*
-- *I see a 404 page*
+What happened, and what did you expect? Quote the exact error text rather than
+describing it, and include a screenshot where the interface is involved.
 
+Error messages on failed posts come from the platform rather than from Postiz,
+so the exact wording is usually the thing that identifies the problem.

@@ -73,4 +73,20 @@ The Postiz backend needs network access to reach your Mastodon instance. If the 
 1. From inside the backend container, run `curl -I https://your-instance.example.com/`. If that fails, fix DNS/egress before retrying.
 2. If you're behind a corporate proxy, set `HTTPS_PROXY` on the backend.
 3. Confirm `MASTODON_URL` exactly matches your instance — protocol included, no trailing slash issues.
+4. If the logs show `Error: Blocked IP`, your instance hostname resolves to a private IP and the SSRF guard rejected it, see the media troubleshooting below.
+
+### "fetch failed" when posting with media (text posts work)
+
+Text posts publish fine, but posts with images fail with `fetch failed`, and the orchestrator logs show `Error: Blocked IP`.
+
+**Cause:** before uploading media to your instance, Postiz downloads it from its own public media URL (e.g. `https://postiz.example.com/uploads/...`). If that hostname resolves to a private IP from inside the container, common behind home reverse proxies like Caddy, split DNS, or hairpin NAT, the SSRF guard blocks the fetch.
+
+**Fix**
+
+1. Set `DISABLE_SSRF_PROTECTION=true` on the backend and orchestrator containers.
+2. Restart the containers.
+
+Alternatively, fix resolution instead: make the media hostname resolve to a reachable address from inside the container (e.g. a Docker DNS alias or split-horizon DNS entry) and keep the protection on.
+
+Note this disables SSRF protection globally, only do it when Postiz runs on a trusted private network. See [`DISABLE_SSRF_PROTECTION`](/configuration/reference#disable_ssrf_protection).
 

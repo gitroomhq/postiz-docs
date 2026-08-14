@@ -74,6 +74,9 @@ connection.
   reach (firewall, missing DNS).
 - GMB metrics endpoint blocked by egress filtering.
 - A reverse proxy in front of Postiz is rewriting the outbound request.
+- The logs show `Error: Blocked IP`, the URL resolved to a private IP
+  and Postiz's SSRF guard rejected it. For trusted private networks, see
+  [`DISABLE_SSRF_PROTECTION`](/configuration/reference#disable_ssrf_protection).
 
 **Fix**
 

@@ -60,7 +60,10 @@ or sits behind authentication, the upload fails.
 
 - Make sure the source URL is publicly reachable HTTPS, with no auth.
 - Don't link to private S3 URLs, signed URLs that have expired, or
-  intranet hosts.
+  intranet hosts. URLs resolving to private or internal IPs are blocked
+  by design (`Error: Blocked IP` in the logs); for trusted-network
+  deployments, see
+  [`DISABLE_SSRF_PROTECTION`](/configuration/reference#disable_ssrf_protection).
 - If the source is consistently slow, pre-download the file locally and
   use the multipart `/upload` endpoint instead.
 

@@ -17,7 +17,10 @@ WordPress integration allows you to publish posts to your WordPress site. You ca
     "id": "image-id",
     "path": "https://uploads.postiz.com/featured.jpg"
   },
-  "type": "post"
+  "type": "post",
+  "categories": [12],
+  "tags": [45, 46],
+  "status": "publish"
 }
 ```
 
@@ -31,6 +34,24 @@ WordPress integration allows you to publish posts to your WordPress site. You ca
 | `main_image.id` | string | ✅ | Image ID |
 | `main_image.path` | string | ✅ | Image URL |
 | `type` | string | ✅ | Post type (depends on your WordPress setup) |
+| `categories` | number[] | ❌ | Category IDs to file the post under |
+| `tags` | number[] | ❌ | Tag IDs to apply |
+| `status` | string | ❌ | `publish`, `draft`, `pending` or `private` |
+
+### `status`
+
+| Value | Description |
+|-------|-------------|
+| `publish` | Publish immediately |
+| `draft` | Save as a draft in WordPress |
+| `pending` | Submit for review |
+| `private` | Publish, visible only to logged-in users with permission |
+
+<Note>
+`categories` and `tags` take **numeric WordPress IDs**, not names. Look them up
+in your WordPress admin, or through the WordPress REST API, before sending
+them.
+</Note>
 
 ## Example
 

@@ -1,0 +1,68 @@
+---
+title: 'Tumblr Settings'
+description: 'Provider settings for Tumblr posts'
+---
+
+<Card title="What Tumblr supports in Postiz" icon="table-list" href="/guide/platforms/overview">
+  Character limits, media rules and how these settings appear in the app.
+</Card>
+
+## Overview
+
+Every setting on Tumblr is optional: a post with no settings at all is valid.
+One Tumblr account can be connected as several channels, one per blog, so the
+destination blog is a property of the channel rather than of the post.
+
+## Settings Schema
+
+```json
+{
+  "__type": "tumblr",
+  "title": "Post title",
+  "link": "https://example.com/article",
+  "sourceUrl": "https://example.com/original",
+  "tags": "design, typography, process"
+}
+```
+
+## Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `__type` | string | ✅ | Must be `"tumblr"` |
+| `title` | string | ❌ | Post title, up to 4096 characters |
+| `link` | string | ❌ | URL the post links to. Must be a valid URL |
+| `sourceUrl` | string | ❌ | Attribution URL for reblogged or quoted content |
+| `tags` | string | ❌ | Comma-separated tags, up to 4096 characters |
+
+<Note>
+`tags` is a single **string**, not an array. Separate tags with commas.
+</Note>
+
+## Media
+
+Tumblr accepts up to 30 images, or a single video, per post.
+
+## Example
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": { "id": "your-tumblr-integration-id" },
+      "value": [
+        { "content": "A short write-up of the process behind this piece.", "image": [] }
+      ],
+      "settings": {
+        "__type": "tumblr",
+        "title": "Behind the process",
+        "tags": "design, process"
+      }
+    }
+  ]
+}
+```

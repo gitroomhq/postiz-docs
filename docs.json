@@ -338,7 +338,9 @@
               "public-api/providers/skool",
               "public-api/providers/kick",
               "public-api/providers/twitch",
-              "public-api/providers/moltbook"
+              "public-api/providers/moltbook",
+              "public-api/providers/mewe",
+              "public-api/providers/tumblr"
             ]
           }
         ]

@@ -132,6 +132,144 @@ different content.
 | Markdown | Adds links, lists and headings | Discord, Medium, Dev.to, Hashnode, Whop |
 | HTML | Rich formatting | X, WordPress, Listmonk |
 
+## Platform details
+
+Most platforms behave the way you would expect. These are the ones with rules
+that catch people out.
+
+<AccordionGroup>
+  <Accordion title="X: long-form articles and reply controls">
+    X posts carry a **Who can reply** setting: everyone, accounts you follow,
+    mentioned accounts, subscribers, or verified accounts. You can also mark a
+    post as **Made with AI** or a **Paid partnership**, and share it into a
+    community.
+
+    Switching the post type to **article** turns it into long-form: the limit
+    becomes 100,000 characters, the content is treated as rich text rather
+    than plain text, and a title is required. Articles take images only, and
+    an article saved as a draft cannot have thread replies attached.
+  </Accordion>
+
+  <Accordion title="TikTok: direct post vs upload">
+    TikTok offers two posting methods and they behave completely differently.
+
+    **Direct post** publishes to the account and applies your settings:
+    privacy level, comments, duet, stitch, auto-add music, branded content
+    disclosure.
+
+    **Upload** does **not** publish. It sends the media to the TikTok app's
+    inbox, where you must finish and publish it manually within 24 hours or it
+    is discarded. In this mode TikTok ignores every setting except the title,
+    silently. If you need any of those settings applied, use direct post.
+
+    Two more: duet, stitch and the AI disclosure are video-only, and auto-add
+    music is photo-only. Settings that do not apply to your attachment type are
+    dropped.
+  </Accordion>
+
+  <Accordion title="Instagram: reels, stories and trial reels">
+    Instagram always needs at least one attachment. A story takes a single
+    picture, and a reel is a single video.
+
+    **Trial reels** publish to non-followers first, then graduate to your
+    followers either manually or automatically based on performance. A trial
+    reel must be exactly one video.
+
+    **Audio** can only be attached to a single-video reel, never to a story,
+    and only on channels connected through the Facebook Business flow.
+
+    Postiz supports two Instagram connections: **Facebook Business** and
+    **Standalone**. They differ in which Meta app they authorise against, which
+    is why they are two platforms in the list.
+  </Accordion>
+
+  <Accordion title="LinkedIn: carousels are PDFs">
+    A LinkedIn carousel needs **at least two images and no video**. Postiz
+    combines your images into a PDF and uploads it as a document share, because
+    that is how LinkedIn implements carousels. You do not upload a PDF
+    yourself.
+
+    Comments on LinkedIn are **text-only**: media on a thread part is rejected.
+
+    Analytics are available for LinkedIn **Pages**, not personal profiles.
+  </Accordion>
+
+  <Accordion title="Pinterest: video pins need a cover">
+    A pin needs at least one media and at most five images. A **video pin needs
+    two attachments**: the video, and a cover image. Set the cover through the
+    media settings on the video.
+
+    Pins also carry a board, a title, a destination link and a dominant colour.
+    The board is required.
+  </Accordion>
+
+  <Accordion title="Reddit: settings are per subreddit">
+    Reddit settings are a list, one entry per subreddit, each with its own
+    title, post type and flair. The same post can go to several subreddits with
+    different titles.
+
+    Post types are link, self (text), image, video and video GIF. A link post
+    requires a URL, and media post types need exactly one attachment. Some
+    subreddits require a flair, and Postiz surfaces that requirement when you
+    pick the subreddit.
+  </Accordion>
+
+  <Accordion title="YouTube: exactly one video">
+    YouTube takes exactly one attachment and it must be a video. Title,
+    privacy, made-for-kids and tags are all part of the post settings, and the
+    combined length of all tags is capped at 500 characters.
+
+    A custom thumbnail is supported, and separate from the video itself.
+  </Accordion>
+
+  <Accordion title="Facebook: stories and background posts">
+    A Facebook story needs at least one attachment, and **each attachment
+    becomes its own story** rather than one story with several slides.
+
+    Short text-only posts can use a coloured background preset. Those are
+    Pages only, text-only, and capped at 130 characters. Adding media or
+    exceeding the limit silently drops the background.
+  </Accordion>
+
+  <Accordion title="Google Business: no video, and post types">
+    Google Business posts are text with at most one image. Video is not
+    supported at all.
+
+    A post is a standard update, an event, or an offer. Events need a title and
+    a start and end date and time. Offers add a coupon code, a redeem URL and
+    terms. All types can carry a call to action and its URL.
+  </Accordion>
+
+  <Accordion title="Blogging platforms: Medium, Dev.to, Hashnode, WordPress">
+    These take markdown or HTML rather than plain text, and all four want a
+    title. Canonical URLs are supported, so you can syndicate without hurting
+    the original's search ranking.
+
+    WordPress additionally takes categories, tags and a publish status, and
+    both categories and tags are **numeric IDs** rather than names.
+
+    None of them need a developer app: you connect with your own API key or
+    application password.
+  </Accordion>
+
+  <Accordion title="Discord, Slack, Telegram: bots and channels">
+    These post through a bot into a specific channel or chat, so the channel is
+    part of the post settings.
+
+    Discord and Telegram let you override the bot's display name and avatar per
+    channel, which is how a client's posts can carry their branding. See
+    [Manage a channel](/guide/channels/manage).
+  </Accordion>
+
+  <Accordion title="Mastodon, Bluesky, Nostr, Lemmy: self-hosted and federated">
+    These let you point at your own server. Bluesky takes a service URL and an
+    app password, Lemmy an instance URL and credentials, Mastodon an instance,
+    Nostr a private key.
+
+    None of them have per-post settings: content and media only.
+  </Accordion>
+</AccordionGroup>
+
 ## Analytics support
 
 Only 10 platforms report account-level analytics back to Postiz. See

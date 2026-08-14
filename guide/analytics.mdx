@@ -1,0 +1,93 @@
+---
+title: Analytics
+description: 'Which platforms report metrics, what they report, and over what period'
+icon: 'chart-line'
+---
+
+**Where:** the Analytics section
+
+Analytics shows account-level performance for the platforms that expose it.
+Per-post numbers live on the post itself, see
+[Post actions and statistics](/guide/posts/actions-and-stats).
+
+## Platforms with analytics
+
+Only 10 of the 34 platforms report analytics back to Postiz. The rest either
+have no analytics API or do not expose one Postiz can use, so they do not
+appear in the left rail here even though they work fine for posting.
+
+{/* GENERATED:analytics */}
+| Platform | Ranges available |
+|---|---|
+| Facebook Page | 7, 30, 90 days |
+| Instagram (Facebook Business) | 7, 30 days |
+| Instagram (Standalone) | 7, 30 days |
+| LinkedIn Page | 7, 30, 90 days |
+| Tiktok | 7, 30 days |
+| YouTube | 7, 30, 90 days |
+| Google My Business | 7, 30, 90 days |
+| Pinterest | 7, 30, 90 days |
+| Threads | 7, 30 days |
+| X | 7, 30, 90 days |
+{/* /GENERATED:analytics */}
+
+<Note>
+LinkedIn analytics are available for **Pages**, not personal profiles, because
+that is what LinkedIn's API exposes.
+</Note>
+
+## What each platform reports
+
+Metric names come from the platforms themselves, so this is indicative rather
+than exhaustive. Several platforms return whatever set their API decides to
+send on the day.
+
+| Platform | Typical metrics |
+|---|---|
+| Facebook Page | Page impressions, post engagement, followers, media views |
+| Instagram | Followers, reach, likes, views, comments, shares, saves, replies |
+| LinkedIn Page | Page views, clicks, shares, engagement, comments, organic and paid followers |
+| TikTok | Followers, following, total likes, video count |
+| YouTube | Estimated minutes watched, average view duration and percentage, subscribers gained and lost, likes |
+| Pinterest | Impressions, pin clicks, click rate, engagement, saves, outbound clicks |
+| Threads | Views, likes, replies, reposts, quotes |
+| X | Impressions, likes, quotes, replies, reposts, bookmarks |
+| Google My Business | Website clicks, phone calls, direction requests, desktop and mobile map views |
+
+## Reading the cards
+
+Each metric is a card with a sparkline, a total for the period, and a trend
+indicator against the previous period of the same length. Changing the range
+recalculates both.
+
+## When a chart is empty
+
+<AccordionGroup>
+  <Accordion title="The channel was connected recently">
+    Most platforms only return data from the point the connection was
+    authorised. Give it a few days.
+  </Accordion>
+  <Accordion title="The account is too new or unverified">
+    Several platforms withhold analytics for new accounts, and Google Business
+    withholds them for unverified profiles. The API returns nothing rather
+    than an error, so the chart is simply blank.
+  </Accordion>
+  <Accordion title="The channel needs reconnecting">
+    An expired token breaks analytics before it breaks posting. Check for a
+    red marker in the channel sidebar.
+  </Accordion>
+  <Accordion title="The date range is longer than the platform allows">
+    Try 7 days. If that works and 90 does not, the platform is refusing the
+    longer window for this account.
+  </Accordion>
+</AccordionGroup>
+
+## Empty state
+
+With no analytics-capable channels connected, the page tells you which
+platforms qualify and links back to the calendar to connect one.
+
+## Analytics over the API
+
+Everything here is also available through the
+[Public API](/public-api/analytics/platform), both per channel and per post.

@@ -52,6 +52,41 @@
             ]
           },
           {
+            "group": "Calendar and posts",
+            "pages": [
+              "guide/calendar/overview",
+              "guide/calendar/moving-posts",
+              "guide/posts/actions-and-stats",
+              "guide/approvals"
+            ]
+          },
+          {
+            "group": "Insights",
+            "pages": [
+              "guide/analytics",
+              "guide/media-library"
+            ]
+          },
+          {
+            "group": "Automation",
+            "pages": [
+              "guide/automations/plugs",
+              "guide/automations/auto-post-rss",
+              "guide/automations/webhooks",
+              "guide/automations/third-party",
+              "guide/agents"
+            ]
+          },
+          {
+            "group": "Settings",
+            "pages": [
+              "guide/settings/overview",
+              "guide/settings/team",
+              "guide/settings/reusables",
+              "guide/settings/developers"
+            ]
+          },
+          {
             "group": "Platforms",
             "pages": [
               "guide/platforms/overview"

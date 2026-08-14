@@ -26,7 +26,7 @@ For the split setup, forward:
 | `/public/*` | Backend `:3000` | Public API. |
 | `/auth/*` | Backend `:3000` | Sign-in flow. |
 | `/integrations/*` | Backend `:3000` | OAuth callbacks. |
-| `/mcp/*`, `/sse/*`, `/message/*` | Backend `:3000` | MCP transport — must support streaming HTTP. |
+| `/mcp/*`, `/sse/*`, `/message/*` | Backend `:3000` | MCP transport, must support streaming HTTP. |
 | `/webhooks/*` | Backend `:3000` | Inbound webhook callbacks from providers (Stripe, social platforms). |
 
 For configured examples, see [Caddy](/reverse-proxies/caddy),
@@ -61,10 +61,10 @@ const nextConfig = {
 
 Most tunnels support WSS out of the box. If you've put your own
 reverse proxy in front of the tunnel, ensure `Upgrade` and `Connection`
-headers pass through — without them the HMR client disconnects every
+headers pass through, without them the HMR client disconnects every
 few seconds.
 
-## `redirectmeto` — why OAuth redirects sometimes go through a third party
+## `redirectmeto`: why OAuth redirects sometimes go through a third party
 
 When `FRONTEND_URL` is plain HTTP, several social providers
 (Slack, TikTok, Threads, VK, Instagram standalone) refuse to register
@@ -76,7 +76,7 @@ https://redirectmeto.com/http://localhost:4200/integrations/social/slack
 ```
 
 The browser hits `redirectmeto`, which serves an HTTPS page that
-immediately redirects to the HTTP target — satisfying the provider's
+immediately redirects to the HTTP target, satisfying the provider's
 HTTPS-only validation without needing your dev environment to have a
 TLS cert.
 

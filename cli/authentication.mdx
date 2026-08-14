@@ -5,7 +5,7 @@ description: 'Set up OAuth2 or API key authentication for the Postiz CLI'
 
 ## OAuth2 (Recommended)
 
-Authenticate using the device flow — no client ID or secret needed:
+Authenticate using the device flow, no client ID or secret needed:
 
 ```bash
 postiz auth:login
@@ -154,6 +154,6 @@ postiz auth:login
 
 ### Deployment
 
-Any platform that runs Node.js and can connect to Postgres works — Railway, Fly.io, Render, VPS, etc.
+Any platform that runs Node.js and can connect to Postgres works, Railway, Fly.io, Render, VPS, etc.
 
 The server is stateless beyond Postgres, so it scales horizontally. Run multiple instances behind a load balancer if needed.

@@ -8,7 +8,7 @@ description: 'Payload limits, upload-from-url, video, and cancel-in-flight behav
 The Postiz backend accepts JSON bodies up to **50 MB** on the post-creation
 routes (`POST /public/v1/posts` for the public API, plus the internal
 `/posts` and `/copilot/*` endpoints used by the web UI). Other endpoints
-fall back to the framework default and are much smaller — don't inline
+fall back to the framework default and are much smaller, don't inline
 base64-encoded images in arbitrary endpoints.
 
 ## Accepted MIME types (Public API)
@@ -29,12 +29,12 @@ the uploaded file's detected MIME type against this allowlist:
 
 PDFs are **not** accepted by the public API. The only PDF flow Postiz
 supports is LinkedIn document carousels, which are produced internally
-by converting an image carousel to PDF — you can't post a PDF directly
+by converting an image carousel to PDF, you can't post a PDF directly
 through the public API.
 
 ## "PayloadTooLargeError" when creating a post
 
-You sent a request body larger than 50 MB to `POST /public/v1/posts` —
+You sent a request body larger than 50 MB to `POST /public/v1/posts`,
 almost always because you inlined image data instead of uploading first.
 
 **Fix:** upload media via `/public/v1/upload` (or `/public/v1/upload-from-url`),
@@ -88,7 +88,7 @@ downstream.
 ## "uploader plugin does not allow removing files during an upload"
 
 You hit Cancel on a file that was already being uploaded. Postiz's
-uploader doesn't support mid-flight cancellation — wait for the upload
+uploader doesn't support mid-flight cancellation, wait for the upload
 to complete, then delete the asset from the post.
 
 This is a known UX limitation; see [Known Issues](/troubleshooting/known-issues).

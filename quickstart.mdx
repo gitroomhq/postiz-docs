@@ -1,28 +1,133 @@
 ---
-title: Quickstart
-description: 'Get started with Postiz installation'
+title: Schedule your first post
+sidebarTitle: Quickstart
+description: 'From an empty account to a scheduled post, in five steps'
+icon: 'rocket'
+keywords: ['install', 'installation', 'docker', 'self host', 'getting started', 'first post']
 ---
 
-## Self Hosted installation options
+This walks through the whole loop once: get into Postiz, connect a channel,
+write a post, schedule it, and confirm it went out. It is the same in both
+Postiz Cloud and a self-hosted install.
 
-You can choose between the following installation options;
+<Note>
+Looking for **installation** instructions? Those moved to
+[Installation options](/installation/overview).
+</Note>
+
+## Step 1: Get into Postiz
+
+<Tabs>
+  <Tab title="Postiz Cloud">
+    Sign up at [postiz.com](https://postiz.com) and pick a plan. There is no
+    free tier on cloud: the app stays behind the plan picker until you
+    subscribe, and new organisations are usually offered a
+    [7 day trial](/cloud/trial).
+
+    Once you are in, you land on the **Calendar**.
+  </Tab>
+  <Tab title="Self-hosted">
+    Follow [Installation options](/installation/overview), then open your
+    instance and register. The first account becomes the organisation owner.
+
+    There are no plans or limits on a self-hosted install: every install
+    behaves as the top tier.
+  </Tab>
+</Tabs>
+
+## Step 2: Connect a channel
+
+A **channel** is one connected social account: one X profile, one Discord
+server, one LinkedIn page. Everything else in Postiz hangs off channels.
+
+<Steps>
+  <Step title="Open the channel list">
+    On the **Calendar**, the left sidebar lists your channels. Click
+    **Add Channel**.
+  </Step>
+  <Step title="Pick a platform">
+    You will get one of four connection flows depending on the platform: a
+    normal OAuth redirect, a credentials form you fill in yourself, an
+    instance URL prompt, or the browser extension. See
+    [Connect a channel](/guide/channels/connect) for what each one means.
+
+    <Tabs>
+      <Tab title="Postiz Cloud">
+        Every platform is ready to connect. Click it, authorise on the
+        platform's own screen, and you come back to Postiz.
+      </Tab>
+      <Tab title="Self-hosted">
+        Most platforms need you to register a developer app first and put the
+        keys in your environment, see [Provider API keys](/providers/overview).
+
+        Eight platforms need no setup at all because you supply your own
+        credentials in the dialog: Bluesky, Lemmy, Nostr, Medium, Dev.to,
+        Hashnode, WordPress and Listmonk. Those are the fastest way to see
+        Postiz working.
+      </Tab>
+    </Tabs>
+  </Step>
+  <Step title="Confirm it appears">
+    The channel shows up in the sidebar with its avatar. A red marker means it
+    needs attention, usually a reconnect.
+  </Step>
+</Steps>
+
+## Step 3: Write the post
+
+Click **Create Post**, or click any empty slot on the calendar to start at that
+time.
+
+1. **Select the channels** you want to publish to at the top of the composer.
+2. **Write once in the Global tab.** The same text goes to every selected
+   channel. To tailor one of them, switch to that channel's tab and unlock it,
+   see [Global vs per-channel content](/guide/composer/global-vs-per-channel).
+3. **Add media** by dragging a file into the editor, pasting an image, or
+   picking from the media library.
+4. **Fill in the per-channel settings** on the right. Some platforms require
+   them: YouTube needs a title, Reddit needs a subreddit, Pinterest needs a
+   board.
+
+The preview column on the right renders the post as each platform will show
+it, which is the fastest way to catch a bad line break or a truncated title.
+
+## Step 4: Schedule it
+
+Pick a date and time at the bottom of the composer, then choose how to publish:
+
+| Button | What it does |
+|---|---|
+| **Save as Draft** | Keeps it on the calendar, never publishes it |
+| **Add to calendar** | Schedules it for the time you picked |
+| **Post Now** | Publishes immediately, hover the schedule button to find it |
+
+If a channel is missing something required, Postiz blocks the save and jumps
+you to the offending channel with the error shown. See
+[Validation errors](/guide/composer/links-and-validation).
+
+## Step 5: Confirm it published
+
+Back on the calendar, the post appears in its slot. After the scheduled time it
+switches to published, and the **Preview** action on the post card opens the
+live version.
+
+If it failed, the card gets a red ring and the error is in the tooltip. The
+usual causes are a channel that needs reconnecting or a platform rule the post
+broke, see [Posting rules by platform](/guide/platforms/overview).
+
+## Where to next
 
 <CardGroup cols={2}>
-  <Card title="Docker Compose" icon="docker" href="/installation/docker-compose">
-    Recommended option for **users**
+  <Card title="How Postiz works" icon="book-open" href="/guide/concepts">
+    Channels, customers, sets, tags and time slots, defined once.
   </Card>
-  <Card title="Development" icon="code" href="/installation/development">
-    Recommended option for **developers**
+  <Card title="Finding your way around" icon="compass" href="/guide/where-things-live">
+    What every section of the app is for.
   </Card>
-</CardGroup>
-
-## Advanced installation options
-
-<CardGroup cols={2}>
-  <Card title="Docker (standalone)" icon="docker" href="/installation/docker">
-    Run from the command line with Docker
+  <Card title="Posting rules by platform" icon="table-list" href="/guide/platforms/overview">
+    Character limits, media rules and settings for all 34 platforms.
   </Card>
-  <Card title="Helm" icon="dharmachakra" href="/installation/kubernetes-helm">
-    Run with Kubernetes + Helm
+  <Card title="Automate it" icon="robot" href="/guide/automations/auto-post-rss">
+    RSS feeds, webhooks, auto-repost plugs and the API.
   </Card>
 </CardGroup>

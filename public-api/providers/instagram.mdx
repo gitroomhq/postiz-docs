@@ -77,7 +77,7 @@ Attach music or an original sound to a Reel, based on the
 [Instagram Audio API](https://developers.facebook.com/docs/instagram-platform/content-publishing/audio-api/).
 
 <Warning>
-Audio can only be attached to a Reel — a single video with `post_type: "post"`.
+Audio can only be attached to a Reel, a single video with `post_type: "post"`.
 It is not supported on Stories, carousels, image posts, or on
 `instagram-standalone` channels (the Audio API requires Facebook Login).
 </Warning>
@@ -103,11 +103,11 @@ curl -X POST https://api.postiz.com/public/v1/integration-trigger/{integrationId
 
 | Parameter | Description |
 |-----------|-------------|
-| `q` | Search query — leave empty to get trending audio |
+| `q` | Search query, leave empty to get trending audio |
 | `type` | `music` (royalty-free catalog) or `original_sound` (user-generated), defaults to `music` |
 
-The response contains `{ output: [{ id, title, artist, image, duration, previewUrl }] }` —
-pass the chosen `id` into `settings.audio.id`.
+The response contains `{ output: [{ id, title, artist, image, duration, previewUrl }] }`.
+Pass the chosen `id` into `settings.audio.id`.
 
 <Note>
 Only audio authorized for third-party use is returned, so the catalog can be

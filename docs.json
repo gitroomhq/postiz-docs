@@ -8,28 +8,82 @@
     "dark": "#7700b3"
   },
   "favicon": "/favicon.ico",
+  "redirects": [
+    {
+      "source": "/configuration/create-provider",
+      "destination": "/contributing/create-provider",
+      "permanent": true
+    }
+  ],
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentation",
+        "tab": "Guide",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "Get started",
             "pages": [
               "introduction",
-              "howitworks",
-              "quickstart"
+              "quickstart",
+              "guide/concepts",
+              "guide/where-things-live"
             ]
           },
           {
-            "group": "Installation",
+            "group": "Troubleshooting",
             "pages": [
+              "troubleshooting/overview",
+              "troubleshooting/oauth-connect",
+              "troubleshooting/uploads",
+              "troubleshooting/activation-and-login",
+              "troubleshooting/known-issues"
+            ]
+          },
+          {
+            "group": "Help",
+            "pages": [
+              "support"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Cloud",
+        "groups": [
+          {
+            "group": "Postiz Cloud",
+            "pages": [
+              "cloud/overview"
+            ]
+          },
+          {
+            "group": "Billing",
+            "pages": [
+              "troubleshooting/billing",
+              "troubleshooting/channel-limits"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Self-Hosting",
+        "groups": [
+          {
+            "group": "Get started",
+            "pages": [
+              "installation/overview",
               "installation/system-requirements",
+              "howitworks"
+            ]
+          },
+          {
+            "group": "Install",
+            "pages": [
               "installation/docker-compose",
               "installation/docker",
               "installation/kubernetes-helm",
-              "installation/development",
               "installation/devcontainer",
+              "installation/development",
               "installation/migration"
             ]
           },
@@ -41,13 +95,13 @@
               "configuration/emails",
               "configuration/uploads",
               "configuration/r2",
-              "configuration/polotno",
               "configuration/oauth",
+              "configuration/polotno",
               "configuration/chrome-extension"
             ]
           },
           {
-            "group": "Reverse Proxies",
+            "group": "Reverse proxies",
             "pages": [
               "reverse-proxies/caddy",
               "reverse-proxies/nginx",
@@ -56,25 +110,11 @@
             ]
           },
           {
-            "group": "Troubleshooting",
-            "pages": [
-              "troubleshooting/overview",
-              "troubleshooting/oauth-connect",
-              "troubleshooting/uploads",
-              "troubleshooting/activation-and-login",
-              "troubleshooting/billing",
-              "troubleshooting/channel-limits",
-              "troubleshooting/known-issues",
-              "troubleshooting/self-host"
-            ]
-          },
-          {
-            "group": "Providers",
+            "group": "Provider API keys",
             "pages": [
               "providers/overview",
-              "configuration/create-provider",
               {
-                "group": "Social Platforms",
+                "group": "Social platforms",
                 "expanded": true,
                 "pages": [
                   "providers/x-twitter",
@@ -91,7 +131,7 @@
                 ]
               },
               {
-                "group": "Video Platforms",
+                "group": "Video platforms",
                 "expanded": true,
                 "pages": [
                   "providers/youtube",
@@ -99,7 +139,7 @@
                 ]
               },
               {
-                "group": "Other Platforms",
+                "group": "Other platforms",
                 "expanded": true,
                 "pages": [
                   "providers/reddit",
@@ -113,6 +153,12 @@
                 ]
               }
             ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
+              "troubleshooting/self-host"
+            ]
           }
         ]
       },
@@ -122,7 +168,8 @@
           {
             "group": "Overview",
             "pages": [
-              "public-api/introduction"
+              "public-api/introduction",
+              "public-api/oauth"
             ]
           },
           {
@@ -179,7 +226,7 @@
             ]
           },
           {
-            "group": "Provider Settings (25 with custom settings)",
+            "group": "Provider settings",
             "pages": [
               "public-api/providers/x",
               "public-api/providers/linkedin",
@@ -218,58 +265,27 @@
         ]
       },
       {
-        "tab": "CLI",
+        "tab": "Automation",
         "groups": [
           {
-            "group": "Getting Started",
+            "group": "CLI",
             "pages": [
               "cli/introduction",
-              "cli/authentication"
-            ]
-          },
-          {
-            "group": "Usage",
-            "pages": [
+              "cli/authentication",
               "cli/managing-posts",
               "cli/integrations",
               "cli/analytics",
-              "cli/media-upload"
-            ]
-          },
-          {
-            "group": "Examples",
-            "pages": [
+              "cli/media-upload",
               "cli/platform-examples"
             ]
-          }
-        ]
-      },
-      {
-        "tab": "MCP",
-        "groups": [
-          {
-            "group": "Getting Started",
-            "pages": [
-              "mcp/introduction",
-              "mcp/setup"
-            ]
           },
           {
-            "group": "Reference",
+            "group": "MCP",
             "pages": [
+              "mcp/introduction",
+              "mcp/setup",
               "mcp/tools",
               "mcp/examples"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Developer App (oAuth2)",
-        "groups": [
-          {
-            "group": "OAuth2",
-            "pages": [
-              "public-api/oauth"
             ]
           }
         ]
@@ -281,7 +297,7 @@
             "group": "Development",
             "pages": [
               "developer-guide",
-              "support"
+              "contributing/create-provider"
             ]
           }
         ]

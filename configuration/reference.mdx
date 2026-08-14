@@ -10,7 +10,7 @@ The canonical list lives in the [example postiz.env file](https://raw.githubuser
 This page documents every variable Postiz reads, grouped by purpose.
 
 <Info>
-Variables marked **Required** are validated on boot — Postiz will fail to start
+Variables marked **Required** are validated on boot: Postiz will fail to start
 if they're missing or malformed.
 </Info>
 
@@ -105,7 +105,7 @@ This disables SSRF protection globally, not per provider. Only set it if your Po
 ### `NOT_SECURED`
 
 <Warning>
-Dev only. Never set in production — it disables security checks that exist for a reason.
+Dev only. Never set in production: it disables security checks that exist for a reason.
 </Warning>
 
 ### `MAIN_URL`
@@ -147,8 +147,8 @@ See also: [Email configuration](/configuration/emails).
 | Variable | Purpose |
 |---|---|
 | `EMAIL_PROVIDER` | `resend` (default) or `nodemailer`. |
-| `RESEND_API_KEY` | Resend API key — required when `EMAIL_PROVIDER=resend`. Presence of this variable also gates whether user activation is required (set → required; unset → users are auto-activated). |
-| `EMAIL_HOST` | SMTP host — required when `EMAIL_PROVIDER=nodemailer`. |
+| `RESEND_API_KEY` | Resend API key, required when `EMAIL_PROVIDER=resend`. Presence of this variable also gates whether user activation is required (set → required; unset → users are auto-activated). |
+| `EMAIL_HOST` | SMTP host, required when `EMAIL_PROVIDER=nodemailer`. |
 | `EMAIL_PORT` | SMTP port. |
 | `EMAIL_USER` | SMTP user. |
 | `EMAIL_PASS` | SMTP password. |
@@ -331,9 +331,9 @@ table is just a lookup so you can find which page documents which variable.
 | Dribbble | `DRIBBBLE_CLIENT_ID`, `DRIBBBLE_CLIENT_SECRET` | [/providers/dribbble](/providers/dribbble) |
 | Farcaster | `NEYNAR_CLIENT_ID`, `NEYNAR_SECRET_KEY`, `NEYNAR_LOGIN_URL` | [/providers/farcaster](/providers/farcaster) |
 | MeWe | `MEWE_HOST`, `MEWE_APP_ID`, `MEWE_API_KEY` | [/providers/mewe](/providers/mewe) |
-| Twitch | `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET` | API only — see [/public-api/providers/twitch](/public-api/providers/twitch) |
-| Kick | `KICK_CLIENT_ID`, `KICK_SECRET` | API only — see [/public-api/providers/kick](/public-api/providers/kick) |
-| VK | `VK_ID` | API only — see [/public-api/providers/vk](/public-api/providers/vk) |
+| Twitch | `TWITCH_CLIENT_ID`, `TWITCH_CLIENT_SECRET` | API only. See [/public-api/providers/twitch](/public-api/providers/twitch) |
+| Kick | `KICK_CLIENT_ID`, `KICK_SECRET` | API only. See [/public-api/providers/kick](/public-api/providers/kick) |
+| VK | `VK_ID` | API only. See [/public-api/providers/vk](/public-api/providers/vk) |
 | Whop | `WHOP_CLIENT_ID` | [/providers/whop](/providers/whop) |
 | GitHub (sign-in) | `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | [/configuration/oauth](/configuration/oauth) |
 | Beehiiv | `BEEHIIVE_API_KEY`, `BEEHIIVE_PUBLICATION_ID` | Newsletter provider |
@@ -351,6 +351,6 @@ hosting platform, or framework rather than set by hand.
 | `PORT` | Port the backend HTTP server binds to. Defaults to `3000`. |
 | `TZ` | Process timezone. The backend forces this to `UTC` on boot. |
 | `NODE_ENV` | Standard Node environment flag (`development` / `production`). Toggles dev-only behaviour like sourcemaps. |
-| `NEXT_RUNTIME` | Set by Next.js (`nodejs` / `edge`) to select the instrumentation hook. Framework-injected — do not set manually. |
+| `NEXT_RUNTIME` | Set by Next.js (`nodejs` / `edge`) to select the instrumentation hook. Framework-injected, do not set manually. |
 | `VERCEL_GIT_COMMIT_SHA` | Commit SHA used as the Sentry release tag on the frontend. Injected by Vercel. |
 | `GITHUB_SHA` | Fallback commit SHA for the Sentry release tag when not on Vercel. Injected by GitHub Actions. |

@@ -1,31 +1,56 @@
 ---
 title: Support
-description: 'Where to go for which kind of problem'
+description: 'How to get help, and what level of support to expect'
 icon: 'comments-question'
 ---
 
-## Where to go
+How you reach us depends on whether you are on Postiz Cloud or hosting Postiz
+yourself. The routes are different, and so is what we can promise.
 
-| What you have | Where to go |
-|---|---|
-| Something in the app is not working | [Discord](https://discord.postiz.com), the fastest route |
-| A reproducible bug | [GitHub issues](https://github.com/gitroomhq/postiz-app/issues/new/choose) |
-| A self-hosting problem | [Discord](https://discord.postiz.com), after checking [self-host troubleshooting](/troubleshooting/self-host) |
-| A billing question or a refund | [Refunds and support](/cloud/refunds-and-support) |
-| Anything involving account or payment details | The contact section on [postiz.com](https://postiz.com), not a public channel |
+<Tabs>
+  <Tab title="Postiz Cloud">
+    Paid Postiz Cloud customers have two supported routes, and both reach the
+    team:
+
+    | Route | Best for |
+    |---|---|
+    | **Email**, [support@postiz.com](mailto:support@postiz.com) | Anything involving your account, billing, refunds, or details you should not post publicly |
+    | **[Discord](https://discord.postiz.com)** | Quick questions, screenshots, and anything easier to show than to describe |
+
+    Use email whenever the answer involves your account. Discord is a public
+    server: never post API keys, OAuth secrets or payment details there.
+  </Tab>
+
+  <Tab title="Self-hosted">
+    Self-hosted Postiz is supported by the **community** in
+    [Discord](https://discord.postiz.com), where other self-hosters and
+    occasionally the team answer questions.
+
+    <Warning>
+    Support for self-hosted installs is **not guaranteed**. It is people
+    helping in their own time, so there is no response time and no commitment
+    that a given question gets answered. Post your question, include the
+    detail below, and be patient.
+    </Warning>
+
+    For a reproducible bug, an issue on
+    [GitHub](https://github.com/gitroomhq/postiz-app/issues/new/choose) is more
+    durable than a chat message and more likely to get fixed.
+
+    If you need support you can rely on, [Postiz Cloud](/cloud/overview) is the
+    supported product.
+  </Tab>
+</Tabs>
 
 <Warning>
 Never post API keys, OAuth secrets or payment details in Discord or in a GitHub
-issue. Both are public.
+issue. Both are public. Send those to
+[support@postiz.com](mailto:support@postiz.com) instead.
 </Warning>
 
-<Note>
-Self-hosted Postiz is supported by the community in their free time, on a
-best-effort basis. Post your question and be patient, and include the detail
-below so someone can actually help.
-</Note>
-
 ## Check first
+
+Most questions have an answer already written down.
 
 <CardGroup cols={2}>
   <Card title="Troubleshooting" icon="life-ring" href="/troubleshooting/overview">
@@ -34,11 +59,19 @@ below so someone can actually help.
   <Card title="Posting rules by platform" icon="table-list" href="/guide/platforms/overview">
     Most "the platform rejected my post" cases are a platform rule.
   </Card>
+  <Card title="Self-hosting problems" icon="server" href="/troubleshooting/self-host">
+    Install failures, database errors, ports, CORS, connect failures.
+  </Card>
+  <Card title="Billing and refunds" icon="credit-card" href="/cloud/refunds-and-support">
+    Plans, limits, payment problems, refund eligibility.
+  </Card>
 </CardGroup>
 
 ## How to ask so you get an answer
 
-Follow this order: **goal, environment, changes, results.**
+Follow this order: **goal, environment, changes, results.** It is the
+difference between a question someone can answer in one reply and a thread of
+clarifications.
 
 ### Goal
 
@@ -57,8 +90,8 @@ What were you trying to do?
 ### Changes
 
 What changed just before it broke? An upgrade, a new browser, a config edit, a
-plan change. "It used to work" is useful information, but "it used to work
-until I upgraded to X" is far more useful.
+plan change. "It used to work" is useful, but "it used to work until I upgraded
+to X" is far more useful.
 
 ### Results
 
@@ -66,4 +99,4 @@ What happened, and what did you expect? Quote the exact error text rather than
 describing it, and include a screenshot where the interface is involved.
 
 Error messages on failed posts come from the platform rather than from Postiz,
-so the exact wording is usually the thing that identifies the problem.
+so the exact wording is usually what identifies the problem.

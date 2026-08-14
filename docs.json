@@ -30,6 +30,28 @@
             ]
           },
           {
+            "group": "Channels",
+            "pages": [
+              "guide/channels/connect",
+              "guide/channels/manage",
+              "guide/channels/time-slots",
+              "guide/channels/customers"
+            ]
+          },
+          {
+            "group": "Creating posts",
+            "pages": [
+              "guide/composer/overview",
+              "guide/composer/global-vs-per-channel",
+              "guide/composer/writing",
+              "guide/composer/threads-and-comments",
+              "guide/composer/media",
+              "guide/composer/ai-and-imports",
+              "guide/composer/scheduling",
+              "guide/composer/links-and-validation"
+            ]
+          },
+          {
             "group": "Platforms",
             "pages": [
               "guide/platforms/overview"

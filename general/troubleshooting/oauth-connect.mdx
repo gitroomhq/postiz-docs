@@ -1,0 +1,85 @@
+---
+title: OAuth & Channel Connect Errors
+description: 'Invalid state, invalid_grant, and fetch failed during the connect flow'
+icon: 'link'
+---
+
+Connecting a social channel is the highest-volume source of user errors on
+Postiz. The OAuth handshake spans three parties, your browser, the social
+provider, and the Postiz backend, and any one of them can break the flow.
+
+## "Invalid state"
+
+By far the most common error. You see it as a flash-message after the
+provider redirects back to Postiz.
+
+**What it means:** Postiz generates a one-time CSRF token (the `state`
+parameter) when you start the connect flow and stores it against your
+session. The provider returns it in the redirect; Postiz compares the two.
+A mismatch, or a missing token, produces this error.
+
+**Common causes**
+
+- You started the connect in one browser tab and finished it in another.
+- You refreshed the provider's login page mid-flow.
+- A third-party-cookie blocker (Brave's Shields, Safari's ITP, hardened
+  uBlock, Firefox Total Cookie Protection) dropped the session cookie
+  between the redirect out and the redirect back.
+- You took longer than the session expiry to complete the OAuth login.
+
+**Fix**
+
+1. Open the Postiz tab in a single, fresh browser session.
+2. Whitelist `platform.postiz.com` (or your self-hosted domain) in any
+   privacy extensions for the duration of the connect.
+3. Click "Add Channel" again from inside the Postiz app, never
+   bookmark or refresh the provider's authorize page.
+4. If your browser is in private/incognito mode, switch to a normal window.
+
+<Note>
+**On self-hosted Postiz:** this error also appears when your frontend and
+backend URLs put the session cookie on different parent domains. See
+[Connect failures on self-hosted installs](/self-host/troubleshooting#connect-failures).
+</Note>
+
+## "invalid_grant"
+
+The OAuth code Postiz received from the provider was rejected when it
+tried to exchange it for an access token.
+
+**Common causes**
+
+- The same OAuth code was used twice: usually from a double-click or
+  retry after a transient error.
+- The code expired (most providers give you ~60 seconds).
+- The redirect URI configured on the provider doesn't exactly match the
+  one Postiz is sending. A trailing slash counts.
+
+**Fix**
+
+1. Start the connect flow over from scratch, codes can't be reused.
+2. Re-check the redirect URI in your provider's developer console
+   matches the URL Postiz is redirecting to, character for character.
+
+## "Failed to fetch" / "fetch failed" on provider connect
+
+You see this on calls like `POST /integrations/provider/:id/connect`.
+
+**What it means:** the Postiz backend tried to talk to the provider's
+API and the request failed at the network level: DNS, TLS, or a refused
+connection.
+
+On Postiz Cloud this is transient. Retry the connect, and if it keeps
+failing the provider's API is likely down.
+
+<Card title="Self-hosting?" icon="server" href="/self-host/troubleshooting#connect-failures">
+  This error is usually a network or egress problem on your own
+  infrastructure. See the self-hosting troubleshooting page.
+</Card>
+
+## "Unsupported file type" during connect
+
+Some providers (TikTok, Instagram) try to upload a profile avatar as part
+of channel attach. If the upstream image is in an exotic format, this
+fails. Retry, Postiz usually falls back successfully on the second
+attempt.

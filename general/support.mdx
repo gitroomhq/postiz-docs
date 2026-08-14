@@ -1,0 +1,102 @@
+---
+title: Support
+description: 'How to get help, and what level of support to expect'
+icon: 'comments-question'
+---
+
+How you reach us depends on whether you are on Postiz Cloud or hosting Postiz
+yourself. The routes are different, and so is what we can promise.
+
+<Tabs>
+  <Tab title="Postiz Cloud">
+    Paid Postiz Cloud customers have two supported routes, and both reach the
+    team:
+
+    | Route | Best for |
+    |---|---|
+    | **Email**, [support@postiz.com](mailto:support@postiz.com) | Anything involving your account, billing, refunds, or details you should not post publicly |
+    | **[Discord](https://discord.postiz.com)** | Quick questions, screenshots, and anything easier to show than to describe |
+
+    Use email whenever the answer involves your account. Discord is a public
+    server: never post API keys, OAuth secrets or payment details there.
+  </Tab>
+
+  <Tab title="Self-hosted">
+    Self-hosted Postiz is supported by the **community** in
+    [Discord](https://discord.postiz.com), where other self-hosters and
+    occasionally the team answer questions.
+
+    <Warning>
+    Support for self-hosted installs is **not guaranteed**. It is people
+    helping in their own time, so there is no response time and no commitment
+    that a given question gets answered. Post your question, include the
+    detail below, and be patient.
+    </Warning>
+
+    For a reproducible bug, an issue on
+    [GitHub](https://github.com/gitroomhq/postiz-app/issues/new/choose) is more
+    durable than a chat message and more likely to get fixed.
+
+    If you need support you can rely on, [Postiz Cloud](/cloud/overview) is the
+    supported product.
+  </Tab>
+</Tabs>
+
+<Warning>
+Never post API keys, OAuth secrets or payment details in Discord or in a GitHub
+issue. Both are public. Send those to
+[support@postiz.com](mailto:support@postiz.com) instead.
+</Warning>
+
+## Check first
+
+Most questions have an answer already written down.
+
+<CardGroup cols={2}>
+  <Card title="Troubleshooting" icon="life-ring" href="/general/troubleshooting/overview">
+    Connect errors, upload failures, login problems, known issues.
+  </Card>
+  <Card title="Posting rules by platform" icon="table-list" href="/general/platforms/overview">
+    Most "the platform rejected my post" cases are a platform rule.
+  </Card>
+  <Card title="Self-hosting problems" icon="server" href="/self-host/troubleshooting">
+    Install failures, database errors, ports, CORS, connect failures.
+  </Card>
+  <Card title="Billing and refunds" icon="credit-card" href="/cloud/refunds-and-support">
+    Plans, limits, payment problems, refund eligibility.
+  </Card>
+</CardGroup>
+
+## How to ask so you get an answer
+
+Follow this order: **goal, environment, changes, results.** It is the
+difference between a question someone can answer in one reply and a thread of
+clarifications.
+
+### Goal
+
+What were you trying to do?
+
+- *I want to schedule a post to Reddit at 6pm*
+- *I want to run Postiz in a container on a Raspberry Pi*
+- *I want to use a custom domain*
+
+### Environment
+
+- Cloud, or self-hosted? If self-hosted, how did you install it and which
+  version?
+- Which browser and operating system?
+
+### Changes
+
+What changed just before it broke? An upgrade, a new browser, a config edit, a
+plan change. "It used to work" is useful, but "it used to work until I upgraded
+to X" is far more useful.
+
+### Results
+
+What happened, and what did you expect? Quote the exact error text rather than
+describing it, and include a screenshot where the interface is involved.
+
+Error messages on failed posts come from the platform rather than from Postiz,
+so the exact wording is usually what identifies the problem.

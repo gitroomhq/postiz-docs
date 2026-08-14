@@ -1,6 +1,6 @@
 # Documentation screenshots
 
-Screenshots in `images/guide/` are captured from a throwaway Postiz instance so
+Screenshots in `images/general/` are captured from a throwaway Postiz instance so
 they can be regenerated when the interface changes, rather than being one-off
 images nobody can reproduce.
 

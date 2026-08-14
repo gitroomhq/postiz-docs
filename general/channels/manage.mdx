@@ -1,0 +1,71 @@
+---
+title: Manage a channel
+description: 'Reconnect, rename, disable, delete, and everything in the channel menu'
+icon: 'sliders'
+---
+
+**Where:** Calendar, left sidebar, the `...` menu on any channel
+
+Almost everything you do to a channel after connecting it lives in one menu.
+
+## The channel menu
+
+| Item | What it does |
+|---|---|
+| **Create a new post** | Opens the composer with only this channel selected |
+| **Copy Channel ID** | Copies the ID the Public API, CLI and MCP call `integration.id` |
+| **Reconnect channel** | Re-runs the authorisation. Only shown when the channel needs it |
+| **Update Credentials** | Re-enters the API key or password. Only for platforms where you supplied credentials |
+| **Additional Settings** | Platform-specific channel options, where the platform has any |
+| **Change Bot Picture / Nickname** | Overrides how the channel appears on platforms that allow it |
+| **Move / add to group** | Assigns the channel to a customer |
+| **Custom URL** | Overrides the link Postiz uses for the channel's public profile |
+| **Edit Time Slots** | The channel's default posting times, see [Time slots](/general/channels/time-slots) |
+| **Enable / Disable Channel** | Takes the channel in or out of service without losing anything |
+| **Delete** | Removes the channel permanently |
+
+## Reconnecting
+
+Access tokens expire. When one does, the channel gets a red marker in the
+sidebar and its posts start failing. Clicking the marker, or **Reconnect
+channel** in the menu, re-runs authorisation and the channel resumes.
+
+A few things to know:
+
+- Reconnecting **does not** count as connecting a new channel, so it does not
+  consume a channel slot on a cloud plan.
+- Posts that already failed are not retried automatically. Reschedule them.
+- Reconnect as the same account. Authorising a different account creates a
+  mismatch between the channel's history and its new identity.
+
+## Disable vs delete
+
+**Disable** takes a channel out of service. Its posts and history stay, and you
+can enable it again at any time. This is the right choice when you want to stop
+posting to a client's account, or, on cloud, when you need to free a slot.
+
+**Delete** is permanent. Postiz refuses to delete a channel that still has
+posts attached:
+
+> You have to delete all the posts associated with this channel before
+> deleting it
+
+Delete those posts first, or disable the channel instead.
+
+<Note>
+**On self-hosted Postiz:** there is no channel cap, so disabling is only about
+taking a channel out of service.
+</Note>
+
+## Bot picture and nickname
+
+Some platforms let a post appear under a name and avatar that are not the
+account's own, Discord and Telegram most usefully. **Change Bot Picture** and
+**Change Bot Nickname** set those per channel, so a client's Discord posts can
+carry their branding rather than yours.
+
+## Additional settings
+
+Platforms that carry channel-level options expose them here rather than in the
+composer, because they apply to every post on that channel rather than to one
+post. Not every platform has any.

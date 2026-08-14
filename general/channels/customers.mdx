@@ -1,0 +1,66 @@
+---
+title: Client groups and invite links
+sidebarTitle: Client groups
+description: 'Group channels per client, filter the calendar, and let clients connect their own accounts'
+icon: 'users'
+---
+
+**Where:** Calendar, channel `...` menu, **Move / add to group**
+
+If you run social for more than one client, grouping channels by client is what
+makes the calendar readable. Postiz calls these groups **customers**.
+
+<Frame>
+  <img src="/images/general/channels/sidebar.png" alt="Channel sidebar with channels grouped under two client headings" />
+</Frame>
+
+## Grouping channels
+
+Assign a channel to a customer from its menu, or drag the channel onto a group
+in the sidebar. A channel belongs to at most one customer, and **Remove from
+customer** puts it back in the ungrouped list.
+
+Once channels are grouped, the sidebar shows them under collapsible group
+headings, and a **customer selector** appears in the calendar toolbar. It only
+appears when more than one customer exists.
+
+## What grouping buys you
+
+- **Filter the whole calendar** to one client. Everything else disappears, so
+  you can review one client's week without noise.
+- **Select all of a client's channels at once** in the composer. Picking the
+  customer selects their channels in one action.
+- **Keep clients visually separate** in a sidebar that would otherwise be a
+  long flat list of avatars.
+
+## Invite links
+
+You do not need a client's password to manage their accounts. Next to **Add
+Channel** there is a second button that generates an **invite link**.
+
+<Steps>
+  <Step title="Generate the link">
+    Click the invite button in the channel sidebar and choose the platform the
+    client should connect.
+  </Step>
+  <Step title="Send it to the client">
+    They open the link, authorise on the platform's own screen, and never see
+    your Postiz account.
+  </Step>
+  <Step title="The channel appears in your organisation">
+    Assign it to their customer group and start scheduling.
+  </Step>
+</Steps>
+
+<Note>
+Invite links only work for platforms that connect through a clean redirect.
+Platforms needing an instance URL, credentials typed into Postiz, or the
+browser extension are not offered, because those all require someone to enter
+values inside your Postiz instance.
+</Note>
+
+## Approval workflow
+
+Grouping pairs with the [preview and approval page](/general/approvals): group a
+client's channels, draft their week, then send preview links for sign-off
+before anything publishes.

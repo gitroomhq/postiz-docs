@@ -10,8 +10,38 @@
   "favicon": "/favicon.ico",
   "redirects": [
     {
+      "source": "/introduction",
+      "destination": "/general/introduction",
+      "permanent": true
+    },
+    {
+      "source": "/quickstart",
+      "destination": "/general/quickstart",
+      "permanent": true
+    },
+    {
+      "source": "/support",
+      "destination": "/general/support",
+      "permanent": true
+    },
+    {
+      "source": "/howitworks",
+      "destination": "/self-host/architecture",
+      "permanent": true
+    },
+    {
+      "source": "/developer-guide",
+      "destination": "/contributing/developer-guide",
+      "permanent": true
+    },
+    {
       "source": "/configuration/create-provider",
       "destination": "/contributing/create-provider",
+      "permanent": true
+    },
+    {
+      "source": "/troubleshooting/self-host",
+      "destination": "/self-host/troubleshooting",
       "permanent": true
     },
     {
@@ -23,6 +53,41 @@
       "source": "/troubleshooting/channel-limits",
       "destination": "/cloud/limits",
       "permanent": true
+    },
+    {
+      "source": "/cli/self-hosted-auth-server",
+      "destination": "/self-host/cli-auth-server",
+      "permanent": true
+    },
+    {
+      "source": "/guide/:slug*",
+      "destination": "/general/:slug*",
+      "permanent": true
+    },
+    {
+      "source": "/troubleshooting/:slug*",
+      "destination": "/general/troubleshooting/:slug*",
+      "permanent": true
+    },
+    {
+      "source": "/installation/:slug*",
+      "destination": "/self-host/installation/:slug*",
+      "permanent": true
+    },
+    {
+      "source": "/configuration/:slug*",
+      "destination": "/self-host/configuration/:slug*",
+      "permanent": true
+    },
+    {
+      "source": "/reverse-proxies/:slug*",
+      "destination": "/self-host/reverse-proxies/:slug*",
+      "permanent": true
+    },
+    {
+      "source": "/providers/:slug*",
+      "destination": "/self-host/providers/:slug*",
+      "permanent": true
     }
   ],
   "navigation": {
@@ -33,89 +98,89 @@
           {
             "group": "Get started",
             "pages": [
-              "introduction",
-              "quickstart",
-              "guide/concepts",
-              "guide/where-things-live"
+              "general/introduction",
+              "general/quickstart",
+              "general/concepts",
+              "general/where-things-live"
             ]
           },
           {
             "group": "Channels",
             "pages": [
-              "guide/channels/connect",
-              "guide/channels/manage",
-              "guide/channels/time-slots",
-              "guide/channels/customers"
+              "general/channels/connect",
+              "general/channels/manage",
+              "general/channels/time-slots",
+              "general/channels/customers"
             ]
           },
           {
             "group": "Creating posts",
             "pages": [
-              "guide/composer/overview",
-              "guide/composer/global-vs-per-channel",
-              "guide/composer/writing",
-              "guide/composer/threads-and-comments",
-              "guide/composer/media",
-              "guide/composer/ai-and-imports",
-              "guide/composer/scheduling",
-              "guide/composer/links-and-validation"
+              "general/composer/overview",
+              "general/composer/global-vs-per-channel",
+              "general/composer/writing",
+              "general/composer/threads-and-comments",
+              "general/composer/media",
+              "general/composer/ai-and-imports",
+              "general/composer/scheduling",
+              "general/composer/links-and-validation"
             ]
           },
           {
             "group": "Calendar and posts",
             "pages": [
-              "guide/calendar/overview",
-              "guide/calendar/moving-posts",
-              "guide/posts/actions-and-stats",
-              "guide/approvals"
+              "general/calendar/overview",
+              "general/calendar/moving-posts",
+              "general/posts/actions-and-stats",
+              "general/approvals"
             ]
           },
           {
             "group": "Insights",
             "pages": [
-              "guide/analytics",
-              "guide/media-library"
+              "general/analytics",
+              "general/media-library"
             ]
           },
           {
             "group": "Automation",
             "pages": [
-              "guide/automations/plugs",
-              "guide/automations/auto-post-rss",
-              "guide/automations/webhooks",
-              "guide/automations/third-party",
-              "guide/agents"
+              "general/automations/plugs",
+              "general/automations/auto-post-rss",
+              "general/automations/webhooks",
+              "general/automations/third-party",
+              "general/agents"
             ]
           },
           {
             "group": "Settings",
             "pages": [
-              "guide/settings/overview",
-              "guide/settings/team",
-              "guide/settings/reusables",
-              "guide/settings/developers"
+              "general/settings/overview",
+              "general/settings/team",
+              "general/settings/reusables",
+              "general/settings/developers"
             ]
           },
           {
             "group": "Platforms",
             "pages": [
-              "guide/platforms/overview"
+              "general/platforms/overview"
             ]
           },
           {
             "group": "Troubleshooting",
             "pages": [
-              "troubleshooting/overview",
-              "troubleshooting/oauth-connect",
-              "troubleshooting/uploads",
-              "troubleshooting/activation-and-login",
-              "troubleshooting/known-issues"
+              "general/troubleshooting/overview",
+              "general/troubleshooting/oauth-connect",
+              "general/troubleshooting/uploads",
+              "general/troubleshooting/activation-and-login",
+              "general/troubleshooting/known-issues"
             ]
           },
           {
             "group": "Help",
             "pages": [
-              "support"
+              "general/support"
             ]
           }
         ]
@@ -149,86 +214,86 @@
           {
             "group": "Get started",
             "pages": [
-              "installation/overview",
-              "installation/system-requirements",
-              "howitworks"
+              "self-host/installation/overview",
+              "self-host/installation/system-requirements",
+              "self-host/architecture"
             ]
           },
           {
             "group": "Install",
             "pages": [
-              "installation/docker-compose",
-              "installation/docker",
-              "installation/kubernetes-helm",
-              "installation/devcontainer",
-              "installation/development",
-              "installation/migration"
+              "self-host/installation/docker-compose",
+              "self-host/installation/docker",
+              "self-host/installation/kubernetes-helm",
+              "self-host/installation/devcontainer",
+              "self-host/installation/development",
+              "self-host/installation/migration"
             ]
           },
           {
             "group": "Configuration",
             "pages": [
-              "configuration/reference",
-              "configuration/docker",
-              "configuration/emails",
-              "configuration/uploads",
-              "configuration/r2",
-              "configuration/oauth",
-              "configuration/polotno",
-              "configuration/chrome-extension"
+              "self-host/configuration/reference",
+              "self-host/configuration/docker",
+              "self-host/configuration/emails",
+              "self-host/configuration/uploads",
+              "self-host/configuration/r2",
+              "self-host/configuration/oauth",
+              "self-host/configuration/polotno",
+              "self-host/configuration/chrome-extension"
             ]
           },
           {
             "group": "Reverse proxies",
             "pages": [
-              "reverse-proxies/caddy",
-              "reverse-proxies/nginx",
-              "reverse-proxies/traefik",
-              "reverse-proxies/websockets-and-dev"
+              "self-host/reverse-proxies/caddy",
+              "self-host/reverse-proxies/nginx",
+              "self-host/reverse-proxies/traefik",
+              "self-host/reverse-proxies/websockets-and-dev"
             ]
           },
           {
             "group": "Provider API keys",
             "pages": [
-              "providers/overview",
+              "self-host/providers/overview",
               {
                 "group": "Social platforms",
                 "expanded": true,
                 "pages": [
-                  "providers/x-twitter",
-                  "providers/linkedin",
-                  "providers/linkedin-page",
-                  "providers/facebook",
-                  "providers/instagram",
-                  "providers/threads",
-                  "providers/bluesky",
-                  "providers/mastodon",
-                  "providers/google-my-business",
-                  "providers/mewe",
-                  "providers/farcaster"
+                  "self-host/providers/x-twitter",
+                  "self-host/providers/linkedin",
+                  "self-host/providers/linkedin-page",
+                  "self-host/providers/facebook",
+                  "self-host/providers/instagram",
+                  "self-host/providers/threads",
+                  "self-host/providers/bluesky",
+                  "self-host/providers/mastodon",
+                  "self-host/providers/google-my-business",
+                  "self-host/providers/mewe",
+                  "self-host/providers/farcaster"
                 ]
               },
               {
                 "group": "Video platforms",
                 "expanded": true,
                 "pages": [
-                  "providers/youtube",
-                  "providers/tiktok"
+                  "self-host/providers/youtube",
+                  "self-host/providers/tiktok"
                 ]
               },
               {
                 "group": "Other platforms",
                 "expanded": true,
                 "pages": [
-                  "providers/reddit",
-                  "providers/pinterest",
-                  "providers/discord",
-                  "providers/slack",
-                  "providers/telegram",
-                  "providers/dribbble",
-                  "providers/skool",
-                  "providers/whop",
-                  "providers/tumblr"
+                  "self-host/providers/reddit",
+                  "self-host/providers/pinterest",
+                  "self-host/providers/discord",
+                  "self-host/providers/slack",
+                  "self-host/providers/telegram",
+                  "self-host/providers/dribbble",
+                  "self-host/providers/skool",
+                  "self-host/providers/whop",
+                  "self-host/providers/tumblr"
                 ]
               }
             ]
@@ -236,7 +301,7 @@
           {
             "group": "Troubleshooting",
             "pages": [
-              "troubleshooting/self-host"
+              "self-host/troubleshooting"
             ]
           }
         ]
@@ -358,7 +423,7 @@
               "cli/analytics",
               "cli/media-upload",
               "cli/platform-examples",
-              "cli/self-hosted-auth-server"
+              "self-host/cli-auth-server"
             ]
           },
           {
@@ -378,7 +443,7 @@
           {
             "group": "Development",
             "pages": [
-              "developer-guide",
+              "contributing/developer-guide",
               "contributing/create-provider"
             ]
           }

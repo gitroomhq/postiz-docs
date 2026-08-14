@@ -1,0 +1,76 @@
+---
+title: Links and validation errors
+sidebarTitle: Links and validation
+description: 'Short links, link stripping, and why the composer will not let you save'
+icon: 'link'
+---
+
+## Short links
+
+If your post contains a URL, Postiz can shorten it so clicks are trackable. The
+behaviour is a setting, not a per-post decision:
+
+| Preference | What happens |
+|---|---|
+| **Ask every time** | You are prompted before saving |
+| **Always shortlink** | URLs are shortened silently |
+| **Never shortlink** | URLs are left alone |
+
+Set it in Settings, see [Settings](/general/settings/overview).
+
+When prompted, the wording is:
+
+> Do you want to shortlink the URLs? it will let you get statistics over clicks
+
+Shortened links produce a click table in the post's
+[statistics](/general/posts/actions-and-stats).
+
+<Note>
+Channels configured to strip links are excluded from shortening, because the
+link is going to be removed anyway.
+</Note>
+
+## Link stripping
+
+Some setups remove URLs from post text before publishing, most commonly on X,
+where accounts often see better reach without links. When that is enabled for a
+channel, links are removed from the text at publish time. Put the link in a
+follow-up comment instead, see
+[Threads and comments](/general/composer/threads-and-comments).
+
+<Note>
+**On self-hosted Postiz:** link stripping is switched on per platform by
+whoever runs the instance.
+</Note>
+
+## Validation
+
+Postiz validates a post against every selected channel before saving. If any
+channel fails, nothing is saved and the composer jumps to the offending
+channel with the error shown, either on the editor or on its settings panel.
+
+The same validation runs again on the server when you submit, so you cannot
+bypass it by editing the request.
+
+### What usually fails
+
+| Error | Cause |
+|---|---|
+| Empty content | A selected channel has no text and the platform requires some |
+| Too long | Over the character limit for that platform |
+| Missing setting | A required per-platform field is empty: YouTube title, Reddit subreddit, Pinterest board |
+| Media rules | Wrong number or type of attachments for the platform |
+
+### Fixing them
+
+For length, detach the offending channel and write a shorter version rather
+than cutting the text everywhere. See
+[Global vs per-channel](/general/composer/global-vs-per-channel).
+
+For media, check the platform's rules first, since the constraint usually comes
+from the platform rather than from Postiz. See
+[Posting rules by platform](/general/platforms/overview).
+
+For required settings, open the channel's tab in the composer and fill in the
+Settings panel. Required fields are the ones the platform refuses posts
+without, so there is no way around them.

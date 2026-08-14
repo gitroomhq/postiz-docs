@@ -1,0 +1,93 @@
+---
+title: Mastodon
+description: 'How to add Mastodon to your system'
+icon: 'mastodon'
+---
+
+<Snippet file="never-share.mdx" />
+
+<Note>
+Watch the YouTube Tutorial: [https://youtu.be/IAnfbE_htqg?si=z30m5qS8qLDN9R0X](https://youtu.be/IAnfbE_htqg?si=z30m5qS8qLDN9R0X)
+</Note>
+
+Mastodon client registration is not done via the web interface, but by talking to the API directly. In the example below, we use `curl` to register a new client.
+
+Optionally check that you have `jq` installed on your system. You can normally install this with brew, apt-get, yum or chocolatey. If you don't have `jq` installed, you can remove it from the command below.
+
+<Info>
+The examples on this page use `https://mastodon.social` as the default Mastodon instance. If you are setting up Postiz to connect to a different self-hosted Mastodon instance (e.g., `https://fosstodon.org`), you must replace `https://mastodon.social` with your instance's URL in the `curl` command below. You will also need to ensure the `MASTODON_URL` environment variable in your application's `.env` file (or equivalent configuration for Docker, etc.) is set to your custom instance's URL.
+</Info>
+
+<Steps>
+  <Step title="Register your client">
+    <Snippet file="oauth2redirect.mdx" />
+
+    **Your Mastodon OAuth2 Redirect URI:**
+    - Production: `https://your-postiz-domain.com/integrations/social/mastodon`
+    - Local development: `http://localhost:4200/integrations/social/mastodon`
+    - Docker: `http://localhost:5000/integrations/social/mastodon`
+
+    Run the following curl command in a terminal to get the Mastodon client id and client secret.
+
+```bash
+curl -X POST -sS https://mastodon.social/api/v1/apps -F "client_name=YourAppName" -F "redirect_uris=http://localhost:4200/integrations/social/mastodon" -F "scopes=write:statuses write:media profile" | jq
+```
+
+    This will give you output that looks something like this;
+
+```json
+{
+  "id": "1234567890",
+  "redirect_uris": [
+    "http://localhost:4200/integrations/social/mastodon"
+  ],
+  ...
+  "client_id": "your_client_id",
+  "client_secret": "your_client_secret"
+}
+```
+  </Step>
+
+  <Step title="Add credentials to your environment">
+    Make a note of your `client_id` and `client_secret` and add them to your `.env` file.
+
+```env
+MASTODON_CLIENT_ID="shown in the output from the above command"
+MASTODON_CLIENT_SECRET="shown in the output from the above command"
+MASTODON_URL="https://mastodon.social" # Change this if connecting to a different instance
+```
+  </Step>
+
+  <Step title="Start Postiz">
+    Stop Postiz if it is running, and then start it using the .env file with the Mastodon details. Click through the new channel setup and you should be asked to login on Mastodon.
+  </Step>
+</Steps>
+
+## Troubleshooting
+
+### "Failed to fetch" / "fetch failed" when connecting
+
+The Postiz backend needs network access to reach your Mastodon instance. If the connect call fails at this stage, the backend container couldn't resolve or reach the `MASTODON_URL` host.
+
+**Fix**
+
+1. From inside the backend container, run `curl -I https://your-instance.example.com/`. If that fails, fix DNS/egress before retrying.
+2. If you're behind a corporate proxy, set `HTTPS_PROXY` on the backend.
+3. Confirm `MASTODON_URL` exactly matches your instance, protocol included and no trailing slash.
+4. If the logs show `Error: Blocked IP`, your instance hostname resolves to a private IP and the SSRF guard rejected it, see the media troubleshooting below.
+
+### "fetch failed" when posting with media (text posts work)
+
+Text posts publish fine, but posts with images fail with `fetch failed`, and the orchestrator logs show `Error: Blocked IP`.
+
+**Cause:** before uploading media to your instance, Postiz downloads it from its own public media URL (e.g. `https://postiz.example.com/uploads/...`). If that hostname resolves to a private IP from inside the container, common behind home reverse proxies like Caddy, split DNS, or hairpin NAT, the SSRF guard blocks the fetch.
+
+**Fix**
+
+1. Set `DISABLE_SSRF_PROTECTION=true` on the backend and orchestrator containers.
+2. Restart the containers.
+
+Alternatively, fix resolution instead: make the media hostname resolve to a reachable address from inside the container (e.g. a Docker DNS alias or split-horizon DNS entry) and keep the protection on.
+
+Note this disables SSRF protection globally, only do it when Postiz runs on a trusted private network. See [`DISABLE_SSRF_PROTECTION`](/self-host/configuration/reference#disable_ssrf_protection).
+

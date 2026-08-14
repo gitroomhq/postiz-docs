@@ -19,7 +19,7 @@ const skipDirs = new Set(['.git', 'node_modules', 'snippets', '.idea', '.vscode'
 
 // Pages that are allowed to mention self-hosting mechanics despite living in a
 // shared tab, because routing readers to the self-hosting docs is their job.
-const selfHostLanguageAllowlist = new Set(['introduction', 'quickstart']);
+const selfHostLanguageAllowlist = new Set(['general/introduction', 'general/quickstart']);
 
 const failures = [];
 

@@ -1,0 +1,86 @@
+---
+title: Provider API keys
+sidebarTitle: Overview
+description: 'Which platforms need a developer app, and how to configure them'
+icon: 'key'
+---
+
+<Snippet file="audience/self-host-only.mdx" />
+
+Postiz talks to each platform through that platform's own API, which usually
+means you have to register a developer app with them and give Postiz the
+resulting keys. This section covers that registration, one page per platform.
+
+<Note>
+Looking for what a platform can actually carry, character limits, media rules
+and per-post settings? That is
+[Posting rules by platform](/general/platforms/overview).
+</Note>
+
+## Ten platforms need no configuration at all
+
+These providers take credentials that **each user supplies in the Postiz
+dialog** when they connect a channel. There is nothing for you to register and
+no environment variable to set. They are the quickest way to confirm a fresh
+install works.
+
+| Platform | What the user provides |
+|---|---|
+| Bluesky | Service URL, handle, app password |
+| Lemmy | Instance URL, username, password |
+| Nostr | Private key |
+| Medium | API key |
+| Dev.to | API key |
+| Hashnode | API key |
+| WordPress | Site domain, username, application password |
+| Listmonk | URL, username, password |
+| Moltbook | Connects in-app, no credentials |
+| Skool | Session cookies, via the [browser extension](/self-host/configuration/chrome-extension) |
+
+## Everything else needs a developer app
+
+For the remaining platforms you register an app on the platform's developer
+portal, then set the keys as environment variables on your instance. Each page
+in this section walks through one platform.
+
+<Snippet file="env-restart.mdx" />
+
+<Snippet file="never-share.mdx" />
+
+### Redirect URIs
+
+Every OAuth provider asks for a redirect URI. Postiz always uses the same
+shape:
+
+```
+{FRONTEND_URL}/integrations/social/{provider}
+```
+
+So an instance at `https://social.example.com` connecting X uses
+`https://social.example.com/integrations/social/x`. The provider identifier is
+the one in the [platform table](/general/platforms/overview), which is not always
+the name you expect: Farcaster is `wrapcast`, Google My Business is `gmb`.
+
+### Keys that are shared between platforms
+
+Three pairs of platforms share credentials, which trips people up:
+
+- **Instagram (Facebook Business)** uses `FACEBOOK_APP_ID` and
+  `FACEBOOK_APP_SECRET`, the same app as Facebook Page. Only **Instagram
+  Standalone** uses `INSTAGRAM_APP_ID` and `INSTAGRAM_APP_SECRET`.
+- **LinkedIn Page** uses the same `LINKEDIN_CLIENT_ID` and
+  `LINKEDIN_CLIENT_SECRET` as LinkedIn.
+- **Google My Business** falls back to the YouTube Google credentials if
+  `GOOGLE_GMB_CLIENT_ID` and `GOOGLE_GMB_CLIENT_SECRET` are not set.
+
+### Unconfigured platforms still appear in the list
+
+Postiz shows every platform in the **Add Channel** dialog whether or not its
+keys are set. Clicking one you have not configured produces a failed connect
+rather than a helpful message, so if a platform will not connect on a fresh
+install, check its keys first.
+
+## Full variable list
+
+Every provider variable, with defaults and notes, is in the
+[Configuration reference](/self-host/configuration/reference).

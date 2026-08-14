@@ -104,7 +104,7 @@ Postiz API keys don't auto-rotate, but if you regenerate one in Settings → Dev
 
 ### Self-hosted: how do I expose the MCP endpoint?
 
-The MCP server starts as part of the Postiz backend and is reachable at `/mcp` (Bearer auth), `/mcp/:apiKey` (key in URL), and `/mcp-oauth` (OAuth-protected). Your reverse proxy must forward these paths to the backend and support streaming HTTP (`Transfer-Encoding: chunked`). See [Reverse Proxies](/reverse-proxies/caddy).
+The MCP server starts as part of the Postiz backend and is reachable at `/mcp` (Bearer auth), `/mcp/:apiKey` (key in URL), and `/mcp-oauth` (OAuth-protected). Your reverse proxy must forward these paths to the backend and support streaming HTTP (`Transfer-Encoding: chunked`). See [Reverse Proxies](/self-host/reverse-proxies/caddy).
 
 ### Can MCP read or reply to comments?
 

@@ -18,14 +18,18 @@ npx mint broken-links # internal link checker
 
 Six tabs, three of which are audiences:
 
-| Tab | For | Rule |
-|---|---|---|
-| **Guide** | Everyone | How the product works. Never mentions env vars, Docker or installation |
-| **Cloud** | Postiz Cloud users | Plans, billing, limits. The only place a price appears |
-| **Self-Hosting** | People running their own instance | Install, configure, provider API keys, infrastructure |
-| **Public API** | Developers | Endpoints and per-platform settings schemas |
-| **Automation** | Developers | CLI and MCP |
-| **Contributing** | Contributors | Working on Postiz itself |
+| Tab | Path prefix | For | Rule |
+|---|---|---|---|
+| **Guide** | `/general/**` | Everyone | How the product works. Never mentions env vars, Docker or installation |
+| **Cloud** | `/cloud/**` | Postiz Cloud users | Plans, billing, limits. The only place a price appears |
+| **Self-Hosting** | `/self-host/**` | People running their own instance | Install, configure, provider API keys, infrastructure |
+| **Public API** | `/public-api/**` | Developers | Endpoints and per-platform settings schemas |
+| **Automation** | `/cli/**`, `/mcp/**` | Developers | CLI and MCP |
+| **Contributing** | `/contributing/**` | Contributors | Working on Postiz itself |
+
+**The path prefix must match the tab.** It is what lets the cloud support agent
+be scoped to non-self-hosting content with a single rule, so a page in the
+wrong prefix is a real bug, not a cosmetic one.
 
 **Every page belongs to exactly one tab.** Listing a page in two places breaks
 breadcrumbs and the previous/next pager. Link across tabs with `<Card>`
@@ -87,6 +91,30 @@ source, not the table.
 ## Moving a page
 
 Existing URLs are linked from Discord, YouTube videos and GitHub issues. If you
-must move one, add a `redirects` entry in `docs.json` in the same change. Never
-rename or reorder an existing `###` heading in
-`configuration/reference.mdx`: those anchors are linked externally.
+must move one, add a `redirects` entry in `docs.json` in the same change.
+Wildcards work, so a whole directory is one entry:
+
+```json
+{ "source": "/old-dir/:slug*", "destination": "/new-dir/:slug*", "permanent": true }
+```
+
+Never rename or reorder an existing `###` heading in
+`self-host/configuration/reference.mdx`: those anchors are linked externally.
+
+## Keeping the support agent scoped to cloud
+
+The cloud support agent must never answer from self-hosting documentation: a
+paying cloud customer asking about connecting a channel should not be told to
+edit an environment variable.
+
+In Fin, under the website source's **Advanced sync settings > URLs to
+exclude**, that is two globs:
+
+```
+https://docs.postiz.com/self-host/**
+https://docs.postiz.com/contributing/**
+```
+
+This works only while the prefixes stay honest, which is the rule above. Do
+not use `noindex` frontmatter or a robots rule instead: that would also drop
+the self-hosting pages from Google, and they should stay findable.

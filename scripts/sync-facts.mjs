@@ -14,8 +14,8 @@
  * Regions:
  *   pricing    -> cloud/plans.mdx
  *   limits     -> cloud/limits.mdx
- *   platforms  -> guide/platforms/overview.mdx
- *   analytics  -> guide/analytics.mdx
+ *   platforms  -> general/platforms/overview.mdx
+ *   analytics  -> general/analytics.mdx
  *
  * Usage: node scripts/sync-facts.mjs [--check]
  */
@@ -248,8 +248,8 @@ if (process.argv.includes('--print')) {
 const results = [
   applyRegion('cloud/plans.mdx', 'pricing', pricingTable(pricing)),
   applyRegion('cloud/limits.mdx', 'limits', limitsTable(pricing)),
-  applyRegion('guide/platforms/overview.mdx', 'platforms', platformsTable(providers)),
-  applyRegion('guide/analytics.mdx', 'analytics', analyticsTable(providers)),
+  applyRegion('general/platforms/overview.mdx', 'platforms', platformsTable(providers)),
+  applyRegion('general/analytics.mdx', 'analytics', analyticsTable(providers)),
 ];
 
 for (const r of results) console.log(`  ${r.status.padEnd(20)} ${r.file} [${r.region}]`);

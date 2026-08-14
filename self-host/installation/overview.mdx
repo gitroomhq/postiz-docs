@@ -1,0 +1,71 @@
+---
+title: Installation options
+sidebarTitle: Overview
+description: 'Choose how to run your own Postiz instance'
+icon: 'server'
+keywords: ['install', 'installation', 'self host', 'docker', 'quickstart']
+---
+
+Postiz is open source and you can run the whole stack yourself. Pick the option
+that matches how you plan to use it.
+
+<Note>
+Not sure you want to host it? [Postiz Cloud](/cloud/overview) runs the same
+application, with the provider developer apps already registered so you can
+connect a channel in two clicks.
+</Note>
+
+## Recommended options
+
+<CardGroup cols={2}>
+  <Card title="Docker Compose" icon="docker" href="/self-host/installation/docker-compose">
+    Recommended for **running Postiz**. One command, brings up the app plus
+    Postgres, Redis and Temporal.
+  </Card>
+  <Card title="Development environment" icon="code" href="/self-host/installation/development">
+    Recommended for **working on Postiz**. Runs the monorepo from source with
+    hot reload.
+  </Card>
+</CardGroup>
+
+## Advanced options
+
+<CardGroup cols={2}>
+  <Card title="Docker (standalone)" icon="docker" href="/self-host/installation/docker">
+    Run the container by hand and bring your own database, Redis and Temporal.
+  </Card>
+  <Card title="Kubernetes and Helm" icon="dharmachakra" href="/self-host/installation/kubernetes-helm">
+    Deploy to a cluster with the community Helm chart.
+  </Card>
+  <Card title="Dev container" icon="box" href="/self-host/installation/devcontainer">
+    A preconfigured VS Code dev container.
+  </Card>
+  <Card title="Upgrading from v1" icon="arrow-up-right-dots" href="/self-host/installation/migration">
+    Migrating an older install onto the Temporal based stack.
+  </Card>
+</CardGroup>
+
+## Before you start
+
+<CardGroup cols={2}>
+  <Card title="System requirements" icon="microchip" href="/self-host/installation/system-requirements">
+    Minimum CPU and RAM, required services, default ports.
+  </Card>
+  <Card title="Architecture" icon="diagram-project" href="/self-host/architecture">
+    What the frontend, backend, orchestrator and Temporal each do.
+  </Card>
+</CardGroup>
+
+## After it is running
+
+1. **Register the first user.** The first account to sign up becomes the
+   organisation owner. If no email provider is configured, Postiz activates
+   the account immediately and you can log straight in.
+2. **Configure the providers you want.** Most platforms need you to register a
+   developer app and supply keys. Eight platforms need no configuration at all.
+   See [Provider API keys](/self-host/providers/overview).
+3. **Put a reverse proxy in front of it.** Postiz sets secure cookies, so it
+   expects HTTPS in production. See [Reverse proxies](/self-host/reverse-proxies/caddy).
+
+Once you can log in, the rest of the product works the same as it does on
+cloud. Head to [Schedule your first post](/general/quickstart).

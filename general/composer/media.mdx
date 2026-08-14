@@ -1,0 +1,83 @@
+---
+title: Images and video
+sidebarTitle: Media
+description: 'Adding media, alt text, video thumbnails, size limits and the design editor'
+icon: 'image'
+---
+
+**Where:** Inside the composer, the attachments bar under the editor
+
+## Four ways to add media
+
+- **Drag and drop** a file onto the editor.
+- **Paste** an image straight from the clipboard.
+- **Insert Media** opens your [media library](/general/media-library).
+- **Import** pulls media from a connected third-party service such as HeyGen,
+  see [Third-party integrations](/general/automations/third-party).
+
+Plus two that generate it: **AI Image** and **AI Video**, covered in
+[AI generation](/general/composer/ai-and-imports).
+
+## Limits and formats
+
+| | Limit |
+|---|---|
+| Image | 10 MB each |
+| Video | 1 GB each |
+| Accepted | JPEG, PNG, GIF, WebP, AVIF, BMP, TIFF, MP4 |
+
+<Note>
+Postiz detects the real type from the file contents, not the extension.
+Renaming a `.mov` to `.mp4` will not get it accepted.
+</Note>
+
+Platform rules are stricter than these and vary a lot: YouTube wants exactly
+one video, Pinterest allows at most five images, Google Business takes no video
+at all. See [Posting rules by platform](/general/platforms/overview).
+
+## Reordering and removing
+
+Thumbnails in the attachments bar are draggable, so the order you see is the
+order the platform gets. The order matters for carousels and for platforms that
+treat the first image as the cover.
+
+## Media settings
+
+Clicking a thumbnail opens its settings:
+
+- **Alt text.** Worth writing. It is the accessibility floor on every platform
+  that supports it, and several platforms surface it in search.
+- **Video thumbnail.** Pick the frame used as the cover, either by scrubbing to
+  a timestamp or choosing a frame. Platforms that require a separate cover
+  image, Pinterest video pins for example, use this.
+
+## The design editor
+
+**Design Media** opens a full editor inside Postiz where you can build a visual
+from templates, text and your own assets, then use it in the post without
+exporting and re-uploading.
+
+<Note>
+**Availability:** included on paid Postiz Cloud plans. On self-hosted installs
+the design editor needs a Polotno key configured by whoever runs the instance,
+see [Image and video editing](/self-host/configuration/polotno).
+</Note>
+
+## Uploads that fail
+
+<AccordionGroup>
+  <Accordion title="The file is rejected as the wrong type">
+    The detected type is not in the accepted list. Convert it, most often an
+    unusual video container that needs re-encoding to MP4.
+  </Accordion>
+  <Accordion title="A large video stalls">
+    Video uploads are capped at 1 GB per session. Compress before uploading:
+    the platform will re-encode anyway, so a smaller source rarely costs
+    visible quality.
+  </Accordion>
+  <Accordion title="The post fails even though the upload worked">
+    The media is fine but breaks a platform rule, wrong count, wrong type, or
+    a missing cover. Check
+    [Posting rules by platform](/general/platforms/overview).
+  </Accordion>
+</AccordionGroup>

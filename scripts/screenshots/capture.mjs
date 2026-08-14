@@ -12,7 +12,7 @@ import { mkdirSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 const BASE = process.env.POSTIZ_URL || 'http://localhost:4009';
-const OUT = process.env.OUT_DIR || '/Users/egelhaus/Git-Repos/postiz-docs/images/guide';
+const OUT = process.env.OUT_DIR || '/Users/egelhaus/Git-Repos/postiz-docs/images/general';
 const EMAIL = 'demo@acme.test';
 const PASSWORD = 'DocsDemo!2345';
 const VIEWPORT = { width: 1440, height: 900 };

@@ -1,0 +1,75 @@
+---
+title: Image and video editing (Polotno)
+sidebarTitle: Design editor (Polotno)
+description: 'Enable the in-app design editor on a self-hosted instance'
+icon: 'palette'
+---
+
+<Snippet file="audience/self-host-only.mdx" />
+
+Postiz has a built-in design editor, powered by the
+[Polotno SDK](https://polotno.com/), that lets people create and edit visuals
+inside the composer. It needs a Polotno key, which you supply.
+
+<Note>
+What the editor does from a user's point of view is covered in
+[Images and video](/general/composer/media). This page is only the setup.
+</Note>
+
+## Setup
+
+<Steps>
+  <Step title="Create a Polotno account">
+    Sign up at [polotno.com](https://polotno.com/) and open the
+    [API dashboard](https://polotno.com/cabinet/) to generate an
+    API key.
+  </Step>
+
+  <Step title="Add the API key to Postiz">
+    Set `NEXT_PUBLIC_POLOTNO` in your environment to the key from
+    the Polotno dashboard:
+
+    ```env
+    NEXT_PUBLIC_POLOTNO="your-polotno-api-key"
+    ```
+
+    In `docker-compose.yaml`:
+
+    ```yaml
+    services:
+      postiz:
+        environment:
+          NEXT_PUBLIC_POLOTNO: "your-polotno-api-key"
+    ```
+  </Step>
+
+  <Step title="Restart Postiz">
+    `NEXT_PUBLIC_POLOTNO` is read by the frontend at build time, so
+    you need to rebuild the frontend image (or restart the dev
+    server) for the change to take effect.
+  </Step>
+</Steps>
+
+Exact steps may vary slightly depending on your deployment. See
+[Docker Compose](/self-host/installation/docker-compose) or
+[Development](/self-host/installation/development) for environment-specific
+notes. If the variable is unset, the editor falls back to a
+demo/anonymous mode that is not suitable for production.
+
+## Licensing
+
+Polotno is a commercial SDK and requires a valid license for
+production use.
+
+- Licenses are purchased and managed directly through Polotno.
+- Postiz does not bundle, resell, or proxy Polotno licenses.
+- Billing, licensing, and usage terms are handled by Polotno.
+
+Postiz users can use the coupon code **`postizfriends`** at checkout
+to receive **$100 off** a Polotno license.
+
+## Reference
+
+- Env var: [`NEXT_PUBLIC_POLOTNO`](/self-host/configuration/reference#misc-frontend)
+- Polotno docs: [polotno.com/docs](https://polotno.com/docs/)
+- Polotno pricing: [polotno.com/pricing](https://polotno.com/pricing/)

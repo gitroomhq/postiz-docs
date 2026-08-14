@@ -1,0 +1,52 @@
+---
+title: Third-party integrations
+sidebarTitle: Third-party media
+description: 'Pull generated media from external services into your posts'
+icon: 'puzzle-piece'
+---
+
+**Where:** the Integrations section
+
+These are not social channels. They are external services that produce media,
+connected so you can pull their output into a post without downloading and
+re-uploading it.
+
+## Connecting one
+
+<Steps>
+  <Step title="Open Integrations">
+    The Integrations entry in the left rail.
+  </Step>
+  <Step title="Pick the service and paste your API key">
+    You supply your own key, so usage is billed by that service to you, not
+    through Postiz.
+  </Step>
+  <Step title="Use it in the composer">
+    The **Import** button in the attachments bar now offers that service. Pick
+    a generated asset and it attaches to the post.
+  </Step>
+</Steps>
+
+Connected services are listed in the sidebar, each with a **Delete
+Integration** option.
+
+## What is available
+
+The current integrations are AI video services, HeyGen being the main one.
+Because each needs your own account and key, the exact list depends on what
+your instance has enabled.
+
+## How this differs from AI generation
+
+| | Third-party integration | Built-in AI |
+|---|---|---|
+| Where it runs | The external service | Postiz |
+| Who pays | You, directly to that service | Your Postiz plan credits |
+| What you get | Whatever that service produces | Images and video from Postiz's generators |
+| Setup | Your API key | None on cloud |
+
+Use a third-party integration when you already use that tool and want its
+output in your calendar. Use [built-in AI](/general/composer/ai-and-imports) when
+you just need an image or a short video and do not care which engine made it.
+
+<Snippet file="earlydoc.mdx" />

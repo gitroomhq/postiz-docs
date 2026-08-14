@@ -48,7 +48,7 @@ function readPricing() {
 
 const money = (n) => (n === 0 ? 'Free' : `$${n}`);
 const yes = (b) => (b ? 'Yes' : 'No');
-const count = (n) => (n >= 1000000 ? 'Unlimited' : String(n));
+const count = (n) => (n >= 1000000 ? 'Unlimited' : n.toLocaleString('en-US'));
 
 function pricingTable(pricing) {
   const tiers = Object.values(pricing).filter((t) => t.current !== 'FREE');

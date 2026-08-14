@@ -1,0 +1,12 @@
+| Where Postiz runs | Base URL |
+|---|---|
+| Postiz Cloud | `https://api.postiz.com` |
+| Self-hosted | your `NEXT_PUBLIC_BACKEND_URL` |
+| Self-hosted, official Docker image | `http://localhost:4007/api` (the compose file maps host `4007` to container `5000`) |
+| Self-hosted, running from source | `http://localhost:3000` (frontend is on `4200`) |
+
+<Note>
+Public API paths are appended to the base URL, so a cloud request goes to
+`https://api.postiz.com/public/v1/...` and a self-hosted one to
+`{NEXT_PUBLIC_BACKEND_URL}/public/v1/...`.
+</Note>

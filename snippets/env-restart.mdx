@@ -1,0 +1,8 @@
+<Note>
+**Restart Postiz after changing environment variables.** With Docker Compose,
+run `docker compose down` then `docker compose up -d`. A plain restart won't
+pick up a changed `.env`.
+
+Variables prefixed `NEXT_PUBLIC_` are baked into the frontend at **build**
+time, so changing one needs a rebuild of the image, not just a restart.
+</Note>

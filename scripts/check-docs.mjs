@@ -11,7 +11,7 @@
  *
  * Usage: node scripts/check-docs.mjs
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const root = new URL('..', import.meta.url).pathname;
@@ -90,6 +90,25 @@ for (const page of new Set(allFiles)) {
   }
 }
 
+// Internal links pointing at pages that do not exist yet. Reported, not fatal,
+// so a restructure in progress can still commit.
+const pending = new Map();
+for (const page of new Set(allFiles)) {
+  let body;
+  try {
+    body = readFileSync(join(root, `${page}.mdx`), 'utf8');
+  } catch {
+    continue;
+  }
+  for (const match of body.matchAll(/href="(\/[^"#]+)"|\]\((\/[^)#]+)\)/g)) {
+    const target = (match[1] ?? match[2]).replace(/\/$/, '').slice(1);
+    if (!target || diskPages.includes(target)) continue;
+    if (existsSync(join(root, target))) continue; // images and other assets
+    if (!pending.has(target)) pending.set(target, new Set());
+    pending.get(target).add(page);
+  }
+}
+
 if (failures.length) {
   console.error('docs check failed:\n');
   failures.forEach((f) => console.error(`  ${f}\n`));
@@ -97,3 +116,10 @@ if (failures.length) {
 }
 
 console.log(`docs check passed: ${navPages.length} pages, all in navigation, no em-dashes.`);
+
+if (pending.size) {
+  console.log(`\n${pending.size} link targets not written yet:`);
+  for (const [target, from] of [...pending].sort()) {
+    console.log(`  /${target}  (linked from ${[...from].length})`);
+  }
+}

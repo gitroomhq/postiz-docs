@@ -1,0 +1,43 @@
+---
+title: 'List Media'
+openapi: 'GET /media'
+icon: 'images'
+---
+
+List the files already in your media library so you can reuse them as post attachments without uploading again. Results are scoped to your organization, sorted newest first, 18 per page.
+
+## Query parameters
+
+- `page`: page number, starting at 1 (default 1).
+- `search`: case-insensitive filter on the original file name.
+
+## Example
+
+```bash
+curl "https://api.postiz.com/public/v1/media?search=banner&page=1" \
+  -H "Authorization: your-api-key"
+```
+
+Response:
+
+```json
+{
+  "pages": 1,
+  "results": [
+    {
+      "id": "e639003b-f727-4a1e-87bd-74a2c48ae41e",
+      "name": "6fba0ef5febb4400ae8778a5b854224d.png",
+      "originalName": "launch-banner.png",
+      "path": "https://uploads.postiz.com/6fba0ef5febb4400ae8778a5b854224d.png",
+      "thumbnail": null,
+      "alt": null,
+      "thumbnailTimestamp": null,
+      "type": "image",
+      "fileSize": 48213,
+      "createdAt": "2025-01-10T09:12:00.000Z"
+    }
+  ]
+}
+```
+
+Pass an item's `path` in a post's `image` array (see [Create Post](/public-api/posts/create)). `path` is a public URL, so there is no separate download endpoint.

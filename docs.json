@@ -359,7 +359,8 @@
             "group": "Uploads",
             "pages": [
               "public-api/uploads/upload-file",
-              "public-api/uploads/upload-from-url"
+              "public-api/uploads/upload-from-url",
+              "public-api/uploads/list-media"
             ]
           },
           {

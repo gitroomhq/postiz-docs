@@ -1990,6 +1990,79 @@
         }
       }
     },
+    "/media": {
+      "get": {
+        "tags": [
+          "Uploads"
+        ],
+        "summary": "List media",
+        "description": "List the media files already uploaded to your organization's media library, newest first, 18 per page.",
+        "operationId": "listMedia",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number (1-indexed). Defaults to 1.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "description": "Case-insensitive filter on the original file name.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of media files",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pages": {
+                      "type": "integer",
+                      "description": "Total number of pages"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MediaListItem"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "pages": 2,
+                  "results": [
+                    {
+                      "id": "e639003b-f727-4a1e-87bd-74a2c48ae41e",
+                      "name": "6fba0ef5febb4400ae8778a5b854224d.png",
+                      "originalName": "cover-cyan.png",
+                      "path": "https://uploads.postiz.com/6fba0ef5febb4400ae8778a5b854224d.png",
+                      "thumbnail": null,
+                      "alt": null,
+                      "thumbnailTimestamp": null,
+                      "type": "image",
+                      "fileSize": 48213,
+                      "createdAt": "2024-12-14T08:18:54.274Z"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/notifications": {
       "get": {
         "tags": [
@@ -2279,6 +2352,53 @@
           "name": {
             "type": "string",
             "description": "Group (customer) display name"
+          }
+        }
+      },
+      "MediaListItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique file ID"
+          },
+          "name": {
+            "type": "string",
+            "description": "Stored file name"
+          },
+          "originalName": {
+            "type": "string",
+            "nullable": true,
+            "description": "File name as uploaded (searchable)"
+          },
+          "path": {
+            "type": "string",
+            "description": "Public file URL, usable as a post attachment"
+          },
+          "thumbnail": {
+            "type": "string",
+            "nullable": true,
+            "description": "Thumbnail URL (videos)"
+          },
+          "alt": {
+            "type": "string",
+            "nullable": true
+          },
+          "thumbnailTimestamp": {
+            "type": "integer",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "description": "Media type. Currently always \"image\" regardless of the file; use the extension of path to tell images from videos."
+          },
+          "fileSize": {
+            "type": "integer",
+            "description": "Size in bytes"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },

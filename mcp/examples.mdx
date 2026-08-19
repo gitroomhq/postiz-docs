@@ -226,6 +226,56 @@ API requires Facebook Login.
   </Step>
 </Steps>
 
+## Reuse an Existing Upload
+
+<Steps>
+  <Step title="Find the file">
+    The agent calls `mediaListTool`:
+
+    ```json
+    {
+      "search": "launch-banner"
+    }
+    ```
+
+    Returns:
+
+    ```json
+    {
+      "pages": 1,
+      "output": [
+        {
+          "id": "med-789",
+          "name": "6fba0ef5febb4400ae8778a5b854224d.png",
+          "originalName": "launch-banner.png",
+          "path": "https://uploads.postiz.com/6fba0ef5febb4400ae8778a5b854224d.png",
+          "type": "image",
+          "fileSize": 48213,
+          "createdAt": "2025-01-10T09:12:00.000Z",
+          "thumbnail": null
+        }
+      ]
+    }
+    ```
+  </Step>
+  <Step title="Schedule with the existing file">
+    The agent passes the returned `path` as an attachment, no re-upload needed:
+
+    ```json
+    {
+      "postsAndComments": [
+        {
+          "content": "<p>Launch day!</p>",
+          "attachments": ["https://uploads.postiz.com/6fba0ef5febb4400ae8778a5b854224d.png"]
+        }
+      ]
+    }
+    ```
+  </Step>
+</Steps>
+
+---
+
 ## Generate a Video and Post
 
 <Steps>

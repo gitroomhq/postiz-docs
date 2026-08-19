@@ -37,9 +37,9 @@ flowchart LR;
 - [Orchestrator](#orchestrator) - Runs Temporal workflows and activities, replacing the old cron and worker services.
 
 - [Temporal](#temporal) - A durable workflow engine that manages scheduling, retries, and task distribution.
-- [Redis](#redis) - Used for session state management and caching.
-- [SQL Database](#db) - Stores all the data, Postgres is typically used, but any SQL database can be used.
-- [Storage](#storage) - Stores all the files, this used to be CloudFlare R2 as the default, but now it's just a local file system.
+- **Redis** - Used for session state management and caching.
+- **SQL Database** - Stores all the data, Postgres is typically used, but any SQL database can be used.
+- **Storage** - Stores all the files, this used to be CloudFlare R2 as the default, but now it's just a local file system.
 
 ### Frontend
 

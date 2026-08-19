@@ -1,7 +1,7 @@
 name: Docs checks
 
 # Pull requests only. Nothing here runs on pushes to main, so a merge never
-# re-runs the same checks the PR already had to pass.
+# re-runs the checks the pull request already had to pass.
 on:
   pull_request:
 
@@ -16,28 +16,56 @@ jobs:
   lint:
     name: Structure and prose
     runs-on: ubuntu-latest
+    env:
+      # Both scripts fail only on lines this branch touched. Everything else in
+      # the repository is still checked, and reported as context.
+      BASE: ${{ github.event.pull_request.base.sha }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the checks need history to work out what changed
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
 
-      # Both scripts are dependency-free, so there is nothing to install.
-      - name: Structure (navigation, orphans, self-hosting language)
-        run: node scripts/check-docs.mjs
+      # The checks are dependency-free, so there is nothing to install.
+      - name: Structure, navigation, redirects and links
+        shell: bash
+        run: |
+          {
+            echo '## Structure'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          # || status=$? so the summary still gets its closing fence when the
+          # check fails. shell: bash already runs with -e and pipefail.
+          status=0
+          node scripts/check-docs.mjs --changed --base "$BASE" 2>&1 | tee -a "$GITHUB_STEP_SUMMARY" || status=$?
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          exit $status
 
       # always() so a structural failure still shows the prose report in the
       # same run instead of hiding it behind the first red step.
-      - name: Prose (AI markers, typos, naming, markdown mechanics)
+      - name: Prose, AI markers, typos and markdown mechanics
         if: always()
-        run: node scripts/check-prose.mjs
+        shell: bash
+        run: |
+          {
+            echo '## Prose'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          # || status=$? so the summary still gets its closing fence when the
+          # check fails. shell: bash already runs with -e and pipefail.
+          status=0
+          node scripts/check-prose.mjs --changed --base "$BASE" 2>&1 | tee -a "$GITHUB_STEP_SUMMARY" || status=$?
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          exit $status
 
   links:
     name: Broken links
     runs-on: ubuntu-latest
     # Informational: pages that are linked but not written yet are a known,
-    # tracked state, so this reports without blocking the PR.
+    # tracked state, so this reports without blocking the pull request.
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
@@ -45,3 +73,23 @@ jobs:
         with:
           node-version: 22
       - run: npx --yes mint@4 broken-links
+
+  facts:
+    name: Generated tables
+    runs-on: ubuntu-latest
+    # Informational: these tables track the Postiz source, so they go stale
+    # because of a change over there, not because of anything in this branch.
+    # Someone still has to see it, hence the job.
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: gitroomhq/postiz-app
+          path: postiz-app
+          fetch-depth: 1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Tables still match the Postiz source
+        run: POSTIZ_APP="$GITHUB_WORKSPACE/postiz-app" node scripts/sync-facts.mjs --check

@@ -4,7 +4,7 @@ description: 'A guide to migrating to the new Temporal infrastructure'
 icon: 'arrow-up-right-dots'
 ---
 
-## Prerequisites 
+## Prerequisites
 
 - Have your existing data saved somewhere (or use the existing PostgreSQL DB)
 - Cloned the [new docker-compose repo](https://github.com/gitroomhq/postiz-docker-compose)
@@ -13,22 +13,22 @@ icon: 'arrow-up-right-dots'
 
 <Steps>
   <Step title="Head into the docker-compose folder">
-      ```
+      ```bash
       cd ./postiz-docker-compose
       ```
   </Step>
-  <Step title="Insert your previous secrets into the new docker compose">
-      ```
+  <Step title="Insert your previous secrets into the new Docker Compose">
+      ```bash
       nano docker-compose.yaml
       ```
       And insert all your previous secrets from the existing docker-compose.yml before v1.12.0
   </Step>
   <Step title="Start the stack, and stop it">
-      ```
+      ```bash
       docker compose up -d
       ```
       Wait for a bit to let it start.
-      ```
+      ```bash
       docker compose down
       ```
   </Step>
@@ -45,7 +45,7 @@ icon: 'arrow-up-right-dots'
     ```
   </Step>
   <Step title="Start the stack finally">
-      ```
+      ```bash
       docker compose up -d
       ```
       And wait for it to start

@@ -41,7 +41,7 @@ The **Google My Business API** requires approval from Google. You must submit an
 
   <Step title="Configure OAuth Consent Screen">
     Navigate to the **OAuth consent screen** tab. If not already configured:
-    
+
     1. Select "External" user type (unless you have a Google Workspace organization)
     2. Fill in the required app information
     3. Add yourself as a test user
@@ -96,7 +96,8 @@ If you cannot find the "Google My Business API" in the API library, your access 
 
 Make sure all three required APIs are enabled:
 - Google My Business API
-- My Business Account Management API  
+- My Business Account Management API
+{/* docs-lint-ignore typo */}
 - My Business Business Information API
 
 ### Business Profile Not Showing
@@ -110,4 +111,3 @@ The GMB performance API restricts which metric combinations and date ranges it w
 ### Known issue: connect page surfaces session-recording errors
 
 The `/integrations/social/gmb` page can surface session-replay overlay errors that mask the actual OAuth flow. The handshake usually still completes. Refresh the Channels page after authorising on Google's side. See [Known Issues](/general/troubleshooting/known-issues).
-

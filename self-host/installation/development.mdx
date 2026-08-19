@@ -4,7 +4,7 @@ description: 'Set up Postiz for local development'
 icon: 'code'
 ---
 
-This article guides you for local development on  Postiz. If you're only looking to self-host, docker-compose is the recommended method.
+This article guides you for local development on Postiz. If you're only looking to self-host, docker-compose is the recommended method.
 [Docker-Compose](/self-host/installation/docker-compose) is the recommended method and now includes the Temporal stack for workflow processing.
 
 <Warning>
@@ -13,7 +13,7 @@ This article guides you for local development on  Postiz. If you're only looking
 
 ## Tested configurations
 
-- MacOS
+- macOS
 - Linux (Fedora 40)
 
 Naturally you can use these instructions to setup a development environment on any platform, but there may not be much experience in the community to help you with any issues you may encounter.
@@ -35,9 +35,9 @@ We have some messages from users who are using Windows, which should work, but t
 
 ## Installation Instructions
 
-### NodeJS (version 18+)
+### Node.js (version 18+)
 
-A complete guide of how to install NodeJS can be found [here](https://nodejs.org/en/download/).
+A complete guide of how to install Node.js is on the [Node.js download page](https://nodejs.org/en/download/).
 
 ### PostgreSQL (or any other SQL database) & Redis
 
@@ -54,7 +54,7 @@ docker run --name redis -p 6379:6379 -d redis
 
 #### Option B) Postgres and Redis as docker-compose
 
-Download the [docker-compose.yaml file here](https://raw.githubusercontent.com/gitroomhq/postiz-app/main/docker-compose.dev.yaml), 
+Download the [docker-compose.yaml file here](https://raw.githubusercontent.com/gitroomhq/postiz-app/main/docker-compose.dev.yaml),
 or grab it from the repository in the next step.
 
 ```bash
@@ -151,7 +151,7 @@ If everything is running successfully, open http://localhost:4200 in your browse
 
 If everything is not running - you had errors in the steps above, please head over to our [support](/general/support) page.
 
-## Next Steps 
+## Next Steps
 
 <CardGroup cols={2}>
   <Card title="Configure uploads" icon="cloud-arrow-up" href="/self-host/configuration/r2">
@@ -167,4 +167,3 @@ If everything is not running - you had errors in the steps above, please head ov
     Set up providers such as LinkedIn, X and Reddit
   </Card>
 </CardGroup>
-

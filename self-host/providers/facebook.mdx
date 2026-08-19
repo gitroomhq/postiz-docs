@@ -13,7 +13,7 @@ icon: 'facebook'
 <Steps>
   <Step title="Create a new app">
     Select a business portfolio, then create a [new app in Facebook developers](https://developers.facebook.com/apps/creation/).
-    
+
     Please be advised that for public applications, you will need to verify your business.
 
     ![Business Portfolio](/images/providers/facebook/Business-Portfolio.png)
@@ -47,7 +47,7 @@ icon: 'facebook'
 
   <Step title="Configure redirect URI">
     Set up a redirect URI back to the application
-    
+
     ![step 6](https://github.com/user-attachments/assets/8bf1774b-b6fe-4ac6-aea5-97d8c8bbf5da)
 
     <Snippet file="oauth2redirect.mdx" />
@@ -101,4 +101,3 @@ Check the **App Mode** of your Facebook app. In **Development** mode, posts with
 ### Facebook posts work for you but not for other users
 
 Same root cause as above: the app is in Development mode. Only roles you've explicitly added (developers, testers, admins) can see content published via the API. Set the app to Live.
-

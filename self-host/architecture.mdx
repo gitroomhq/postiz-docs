@@ -6,7 +6,7 @@ icon: 'diagram-project'
 
 ## Architecture
 
-Postiz is composed of 3 main services and 4 external services - all 3 of the main services typically run within a **single docker container**, and talk to each other through HTTP. Those services talk to other containers running the external services - the SQL Database, Redis, Temporal and Storage.
+Postiz is composed of 3 main services and 4 external services - all 3 of the main services typically run within a **single Docker container**, and talk to each other through HTTP. Those services talk to other containers running the external services - the SQL Database, Redis, Temporal and Storage.
 
 ```mermaid
 flowchart LR;
@@ -37,9 +37,9 @@ flowchart LR;
 - [Orchestrator](#orchestrator) - Runs Temporal workflows and activities, replacing the old cron and worker services.
 
 - [Temporal](#temporal) - A durable workflow engine that manages scheduling, retries, and task distribution.
-- [Redis](#redis) - Used for session state management and caching.
-- [SQL Database](#db) - Stores all the data, Postgres is typically used, but any SQL database can be used.
-- [Storage](#storage) - Stores all the files, this used to be CloudFlare R2 as the default, but now it's just a local file system.
+- **Redis** - Used for session state management and caching.
+- **SQL Database** - Stores all the data, Postgres is typically used, but any SQL database can be used.
+- **Storage** - Stores all the files, this used to be CloudFlare R2 as the default, but now it's just a local file system.
 
 ### Frontend
 
@@ -73,4 +73,3 @@ Temporal is a durable workflow execution engine. It provides:
 - **Task queues** - Each social platform gets its own task queue for concurrency control.
 - **Workflow visibility** - A built-in UI for monitoring and debugging workflow execution.
 - **Durable state** - Workflow state is persisted, so nothing is lost if a service restarts.
-

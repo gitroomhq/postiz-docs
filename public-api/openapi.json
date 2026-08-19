@@ -2574,6 +2574,10 @@
           },
           "path": {
             "type": "string"
+          },
+          "thumbnail": {
+            "type": "string",
+            "description": "Optional image URL (jpeg/png, uploaded via the uploads endpoint) used as the video thumbnail / cover, e.g. the Instagram Reel cover"
           }
         }
       },

@@ -117,6 +117,25 @@ smaller than what you see in the Instagram app.
 
 ---
 
+## Reel Cover Image
+
+To set a custom cover for a Reel, upload a JPEG/PNG image via the
+[uploads endpoint](/public-api/uploads/upload-file) and pass its path as the
+`thumbnail` of the video media object. Without a `thumbnail`, Instagram picks
+a frame from the video as the cover.
+
+```json
+"image": [
+  {
+    "id": "video-id",
+    "path": "https://uploads.postiz.com/reel.mp4",
+    "thumbnail": "https://uploads.postiz.com/cover.jpg"
+  }
+]
+```
+
+---
+
 ## Complete Example
 
 ### Feed Post

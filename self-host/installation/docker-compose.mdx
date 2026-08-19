@@ -15,7 +15,7 @@ Watch the Tutorial for docker-compose install: [https://m.youtube.com/watch?v=A6
 
 ## Docker Compose
 
-This guide assumes that you have docker installed, with a reasonable amount of resources to run Postiz. This Docker Compose setup has been tested with;
+This guide assumes that you have Docker installed, with a reasonable amount of resources to run Postiz. This Docker Compose setup has been tested with;
 
 - Virtual Machine, Ubuntu 24.04, 2Gb RAM, 2 vCPUs.
 
@@ -23,7 +23,7 @@ This guide assumes that you have docker installed, with a reasonable amount of r
 
 ### Configuration uses environment variables
 
-The docker containers for Postiz are entirely configured with environment variables.
+The Docker containers for Postiz are entirely configured with environment variables.
 
 - **Option A** - environment variables in your `docker-compose.yml` file
 - **Option B** - environment variables in a `postiz.env` file mounted in `/config` for the Postiz container only
@@ -34,15 +34,15 @@ The docker containers for Postiz are entirely configured with environment variab
 ## Installation
 <Steps>
   <Step title="Clone the Docker Compose repository">
-      ```
+      ```bash
       git clone https://github.com/gitroomhq/postiz-docker-compose
       ```
   </Step>
-  <Step title="Configure your docker compose">
-      Configure your docker compose variables
+  <Step title="Configure your Docker Compose">
+      Configure your Docker Compose variables
   </Step>
   <Step title="Run the docker-compose command">
-      ```
+      ```bash
       docker compose up
       ```
   </Step>
@@ -69,7 +69,7 @@ services, images, and environment variables change between releases, and the
 repository is the canonical source.
 </Note>
 
-## How to use docker compose
+## How to use Docker Compose
 
 From the cloned repository directory, run `docker compose up` to start the services.
 
@@ -95,4 +95,3 @@ If everything looks good, then you can access the Postiz web interface at https:
     Set up providers such as LinkedIn, X and Reddit
   </Card>
 </CardGroup>
-

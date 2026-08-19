@@ -20,13 +20,13 @@ NOT_SECURED=true
 
 #### Network Ports
 
-- **5000/tcp**: for a single **single entry point** for postiz when running in a container. This is the one port your reverse proxy should talk to.
+- **5000/tcp**: for a single **single entry point** for Postiz when running in a container. This is the one port your reverse proxy should talk to.
 - **4200/tcp**: for the **Frontend** service (the web interface). Most users **do not** need to expose this port publicly.
 - **3000/tcp**: for the **Backend** service (the API). Most users **do not** need to expose this port publicly.
 - **5432/tcp**: for the **Postgres** container. Most users **do not** need to expose this port publicly.
 - **6379/tcp**: for the **Redis** container. Most users **do not** need to expose this port publicly.
 
-If you are using docker images, we recommend just exposing port 5000 to your external proxy. This will reduce the likelihood of misconfiguration, and make it easier to manage your network.
+If you are using Docker images, we recommend just exposing port 5000 to your external proxy. This will reduce the likelihood of misconfiguration, and make it easier to manage your network.
 
 ```mermaid
 graph TD;
@@ -42,4 +42,3 @@ graph TD;
 	E -->|5432/tcp| F[Postgres Container]
 	E -->|6379/tcp| G[Redis Container]
 ```
-

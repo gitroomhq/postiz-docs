@@ -15,7 +15,7 @@ Add the following to your Claude Desktop MCP configuration file:
     {
       "mcpServers": {
         "postiz": {
-          "url": "https://api.postiz.com/mcp/your-api-key"
+          "url": "https://mcp.postiz.com/mcp/your-api-key"
         }
       }
     }
@@ -28,7 +28,7 @@ Add the following to your Claude Desktop MCP configuration file:
     {
       "mcpServers": {
         "postiz": {
-          "url": "https://api.postiz.com/mcp/your-api-key"
+          "url": "https://mcp.postiz.com/mcp/your-api-key"
         }
       }
     }
@@ -43,7 +43,7 @@ Replace `your-api-key` with your actual API key from **Settings > Developers > P
 The fastest way is the CLI:
 
 ```bash
-claude mcp add postiz --transport http --url https://api.postiz.com/mcp/your-api-key
+claude mcp add postiz --transport http --url https://mcp.postiz.com/mcp/your-api-key
 ```
 
 Or add it to your Claude Code config directly:
@@ -52,7 +52,7 @@ Or add it to your Claude Code config directly:
 {
   "mcpServers": {
     "postiz": {
-      "url": "https://api.postiz.com/mcp/your-api-key"
+      "url": "https://mcp.postiz.com/mcp/your-api-key"
     }
   }
 }
@@ -62,9 +62,23 @@ The Bearer-token transport works too — pick whichever your client supports bet
 
 ```bash
 claude mcp add postiz --transport http \
-  --url https://api.postiz.com/mcp \
+  --url https://mcp.postiz.com/mcp \
   --header "Authorization: Bearer your-api-key"
 ```
+
+## Claude.ai and ChatGPT (remote connectors)
+
+For remote clients such as claude.ai custom connectors or ChatGPT, use the URL from the Postiz dashboard: go to **Settings > MCP Client Configuration**, open the **Remote servers (ChatGPT, Claude)** tab and copy the URL. It has the form:
+
+```
+https://mcp.postiz.com/mcp/your-api-key
+```
+
+Paste it as the connector URL and leave the OAuth Client ID and Client Secret empty — the key in the URL is the only authentication needed.
+
+<Warning>
+Using `https://mcp.postiz.com/mcp` without the API key will fail in these clients with an OAuth registration error (for example "Couldn't register with Postiz's sign-in service"). Always include the key in the URL.
+</Warning>
 
 ## Cursor
 
@@ -72,24 +86,24 @@ In Cursor, go to **Settings > MCP** and add a new server:
 
 - **Name:** Postiz
 - **Type:** HTTP
-- **URL:** `https://api.postiz.com/mcp/your-api-key`
+- **URL:** `https://mcp.postiz.com/mcp/your-api-key`
 
 ## Other MCP Clients
 
 Any MCP-compatible client can connect to Postiz. Use the streamable HTTP transport:
 
-- **URL:** `https://api.postiz.com/mcp/your-api-key`
+- **URL:** `https://mcp.postiz.com/mcp/your-api-key`
 - **Transport:** Streamable HTTP
 
 Or, if your client supports Bearer token authentication:
 
-- **URL:** `https://api.postiz.com/mcp`
+- **URL:** `https://mcp.postiz.com/mcp`
 - **Transport:** Streamable HTTP
 - **Authorization:** `Bearer your-api-key`
 
 ## Self-Hosted
 
-For self-hosted Postiz instances, replace `https://api.postiz.com` with your `NEXT_PUBLIC_BACKEND_URL`:
+For self-hosted Postiz instances, replace `https://mcp.postiz.com` with your `NEXT_PUBLIC_BACKEND_URL`:
 
 ```
 https://your-postiz-server.com/mcp/your-api-key

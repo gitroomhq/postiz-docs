@@ -4,7 +4,10 @@
   "description": "Postiz documentation, built with Mintlify",
   "scripts": {
     "dev": "mint dev",
-    "check": "node scripts/check-docs.mjs",
+    "check": "node scripts/check-docs.mjs && node scripts/check-prose.mjs",
+    "check:structure": "node scripts/check-docs.mjs",
+    "check:prose": "node scripts/check-prose.mjs",
+    "check:changed": "node scripts/check-docs.mjs --changed && node scripts/check-prose.mjs --changed",
     "check:links": "mint broken-links"
   },
   "devDependencies": {

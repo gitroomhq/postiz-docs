@@ -1,7 +1,7 @@
 ---
 title: Self-hosting the CLI auth server
 sidebarTitle: Self-hosted auth server
-description: 'Run your own OAuth2 device-flow server for postiz auth:login'
+description: 'Run your own OAuth2 device-flow server for the Postiz CLI login'
 icon: 'server'
 ---
 
@@ -21,7 +21,7 @@ The auth server mediates the OAuth2 device flow so CLI users can authenticate wi
 
 ### How It Works
 
-```
+```text
 CLI                        Auth Server                    Postiz
  |                              |                           |
  |-- POST /device/code ------->|                           |
@@ -52,7 +52,7 @@ cd postiz-agent/server
 
 Go to **Postiz Settings > Developer > OAuth Apps** and create a new app. Set the callback URL to:
 
-```
+```text
 https://your-server-domain.com/device/callback
 ```
 

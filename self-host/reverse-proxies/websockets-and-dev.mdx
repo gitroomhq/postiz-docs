@@ -54,7 +54,7 @@ this, Next.js refuses HMR connections coming through the tunnel.
 ```js
 const nextConfig = {
   allowedDevOrigins: ['your-subdomain.ngrok-free.app'],
-  // …
+  // ...
 };
 ```
 
@@ -72,7 +72,7 @@ When `FRONTEND_URL` is plain HTTP, several social providers
 your redirect URI. Postiz works around this by wrapping the redirect
 through `https://redirectmeto.com/`:
 
-```
+```text
 https://redirectmeto.com/http://localhost:4200/integrations/social/slack
 ```
 

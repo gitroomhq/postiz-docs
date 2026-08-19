@@ -23,7 +23,7 @@ These six variables are non-optional for any deployment.
 
 PostgreSQL connection string used by Prisma.
 
-```
+```env
 DATABASE_URL="postgresql://postiz-user:postiz-password@localhost:5432/postiz-db-local"
 ```
 
@@ -31,7 +31,7 @@ DATABASE_URL="postgresql://postiz-user:postiz-password@localhost:5432/postiz-db-
 
 Redis connection string used for queues, rate limiting, and short-lived caches.
 
-```
+```env
 REDIS_URL="redis://localhost:6379"
 ```
 
@@ -43,7 +43,7 @@ A long random string used to sign session JWTs. Rotating this invalidates every 
 
 The URL the **browser** uses to reach the Postiz frontend. Used as the OAuth redirect base and for email links.
 
-```
+```env
 FRONTEND_URL="https://postiz.example.com"
 ```
 
@@ -51,7 +51,7 @@ FRONTEND_URL="https://postiz.example.com"
 
 The URL the **browser** uses to reach the Postiz backend.
 
-```
+```env
 NEXT_PUBLIC_BACKEND_URL="https://api.postiz.example.com"
 ```
 

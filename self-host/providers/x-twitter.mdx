@@ -14,7 +14,7 @@ X is a bit different.
 
 They created an oAuth2 flow, but it works only with Twitter v2 API.
 But in order to upload pictures to X, you need to use the old Twitter v1 API.
-So you are going to use the normal oAuth1 flow for that (that supports Twitter v2 also 🤷🏻‍).
+So you are going to use the normal oAuth1 flow for that (that supports Twitter v2 also 🤷🏻).
 
 <Steps>
   <Step title="Create a new app">
@@ -26,13 +26,13 @@ So you are going to use the normal oAuth1 flow for that (that supports Twitter v
 
   <Step title="Edit application settings">
     Click to edit the application settings
-    
+
     ![X](/images/providers/x/x-002.png)
   </Step>
 
   <Step title="Set up authentication flow">
     Click to set up an authentication flow
-    
+
     ![X](/images/providers/x/x-003.png)
 
     - In the App Permission set it to `Read and Write`
@@ -56,9 +56,9 @@ So you are going to use the normal oAuth1 flow for that (that supports Twitter v
 
   <Step title="Copy your API keys">
     Save it and go to "Keys and Tokens" tab.
-    
+
     Click on "Regenerate" inside "Consumer Keys" and copy the `API Key` and `API Key Secret`.
-    
+
     Open .env file and add the following:
 
 ```env
@@ -82,5 +82,3 @@ When creating a post for X, you can configure the following options:
 - **Post to a community**: Optionally share your post to an X community by providing the community URL.
 - **Made with AI**: Mark your post as containing AI-generated content. When enabled, the post will be labeled accordingly on X.
 - **Paid partnership**: Mark your post as a paid promotion. When enabled, the post will be labeled as a paid partnership on X.
-
-

@@ -13,7 +13,7 @@ TikTok will also not allow http:// for your app redirect URI, so you will need t
 </Note>
 
 <Warning>
-**NOTE:** TikTok fetches media via pull_from_url. Your media files must be publicly reachable over HTTPS; localhost or private routes (e.g., /uploads) will fail. 
+**NOTE:** TikTok fetches media via pull_from_url. Your media files must be publicly reachable over HTTPS; localhost or private routes (e.g., /uploads) will fail.
 Expose your uploads via a reverse proxy (e.g., [Caddy](/self-host/reverse-proxies/caddy)) or use object storage/CDN such as [Cloudflare R2](/self-host/configuration/r2) with public access.
 
 Ensure the media domain is listed under your TikTok developer account's verified sites.
@@ -49,7 +49,7 @@ In practice this means: before your TikTok developer app passes audit, the `priv
   </Step>
 
   <Step title="Set a TOS and Privacy Policy">
-    This needs to be on a public domain that you have access to, that is hosted on HTTPS. 
+    This needs to be on a public domain that you have access to, that is hosted on HTTPS.
 
     Tick "Web" for your platforms.
   </Step>

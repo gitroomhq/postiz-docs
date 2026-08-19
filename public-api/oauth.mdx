@@ -54,7 +54,7 @@ sequenceDiagram
   <Step title="Redirect Users to Authorize">
     When a user wants to connect their Postiz account to your app, redirect them to:
 
-    ```
+    ```text
     https://{FRONTEND_URL}/oauth/authorize?client_id={CLIENT_ID}&response_type=code&state={STATE}
     ```
 
@@ -78,7 +78,7 @@ sequenceDiagram
 
     **If approved:**
 
-    ```
+    ```text
     https://yourapp.com/callback?code=abc123&state=random123
     ```
 
@@ -89,7 +89,7 @@ sequenceDiagram
 
     **If denied:**
 
-    ```
+    ```text
     https://yourapp.com/callback?error=access_denied&state=random123
     ```
 

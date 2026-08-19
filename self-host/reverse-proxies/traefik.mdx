@@ -25,7 +25,6 @@ services:
       - "traefik.http.routers.postiz.entrypoints=websecure"  # Postiz requires HTTPS
       - "traefik.http.routers.postiz.tls=true"
 
-
   traefik:
     image: "traefik:v2.9"
     container_name: "traefik"
@@ -43,4 +42,3 @@ services:
     networks:
       - postiz-network
 ```
-

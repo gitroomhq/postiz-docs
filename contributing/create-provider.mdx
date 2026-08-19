@@ -4,7 +4,7 @@ description: 'How to add a new provider to Postiz'
 icon: 'plus'
 ---
 
-# Steps to implement a new provider
+## Steps to implement a new provider
 
 1. **The backend logic:**
    - Define DTO for the settings of the provider
@@ -26,7 +26,7 @@ For our example, we will use the X provider.
 <Steps>
   <Step title="Create a DTO for provider settings">
     Head over to `nestjs-libraries/src/dtos/posts/providers-settings` and create a new file `x-provider-settings.dto.ts`
-    
+
     <Note>
     You don't have to create a DTO if there are no settings
     </Note>
@@ -56,7 +56,7 @@ import {
 export class XProvider implements SocialProvider {
   identifier = 'providerName';
   name = 'Provider Name';
-  
+
   async refreshToken(refreshToken: string): Promise<AuthTokenDetails> {
     // ...refresh the token
   }
@@ -100,7 +100,7 @@ You can create a public function in the provider for example `organizations` and
 <Steps>
   <Step title="Create provider component">
     Head over to `apps/frontend/src/components/launches/providers` and create a new folder with the providerName.
-    
+
     Add a new file `providerName.provider.tsx` with the following content:
 
 ```typescript
@@ -160,4 +160,3 @@ const getOrgs = useCallback(() => {
 ```
   </Step>
 </Steps>
-

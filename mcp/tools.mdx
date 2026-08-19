@@ -234,6 +234,28 @@ If the update fails, returns `{ errors: string }` with details (e.g., post not f
 
 ---
 
+## mediaListTool
+
+List the media files already uploaded to your media library, newest first, 18 per page. Use it to reuse an existing image or video instead of uploading it again.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `search` | string | No | Case-insensitive filter on the original file name |
+| `page` | number | No | Page number, starting at 1 (default 1) |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `pages` | number | Total number of pages |
+| `output` | array | Media items: `id`, `name`, `originalName`, `path`, `type`, `fileSize`, `createdAt`, `thumbnail` |
+
+Use an item's `path` in the `attachments` array when scheduling a post.
+
+---
+
 ## generateImageTool
 
 Generate an AI image to use as a post attachment.

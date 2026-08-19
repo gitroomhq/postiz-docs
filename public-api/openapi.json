@@ -2390,7 +2390,7 @@
           },
           "type": {
             "type": "string",
-            "description": "image or video"
+            "description": "Media type. Currently always \"image\" regardless of the file; use the extension of path to tell images from videos."
           },
           "fileSize": {
             "type": "integer",

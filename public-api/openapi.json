@@ -2363,6 +2363,12 @@
               "DRAFT"
             ]
           },
+          "error": {
+            "type": "string",
+            "nullable": true,
+            "description": "For posts in the ERROR state, the error message reported by the platform when it rejected the post (the same message shown in the calendar tooltip). `null` when the post did not fail or no platform message is available.",
+            "example": "Account banned from posting, please check TikTok account status"
+          },
           "integration": {
             "type": "object",
             "properties": {

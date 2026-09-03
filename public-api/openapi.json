@@ -537,6 +537,16 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "includeAttachments",
+            "in": "query",
+            "required": false,
+            "description": "Set to true to include each post's attachments (the media already uploaded to Postiz). Default false.",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": true
           }
         ],
         "responses": {
@@ -2362,6 +2372,27 @@
               "ERROR",
               "DRAFT"
             ]
+          },
+          "attachments": {
+            "type": "array",
+            "description": "Only present when includeAttachments=true. The media attached to the post; pass the path values as attachments when creating a post to reuse the same media on another channel without re-uploading.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string",
+                  "description": "URL of the uploaded file"
+                },
+                "thumbnail": {
+                  "type": "string",
+                  "nullable": true,
+                  "description": "URL of the thumbnail / cover image, if one was set"
+                }
+              }
+            }
           },
           "integration": {
             "type": "object",

@@ -2073,10 +2073,10 @@
                     }
                   }
                 },
-                "veo3": {
-                  "summary": "VEO3 Fast Video",
+                "seedance": {
+                  "summary": "Seedance 2.0 (Audio + Video)",
                   "value": {
-                    "type": "veo3",
+                    "type": "seedance",
                     "output": "vertical",
                     "customParams": {
                       "prompt": "A scenic view of mountains at sunset",
@@ -2110,6 +2110,9 @@
                 }
               }
             }
+          },
+          "406": {
+            "description": "Not available on the trial. On Postiz Cloud, generators that are not trial-enabled (currently seedance) return `This video is not available in trial mode` until the trial ends."
           }
         }
       }
@@ -3514,7 +3517,7 @@
             "type": "string",
             "enum": [
               "image-text-slides",
-              "veo3"
+              "seedance"
             ],
             "description": "Video generation type"
           },
@@ -3543,7 +3546,7 @@
                 "items": {
                   "$ref": "#/components/schemas/Media"
                 },
-                "description": "Reference images (for veo3, max 3)"
+                "description": "Reference images (for seedance, max 3)"
               }
             }
           }

@@ -371,6 +371,14 @@
             ]
           },
           {
+            "group": "Clipping",
+            "pages": [
+              "public-api/clipping/create",
+              "public-api/clipping/get",
+              "public-api/clipping/list"
+            ]
+          },
+          {
             "group": "Provider settings",
             "pages": [
               "public-api/providers/x",
@@ -423,6 +431,7 @@
               "cli/integrations",
               "cli/analytics",
               "cli/media-upload",
+              "cli/clipping",
               "cli/platform-examples",
               "self-host/cli-auth-server"
             ]

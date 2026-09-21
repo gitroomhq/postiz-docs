@@ -5,7 +5,7 @@ description: 'Turn a long YouTube video into captioned vertical clips and draft 
 icon: 'scissors'
 ---
 
-**Where:** the Agent section, or any client connected through [MCP](/mcp/introduction)
+**Where:** the Agent section, any client connected through [MCP](/mcp/introduction), the [Public API](/public-api/clipping/create) and the [CLI](/cli/clipping)
 
 <Note>
 **Availability:** Postiz Cloud, Standard plan and above, once the trial has
@@ -22,7 +22,7 @@ until you review them.
 
 ## Starting a clipping
 
-There is no clipping screen. You ask for it in a chat:
+There is no clipping screen. You ask for it in a chat (or start it [from code](#from-the-public-api-and-the-cli)):
 
 - In the [AI agent](/general/agents), paste the YouTube link and say what you
   want, for example "clip this video into 5 shorts and draft them for my TikTok
@@ -124,19 +124,28 @@ is the 180 minute cap below.
 | No speech was found in this video | Clips are picked from what is said, so a video without speech cannot be clipped |
 | No part of this video works as a short clip | Nothing in the video stands on its own for 10 to 90 seconds |
 
-## Not in the Public API or CLI
+## From the Public API and the CLI
 
-Clipping is available through the agent and MCP only. The
-[Public API](/public-api/introduction) and the [CLI](/cli/introduction) have no
-clipping endpoint or command. Once a clip is in the media library, its URL works
-as an attachment anywhere a media URL does, including
-[Create Post](/public-api/posts/create).
+The same clipping can be started from code. The [Public API](/public-api/clipping/create)
+has an endpoint to start a clipping, one to read its status and clips, and one
+to list them, and the [CLI](/cli/clipping) wraps them as `clipping:create`,
+`clipping:status` and `clipping:list`. The options, the clipping minutes and the
+limits are the ones on this page.
+
+The URL of a finished clip works as an attachment anywhere a media URL does,
+including [Create Post](/public-api/posts/create).
 
 ## Related
 
 <CardGroup cols={2}>
   <Card title="Clipping tools" icon="wrench" href="/mcp/tools#clippingtool">
     The MCP tools and their parameters.
+  </Card>
+  <Card title="Public API" icon="plug" href="/public-api/clipping/create">
+    Start a clipping and read its clips over HTTP.
+  </Card>
+  <Card title="CLI" icon="terminal" href="/cli/clipping">
+    The `clipping:*` commands.
   </Card>
   <Card title="Clipping example" icon="code" href="/mcp/examples#clip-a-youtube-video-into-draft-posts">
     The tool calls behind a clipping, step by step.

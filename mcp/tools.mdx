@@ -234,6 +234,26 @@ If the update fails, returns `{ errors: string }` with details (e.g., post not f
 
 ---
 
+## deletePostTool
+
+Delete a post, the same as the [Delete Post](/public-api/posts/delete) API endpoint. It deletes the post together with all of its thread items or comments. A post scheduled to several channels is a separate post per channel, each with its own ID, so deleting one leaves the others in place. This cannot be undone. A post that was already published is only removed from Postiz and stays live on the social network. One post per call.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | Yes | The post ID (from `postsListTool`) |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | The deleted post ID |
+
+If the deletion fails, returns `{ errors: string }` with details (e.g., post not found).
+
+---
+
 ## generateImageTool
 
 Generate an AI image to use as a post attachment.

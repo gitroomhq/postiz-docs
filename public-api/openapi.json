@@ -1837,7 +1837,7 @@
           "Analytics"
         ],
         "summary": "Get post analytics",
-        "description": "Get analytics data for a specific published post. Returns metrics like likes, comments, shares, impressions, etc. depending on the platform.",
+        "description": "Get analytics data for a specific published post. Returns metrics like likes, comments, shares, impressions, etc. depending on the platform. Returns an empty array for platforms without per-post metrics and for posts whose platform ID is not available yet.",
         "operationId": "getPostAnalytics",
         "parameters": [
           {
@@ -2600,9 +2600,13 @@
             "type": "string",
             "format": "date-time"
           },
+          "releaseId": {
+            "type": "string",
+            "description": "ID of the published post on the platform. For TikTok, until the video ID is resolved (see Post Analytics) this is TikTok's publish handle."
+          },
           "releaseURL": {
             "type": "string",
-            "description": "URL of the published post"
+            "description": "URL of the published post. For TikTok, until the video ID is resolved (see Post Analytics) this is the channel's profile URL."
           },
           "state": {
             "type": "string",

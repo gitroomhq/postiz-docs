@@ -166,12 +166,17 @@ function readProviders() {
   });
 }
 
+// The two TikTok providers are both named "TikTok" (one as "Tiktok"), so
+// label them the way the rest of the docs do.
+const displayName = { tiktok: 'TikTok', 'tiktok-business': 'TikTok Business' };
+const labelOf = (p) => displayName[p.identifier] || p.name;
+
 function platformsTable(providers) {
   const head = '| Platform | API `__type` | How you connect it | Self-hosted: needs a developer app | Characters |';
   const rule = '|---|---|---|---|---|';
   const rows = providers.map(
     (p) =>
-      `| ${p.name} | \`${p.identifier}\` | ${p.connect} | ${p.needsApp ? 'Yes' : 'No'} | ${p.maxChars} |`
+      `| ${labelOf(p)} | \`${p.identifier}\` | ${p.connect} | ${p.needsApp ? 'Yes' : 'No'} | ${p.maxChars} |`
   );
   return [head, rule, ...rows].join('\n');
 }
@@ -198,7 +203,7 @@ function analyticsTable(providers) {
   const thirty = listBefore(30);
   const ninety = listBefore(90);
 
-  const nameOf = new Map(providers.map((p) => [p.identifier, p.name]));
+  const nameOf = new Map(providers.map((p) => [p.identifier, labelOf(p)]));
   const ranges = (id) => {
     const out = ['7'];
     if (thirty.includes(id)) out.push('30');
@@ -212,9 +217,6 @@ function analyticsTable(providers) {
 }
 
 function postAnalyticsTable(providers) {
-  // The two TikTok providers are both named "TikTok" (one as "Tiktok"), so
-  // label them the way the rest of the docs do.
-  const displayName = { tiktok: 'TikTok', 'tiktok-business': 'TikTok Business' };
   const socialDir = 'libraries/nestjs-libraries/src/integrations/social';
   const withPostAnalytics = readdirSync(join(appRoot, socialDir))
     .filter((f) => f.endsWith('.provider.ts'))
@@ -225,7 +227,7 @@ function postAnalyticsTable(providers) {
   const rule = '|---|';
   const rows = providers
     .filter((p) => withPostAnalytics.includes(p.identifier))
-    .map((p) => `| ${displayName[p.identifier] || p.name} |`);
+    .map((p) => `| ${labelOf(p)} |`);
   return [head, rule, ...rows].join('\n');
 }
 

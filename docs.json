@@ -149,7 +149,8 @@
               "general/automations/auto-post-rss",
               "general/automations/webhooks",
               "general/automations/third-party",
-              "general/agents"
+              "general/agents",
+              "general/clipping"
             ]
           },
           {
@@ -240,6 +241,7 @@
               "self-host/configuration/r2",
               "self-host/configuration/oauth",
               "self-host/configuration/polotno",
+              "self-host/configuration/clipping",
               "self-host/configuration/chrome-extension"
             ]
           },
@@ -312,8 +314,7 @@
           {
             "group": "Overview",
             "pages": [
-              "public-api/introduction",
-              "public-api/oauth"
+              "public-api/introduction"
             ]
           },
           {
@@ -370,6 +371,14 @@
             ]
           },
           {
+            "group": "Clipping",
+            "pages": [
+              "public-api/clipping/create",
+              "public-api/clipping/get",
+              "public-api/clipping/list"
+            ]
+          },
+          {
             "group": "Provider settings",
             "pages": [
               "public-api/providers/x",
@@ -411,7 +420,7 @@
         ]
       },
       {
-        "tab": "Automation",
+        "tab": "Agents",
         "groups": [
           {
             "group": "CLI",
@@ -422,6 +431,7 @@
               "cli/integrations",
               "cli/analytics",
               "cli/media-upload",
+              "cli/clipping",
               "cli/platform-examples",
               "self-host/cli-auth-server"
             ]
@@ -433,6 +443,17 @@
               "mcp/setup",
               "mcp/tools",
               "mcp/examples"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Add Postiz to your app",
+        "groups": [
+          {
+            "group": "OAuth2",
+            "pages": [
+              "public-api/oauth"
             ]
           }
         ]

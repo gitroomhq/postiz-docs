@@ -1,0 +1,21 @@
+---
+title: 'Start a Clipping'
+openapi: 'POST /clipping'
+icon: 'scissors'
+---
+
+See [Video clipping](/general/clipping) for what the feature does, the clipping minutes it uses and its limits.
+
+<Note>
+Clipping takes several minutes. This endpoint only starts it and returns the clipping `id`: poll [Get a Clipping](/public-api/clipping/get) until the status is `completed` or `failed`.
+</Note>
+
+## Clipping minutes
+
+On Postiz Cloud a clipping spends one clipping minute for every minute of the source video, from the same monthly allowance the agent and MCP use:
+
+- With no minutes left the request is refused with `402` and nothing is charged.
+- The minutes are charged once the real length of the video is known. A video longer than the minutes left fails the clipping (the `error` of [Get a Clipping](/public-api/clipping/get) says so) and nothing is charged.
+- A clipping that fails without producing a single clip gives the minutes back.
+
+Starting a clipping and polling its status do not count against the hourly [rate limit](/public-api/introduction#rate-limits), which applies to the create post endpoint only. Clipping has its own caps: one running clipping per organization and 20 starts a day, both answered with `429`.

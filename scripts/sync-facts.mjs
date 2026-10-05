@@ -16,6 +16,7 @@
  *   limits     -> cloud/limits.mdx
  *   platforms  -> general/platforms/overview.mdx
  *   analytics  -> general/analytics.mdx
+ *   post-analytics -> general/analytics.mdx
  *
  * Usage: node scripts/sync-facts.mjs [--check]
  */
@@ -61,6 +62,7 @@ function pricingTable(pricing) {
     ['Posts per month', tiers.map((t) => count(t.posts_per_month))],
     ['AI image credits', tiers.map((t) => String(t.image_generation_count))],
     ['AI video credits', tiers.map((t) => String(t.generate_videos))],
+    ['Clipping minutes', tiers.map((t) => String(t.clipping_minutes))],
     ['Webhooks', tiers.map((t) => count(t.webhooks))],
     ['Team members', tiers.map((t) => yes(t.team_members))],
     ['RSS auto-posting', tiers.map((t) => yes(t.autoPost))],
@@ -78,6 +80,7 @@ function limitsTable(pricing) {
     ['Channels', 'Connecting or enabling one past the cap', tiers.map((t) => t.channel)],
     ['AI images per month', 'Generating an image with no credits left', tiers.map((t) => t.image_generation_count)],
     ['AI videos per month', 'Generating a video with no credits left', tiers.map((t) => t.generate_videos)],
+    ['Clipping minutes per month', 'Clipping a video longer than the minutes left', tiers.map((t) => t.clipping_minutes)],
     ['Webhooks', 'Saving one past the cap', tiers.map((t) => t.webhooks)],
   ];
   const head = `| Limit | Enforced when | ${tiers.map((t) => titleCase(t.current)).join(' | ')} |`;
@@ -163,12 +166,17 @@ function readProviders() {
   });
 }
 
+// The two TikTok providers are both named "TikTok" (one as "Tiktok"), so
+// label them the way the rest of the docs do.
+const displayName = { tiktok: 'TikTok', 'tiktok-business': 'TikTok Business' };
+const labelOf = (p) => displayName[p.identifier] || p.name;
+
 function platformsTable(providers) {
   const head = '| Platform | API `__type` | How you connect it | Self-hosted: needs a developer app | Characters |';
   const rule = '|---|---|---|---|---|';
   const rows = providers.map(
     (p) =>
-      `| ${p.name} | \`${p.identifier}\` | ${p.connect} | ${p.needsApp ? 'Yes' : 'No'} | ${p.maxChars} |`
+      `| ${labelOf(p)} | \`${p.identifier}\` | ${p.connect} | ${p.needsApp ? 'Yes' : 'No'} | ${p.maxChars} |`
   );
   return [head, rule, ...rows].join('\n');
 }
@@ -195,7 +203,7 @@ function analyticsTable(providers) {
   const thirty = listBefore(30);
   const ninety = listBefore(90);
 
-  const nameOf = new Map(providers.map((p) => [p.identifier, p.name]));
+  const nameOf = new Map(providers.map((p) => [p.identifier, labelOf(p)]));
   const ranges = (id) => {
     const out = ['7'];
     if (thirty.includes(id)) out.push('30');
@@ -205,6 +213,21 @@ function analyticsTable(providers) {
   const head = '| Platform | Ranges available |';
   const rule = '|---|---|';
   const rows = allowed.map((id) => `| ${nameOf.get(id) || id} | ${ranges(id)} |`);
+  return [head, rule, ...rows].join('\n');
+}
+
+function postAnalyticsTable(providers) {
+  const socialDir = 'libraries/nestjs-libraries/src/integrations/social';
+  const withPostAnalytics = readdirSync(join(appRoot, socialDir))
+    .filter((f) => f.endsWith('.provider.ts'))
+    .filter((f) => /^\s+async postAnalytics\(/m.test(app(join(socialDir, f))))
+    .map((f) => app(join(socialDir, f)).match(/^\s+(?:override\s+)?identifier\s*=\s*'([\w-]+)'/m)?.[1]);
+
+  const head = '| Platform |';
+  const rule = '|---|';
+  const rows = providers
+    .filter((p) => withPostAnalytics.includes(p.identifier))
+    .map((p) => `| ${labelOf(p)} |`);
   return [head, rule, ...rows].join('\n');
 }
 
@@ -241,7 +264,8 @@ if (process.argv.includes('--print')) {
   console.log(pricingTable(pricing), '\n');
   console.log(limitsTable(pricing), '\n');
   console.log(platformsTable(providers), '\n');
-  console.log(analyticsTable(providers));
+  console.log(analyticsTable(providers), '\n');
+  console.log(postAnalyticsTable(providers));
   process.exit(0);
 }
 
@@ -250,6 +274,7 @@ const results = [
   applyRegion('cloud/limits.mdx', 'limits', limitsTable(pricing)),
   applyRegion('general/platforms/overview.mdx', 'platforms', platformsTable(providers)),
   applyRegion('general/analytics.mdx', 'analytics', analyticsTable(providers)),
+  applyRegion('general/analytics.mdx', 'post-analytics', postAnalyticsTable(providers)),
 ];
 
 for (const r of results) console.log(`  ${r.status.padEnd(20)} ${r.file} [${r.region}]`);

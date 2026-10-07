@@ -26,6 +26,7 @@ Facebook integration allows you to post to Facebook pages. You can optionally in
 | `url` | string | ❌ | Optional link URL to include in the post |
 | `post_type` | string | ❌ | `post` (default) or `story` |
 | `text_format_preset_id` | string | ❌ | Background preset for a text-only post |
+| `title` | string | ❌ | Title of the video, used only for video posts |
 
 ### `post_type`
 
@@ -48,6 +49,12 @@ Constraints, all enforced by Facebook rather than Postiz:
 Facebook publishes no API to enumerate the presets, so Postiz ships a fixed
 catalogue of them. Pick one in the app to find the ID you want, then reuse that
 ID over the API.
+
+### `title`
+
+Sets the title of the published video. It applies only to a `post` whose first
+attachment is an mp4 video, and is ignored for stories, photo posts and
+text-only posts.
 
 ## Examples
 
@@ -132,6 +139,39 @@ ID over the API.
       ],
       "settings": {
         "__type": "facebook"
+      }
+    }
+  ]
+}
+```
+
+### Video post with title
+
+```json
+{
+  "type": "schedule",
+  "date": "2024-12-14T10:00:00.000Z",
+  "shortLink": false,
+  "tags": [],
+  "posts": [
+    {
+      "integration": {
+        "id": "your-facebook-integration-id"
+      },
+      "value": [
+        {
+          "content": "Behind the scenes of our product launch 🎬",
+          "image": [
+            {
+              "id": "vid-123",
+              "path": "https://uploads.postiz.com/launch.mp4"
+            }
+          ]
+        }
+      ],
+      "settings": {
+        "__type": "facebook",
+        "title": "Product launch: behind the scenes"
       }
     }
   ]

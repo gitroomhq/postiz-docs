@@ -4,13 +4,13 @@ description: 'Connect AI agents to Postiz using the Model Context Protocol (MCP)
 icon: 'robot'
 ---
 
-MCP (Model Context Protocol) lets AI agents interact with Postiz directly, listing integrations, scheduling posts, generating images and videos, all through a standardized tool-calling interface.
+MCP (Model Context Protocol) lets AI agents interact with Postiz directly, listing integrations, scheduling posts, generating images and videos, clipping long videos into shorts, all through a standardized tool-calling interface.
 
 This means you can connect Claude, ChatGPT, Cursor, or any MCP-compatible client to your Postiz account and manage your social media through natural language.
 
 ## How It Works
 
-Postiz exposes an MCP server that provides **11 tools** to AI agents. The agent discovers these tools, understands their schemas, and calls them on your behalf.
+Postiz exposes an MCP server that provides **13 tools** to AI agents. The agent discovers these tools, understands their schemas, and calls them on your behalf.
 
 ```mermaid
 sequenceDiagram
@@ -41,6 +41,8 @@ sequenceDiagram
 | `generateVideoOptions` | List available video generation options |
 | `videoFunctionTool` | Get video generator settings (e.g., available voices) |
 | `generateVideoTool` | Generate videos for posts |
+| `clippingTool` | Turn a long YouTube video into captioned vertical clips and draft posts |
+| `clippingStatusTool` | Check a clipping and get the finished clips |
 
 ## Authentication
 
@@ -54,7 +56,7 @@ Use it directly in the MCP endpoint URL, or as a Bearer token.
 
 ### OAuth Token
 
-If you're building an app for other Postiz users, use [OAuth2](/public-api/oauth) to obtain tokens. OAuth tokens start with `pos_` and work the same way as API keys.
+If you're building an app for other Postiz users, use [OAuth2](/oauth) to obtain tokens. OAuth tokens start with `pos_` and work the same way as API keys.
 
 ## Connecting
 
@@ -63,7 +65,7 @@ If you're building an app for other Postiz users, use [OAuth2](/public-api/oauth
     Use the `/mcp` endpoint with your API key or OAuth token as a Bearer token:
 
     ```text
-    URL: https://api.postiz.com/mcp
+    URL: https://mcp.postiz.com/mcp
     Authorization: Bearer your-api-key
     ```
 
@@ -73,7 +75,7 @@ If you're building an app for other Postiz users, use [OAuth2](/public-api/oauth
     Use the `/mcp/:apiKey` endpoint with your API key embedded in the URL:
 
     ```text
-    URL: https://api.postiz.com/mcp/your-api-key
+    URL: https://mcp.postiz.com/mcp/your-api-key
     ```
   </Tab>
 </Tabs>

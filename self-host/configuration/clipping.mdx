@@ -1,0 +1,116 @@
+---
+title: Video clipping
+description: 'Enable YouTube video clipping on a self-hosted instance'
+icon: 'scissors'
+---
+
+<Snippet file="audience/self-host-only.mdx" />
+
+Video clipping turns a long YouTube video into captioned vertical clips and
+draft posts. It is off until every piece below is configured, and the clipping
+tools do not appear in the agent or in MCP while it is off.
+
+<Note>
+What clipping does from a user's point of view is covered in
+[Video clipping](/general/clipping). This page is only the setup.
+</Note>
+
+## What it needs
+
+Postiz does not download or render video itself. It hands the heavy work to
+[postiz-uploader](https://github.com/gitroomhq/postiz-uploader), an open source
+media worker you deploy on [RunPod Serverless](https://docs.runpod.io/serverless/overview),
+and passes files around as presigned URLs.
+
+| Piece | Used for |
+|---|---|
+| Cloudflare R2 storage | Presigned upload and download URLs for the worker and the transcriber. Local storage cannot do this |
+| A postiz-uploader CPU endpoint | Ingest jobs: the video's details, captions, audio, and the window of each clip |
+| A postiz-uploader GPU endpoint | Clip jobs: cutting, fitting to vertical and burning in the captions |
+| An Oxylabs account, configured on the worker | Fetching from YouTube. Postiz never talks to YouTube directly |
+| Deepgram | Transcribing videos that have no usable captions, and word timing for the captions |
+| OpenAI | Picking the clips and writing their titles and post texts |
+| Temporal | The clipping runs as a workflow in the orchestrator |
+
+## Setup
+
+<Steps>
+  <Step title="Switch storage to Cloudflare R2">
+    Follow [Cloudflare R2](/self-host/configuration/r2) and set
+    `STORAGE_PROVIDER="cloudflare"`.
+  </Step>
+
+  <Step title="Deploy postiz-uploader twice on RunPod">
+    Create two serverless endpoints from the
+    [postiz-uploader](https://github.com/gitroomhq/postiz-uploader) image: a CPU
+    endpoint for ingest jobs and a GPU endpoint for clip jobs. Its README covers
+    the image, the deployment and the worker's own variables.
+
+    On the ingest endpoint, set the worker's `OXYLABS_USERNAME`,
+    `OXYLABS_PASSWORD` and `OXYLABS_STORAGE_URL`. Without them every clipping
+    fails at the first step.
+  </Step>
+
+  <Step title="Create the API keys">
+    - A RunPod API key with access to both endpoints.
+    - A [Deepgram](https://deepgram.com/) API key.
+    - An OpenAI API key, if the instance does not have one already.
+  </Step>
+
+  <Step title="Add the variables to Postiz">
+    ```env
+    STORAGE_PROVIDER="cloudflare"
+    RUNPOD_API_KEY="your-runpod-api-key"
+    RUNPOD_INGEST_ENDPOINT_ID="cpu-endpoint-id"
+    RUNPOD_CLIPPER_ENDPOINT_ID="gpu-endpoint-id"
+    DEEPGRAM_API_KEY="your-deepgram-api-key"
+    OPENAI_API_KEY="your-openai-api-key"
+    ```
+
+    All six have to be set. If one is missing, clipping stays off and nothing
+    is logged about it.
+  </Step>
+
+  <Step title="Restart Postiz">
+    <Snippet file="env-restart.mdx" />
+
+    The backend and the orchestrator both read these variables, so they need
+    the same values if you run them as separate processes.
+  </Step>
+</Steps>
+
+## Check that it works
+
+Connect an MCP client and list the tools, or open the Agent section. When
+clipping is on, `clippingTool` and `clippingStatusTool` are there. Ask for a
+clipping of a short public YouTube video and watch it move through its steps.
+
+## Limits on a self-hosted instance
+
+There are no plans, so no clipping minutes are counted. These caps still apply
+and are not configurable:
+
+| Limit | Value |
+|---|---|
+| Longest video | 180 minutes |
+| Clips per video | 10 |
+| At the same time | One clipping per organization |
+| Per day | 20 clippings per organization |
+
+A clipping that has not finished after 4 hours is closed as failed the next
+time anybody looks at it.
+
+## Costs to expect
+
+Every clipping spends money at four providers: RunPod seconds, Oxylabs
+requests, Deepgram minutes (only for videos without usable captions, or captions
+without word timing) and OpenAI tokens for one prompt carrying the transcript.
+
+## Troubleshooting
+
+| Symptom | Cause |
+|---|---|
+| The clipping tools are missing | One of the six variables is not set, or storage is not `cloudflare` |
+| `Clipping is not available` | Temporal is not reachable from the backend, or the workflow could not start |
+| Every clipping fails while analysing | The ingest endpoint has no Oxylabs credentials, or the RunPod key cannot reach the endpoint |
+| Cropped clips look soft | The worker caps downloads at `OXYLABS_MAX_HEIGHT` (720 by default). Raise it on the ingest endpoint to let `crop` fetch 1080p |

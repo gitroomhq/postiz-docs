@@ -265,6 +265,77 @@ API requires Facebook Login.
   </Step>
 </Steps>
 
+## Clip a YouTube Video into Draft Posts
+
+[Video clipping](/general/clipping) runs for several minutes, so it is a start call followed by status calls:
+
+<Steps>
+  <Step title="List integrations">
+    The agent calls `integrationList` to get the IDs of the channels the drafts are for.
+  </Step>
+  <Step title="Start the clipping">
+    The agent calls `clippingTool`:
+
+    ```json
+    {
+      "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+      "integrations": ["tiktok-123", "instagram-123"],
+      "clips": 3
+    }
+    ```
+
+    Returns right away:
+
+    ```json
+    {
+      "clippingId": "0b6f1c1e-5f0a-4c55-9a53-2f1f6f7f7c11"
+    }
+    ```
+  </Step>
+  <Step title="Check the status">
+    The agent calls `clippingStatusTool` with the `clippingId`. Each call waits up to 25 seconds for a change, and the agent repeats it while the status is `pending`:
+
+    ```json
+    {
+      "status": "pending",
+      "step": "rendering",
+      "title": "How we grew to 10k users",
+      "clips": [
+        {
+          "id": "clip-1",
+          "title": "The launch that failed",
+          "content": "Our first launch got 12 signups. Here is what we changed.",
+          "status": "pending"
+        }
+      ]
+    }
+    ```
+  </Step>
+  <Step title="Read the clips">
+    When the status is `completed`, every finished clip has a hosted `url`:
+
+    ```json
+    {
+      "status": "completed",
+      "step": "completed",
+      "title": "How we grew to 10k users",
+      "clips": [
+        {
+          "id": "clip-1",
+          "title": "The launch that failed",
+          "content": "Our first launch got 12 signups. Here is what we changed.",
+          "status": "completed",
+          "url": "https://uploads.postiz.com/clip-clip-1.mp4",
+          "thumbnail": "https://uploads.postiz.com/clip-clip-1.jpg"
+        }
+      ]
+    }
+    ```
+
+    The clips are already in the media library, and a draft per clip was created on each of the two channels. To publish one somewhere else, the agent passes its `url` in `attachments` when calling `schedulePostTool`.
+  </Step>
+</Steps>
+
 ## Create an X Thread
 
 To create a thread on X, add multiple items to `postsAndComments`:

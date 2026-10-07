@@ -1,0 +1,136 @@
+---
+title: Clipping
+description: 'Turn a long YouTube video into captioned vertical clips from the command line'
+icon: 'scissors'
+---
+
+[Video clipping](/general/clipping) takes a long YouTube video, picks the parts that work on their own, and renders each one as a short vertical video with captions burned in. Every clip lands in the media library, and if you pass integrations, a draft post is created for every clip on every channel. Nothing is scheduled or published.
+
+## Start a Clipping
+
+```bash
+postiz clipping:create <youtube-url>
+```
+
+### Options
+
+| Flag | Description |
+|------|-------------|
+| `-i, --integrations` | Comma-separated integration IDs to create a draft post for every clip. Without it the clips only land in the media library |
+| `-n, --clips` | Maximum number of clips, 1 to 10 (default: 5) |
+| `-f, --fit` | `blur` keeps the whole picture over a blurred copy of itself (default), `crop` fills the clip with the middle of the picture and cuts the sides away |
+
+### Examples
+
+```bash
+# Clip a video into the media library
+postiz clipping:create "https://www.youtube.com/watch?v=VIDEO_ID"
+
+# Up to 3 cropped clips, drafted on two channels
+postiz clipping:create "https://www.youtube.com/watch?v=VIDEO_ID" -n 3 -f crop -i "tiktok-id,instagram-id"
+```
+
+Clipping takes several minutes, so the command only starts it and returns the clipping ID:
+
+```json
+{
+  "id": "0b6f1c1e-5f0a-4c55-9a53-2f1f6f7f7c11"
+}
+```
+
+<Warning>
+With `crop` there is no face tracking: a speaker who is not in the centre of the picture is cut out of the clip. When an agent runs this command, it should ask the user which fit they want first.
+</Warning>
+
+## Check the Status
+
+```bash
+postiz clipping:status <clipping-id>
+```
+
+The `status` moves through `analysing`, `transcribing` (only when the video has no usable captions), `picking` and `rendering`, and ends on `completed` or `failed`. Run it again every 30 seconds or so until it is final.
+
+```json
+{
+  "id": "0b6f1c1e-5f0a-4c55-9a53-2f1f6f7f7c11",
+  "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+  "status": "completed",
+  "error": null,
+  "title": "How we built our product",
+  "thumbnail": "https://i.ytimg.com/vi/VIDEO_ID/maxresdefault.jpg",
+  "duration": 2520,
+  "createdAt": "2026-09-21T10:30:00.000Z",
+  "clips": [
+    {
+      "id": "6d1f0a52-3c5e-4a53-8d5b-0f1b3f7c9a21",
+      "title": "Why we rewrote everything",
+      "content": "We threw away six months of work. Here is why it was the best decision we made.",
+      "start": 312.4,
+      "end": 358.9,
+      "status": "completed",
+      "error": null,
+      "mediaId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "path": "https://uploads.postiz.com/clip-6d1f0a52-3c5e-4a53-8d5b-0f1b3f7c9a21.mp4",
+      "thumbnail": "https://uploads.postiz.com/clip-6d1f0a52-3c5e-4a53-8d5b-0f1b3f7c9a21.jpg"
+    }
+  ]
+}
+```
+
+- Every clip has its own `status`: a `completed` clipping can still carry failed clips.
+- The `path` of a clip is already hosted by Postiz, so it can go straight into `posts:create -m` without `postiz upload`.
+- When the status is `failed`, `error` says why, no clip was made and the clipping minutes were given back.
+
+## List Clippings
+
+```bash
+postiz clipping:list
+postiz clipping:list --page 2
+```
+
+Returns the clippings of your organization, most recent first, 20 per page:
+
+```json
+{
+  "pages": 1,
+  "results": [
+    {
+      "id": "0b6f1c1e-5f0a-4c55-9a53-2f1f6f7f7c11",
+      "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+      "status": "completed",
+      "error": null,
+      "title": "How we built our product",
+      "thumbnail": "https://i.ytimg.com/vi/VIDEO_ID/maxresdefault.jpg",
+      "duration": 2520,
+      "createdAt": "2026-09-21T10:30:00.000Z"
+    }
+  ]
+}
+```
+
+## Clip and Post
+
+```bash
+# 1. Start the clipping
+ID=$(postiz clipping:create "https://www.youtube.com/watch?v=VIDEO_ID" -n 3 | jq -r '.id')
+
+# 2. Wait for it to finish
+while true; do
+  RESULT=$(postiz clipping:status "$ID")
+  STATUS=$(echo "$RESULT" | jq -r '.status')
+  [ "$STATUS" = "completed" ] || [ "$STATUS" = "failed" ] && break
+  sleep 30
+done
+
+# 3. Schedule the first clip
+CLIP=$(echo "$RESULT" | jq -r '[.clips[] | select(.status == "completed")][0]')
+postiz posts:create \
+  -c "$(echo "$CLIP" | jq -r '.content')" \
+  -m "$(echo "$CLIP" | jq -r '.path')" \
+  -s "2026-12-31T12:00:00Z" \
+  -i "tiktok-id"
+```
+
+<Note>
+On Postiz Cloud a clipping uses one clipping minute for every minute of the source video, one clipping runs at a time and 20 can be started a day. See [Video clipping](/general/clipping#limits) for every limit and error message.
+</Note>

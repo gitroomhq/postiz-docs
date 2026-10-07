@@ -53,6 +53,10 @@
     {
       "name": "Video Generation",
       "description": "Generate videos with AI"
+    },
+    {
+      "name": "Clipping",
+      "description": "Turn long YouTube videos into short vertical clips"
     }
   ],
   "paths": {
@@ -2183,6 +2187,252 @@
           }
         }
       }
+    },
+    "/clipping": {
+      "post": {
+        "tags": [
+          "Clipping"
+        ],
+        "summary": "Start a clipping",
+        "description": "Turn a long YouTube video into short vertical clips with burned-in captions. The best parts are picked automatically, every clip is saved to the media library, and when integrations are passed a draft post is created for every clip on every integration. Nothing is scheduled or published.\n\nClipping takes several minutes, so this only starts it and returns the clipping `id`. Poll [Get a clipping](/public-api/clipping/get) until the status is `completed` or `failed`.",
+        "operationId": "startClipping",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClippingRequest"
+              },
+              "examples": {
+                "library": {
+                  "summary": "Clips to the media library",
+                  "value": {
+                    "url": "https://www.youtube.com/watch?v=VIDEO_ID"
+                  }
+                },
+                "drafts": {
+                  "summary": "3 cropped clips drafted on two channels",
+                  "value": {
+                    "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+                    "clips": 3,
+                    "fit": "crop",
+                    "integrations": [
+                      "your-tiktok-integration-id",
+                      "your-instagram-integration-id"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Clipping started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "ID of the clipping"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "0b6f1c1e-5f0a-4c55-9a53-2f1f6f7f7c11"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Not a YouTube URL, or an integration was not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 400,
+                  "message": "Only YouTube videos can be clipped"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "No clipping minutes are left for this month (or the plan has none). Nothing is charged",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 402,
+                  "message": "You have used all the clipping minutes of your subscription for this month. Please upgrade your subscription to clip more videos.",
+                  "url": "https://platform.postiz.com/billing"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "The organization is still in trial",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 406,
+                  "message": "Clipping is not available in trial mode"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "A clipping is already running, or the daily cap of 20 was reached",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 429,
+                  "message": "A clipping is already running, wait for it to finish"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Clipping is not configured on this instance",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 503,
+                  "message": "Clipping is not available"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Clipping"
+        ],
+        "summary": "List clippings",
+        "description": "Get the clippings of your organization, most recent first, 20 per page. The clips themselves are returned by [Get a clipping](/public-api/clipping/get).",
+        "operationId": "listClippings",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number (1-indexed). Defaults to 1.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "example": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Paginated list of clippings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pages": {
+                      "type": "integer",
+                      "description": "Total number of pages"
+                    },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ClippingSummary"
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "pages": 1,
+                  "results": [
+                    {
+                      "id": "0b6f1c1e-5f0a-4c55-9a53-2f1f6f7f7c11",
+                      "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+                      "status": "completed",
+                      "error": null,
+                      "title": "How we built our product",
+                      "thumbnail": "https://i.ytimg.com/vi/VIDEO_ID/maxresdefault.jpg",
+                      "duration": 2520,
+                      "createdAt": "2026-09-21T10:30:00.000Z"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clipping/{id}": {
+      "get": {
+        "tags": [
+          "Clipping"
+        ],
+        "summary": "Get a clipping",
+        "description": "Get the status of a clipping and its clips. Poll it (every 30 seconds is plenty) until the status is `completed` or `failed`.\n\nA `completed` clipping can still carry failed clips: every clip has its own `status`. When the status is `failed` no clip was made and the clipping minutes were given back.",
+        "operationId": "getClipping",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the clipping",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The clipping and its clips",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Clipping"
+                },
+                "example": {
+                  "id": "0b6f1c1e-5f0a-4c55-9a53-2f1f6f7f7c11",
+                  "url": "https://www.youtube.com/watch?v=VIDEO_ID",
+                  "status": "completed",
+                  "error": null,
+                  "title": "How we built our product",
+                  "thumbnail": "https://i.ytimg.com/vi/VIDEO_ID/maxresdefault.jpg",
+                  "duration": 2520,
+                  "createdAt": "2026-09-21T10:30:00.000Z",
+                  "clips": [
+                    {
+                      "id": "6d1f0a52-3c5e-4a53-8d5b-0f1b3f7c9a21",
+                      "title": "Why we rewrote everything",
+                      "content": "We threw away six months of work. Here is why it was the best decision we made.",
+                      "start": 312.4,
+                      "end": 358.9,
+                      "status": "completed",
+                      "error": null,
+                      "mediaId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                      "path": "https://uploads.postiz.com/clip-6d1f0a52-3c5e-4a53-8d5b-0f1b3f7c9a21.mp4",
+                      "thumbnail": "https://uploads.postiz.com/clip-6d1f0a52-3c5e-4a53-8d5b-0f1b3f7c9a21.jpg"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Clipping not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "statusCode": 404,
+                  "message": "Clipping not found"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2362,6 +2612,12 @@
               "ERROR",
               "DRAFT"
             ]
+          },
+          "error": {
+            "type": "string",
+            "nullable": true,
+            "description": "For posts in the ERROR state, the error message reported by the platform when it rejected the post (the same message shown in the calendar tooltip). `null` when the post did not fail or no platform message is available.",
+            "example": "Account banned from posting, please check TikTok account status"
           },
           "integration": {
             "type": "object",
@@ -3673,6 +3929,221 @@
           "title": {
             "type": "string",
             "description": "Post title"
+          }
+        }
+      },
+      "ClippingRequest": {
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL of the YouTube video (`youtube.com` or `youtu.be`)"
+          },
+          "integrations": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "string"
+            },
+            "description": "IDs of the integrations to create a draft post for, one draft per clip per integration. Without any, the clips only land in the media library"
+          },
+          "clips": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "default": 5,
+            "description": "Maximum number of clips"
+          },
+          "fit": {
+            "type": "string",
+            "enum": [
+              "blur",
+              "crop"
+            ],
+            "default": "blur",
+            "description": "How the horizontal video fills the vertical clip. `blur` keeps the whole picture over a blurred copy of itself. `crop` fills the clip with the middle of the picture and cuts the sides away; there is no face tracking"
+          }
+        }
+      },
+      "ClippingClip": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title written for the clip"
+          },
+          "content": {
+            "type": "string",
+            "description": "Post text written for the clip"
+          },
+          "start": {
+            "type": "number",
+            "description": "Start of the clip in the source video, in seconds"
+          },
+          "end": {
+            "type": "number",
+            "description": "End of the clip in the source video, in seconds"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "completed",
+              "failed"
+            ]
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Why this clip failed"
+          },
+          "mediaId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "ID of the clip in the media library"
+          },
+          "path": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Hosted URL of the rendered clip. Works as a media URL in Create Post"
+          },
+          "thumbnail": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "URL of the clip's thumbnail"
+          }
+        }
+      },
+      "ClippingSummary": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "description": "The YouTube URL that was clipped"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "analysing",
+              "transcribing",
+              "picking",
+              "rendering",
+              "completed",
+              "failed"
+            ],
+            "description": "The step the clipping is on. `completed` and `failed` are final"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Why the clipping failed. A completed clipping can also carry an error when something after the rendering (like the draft posts) went wrong"
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Title of the source video, known after the analysing step"
+          },
+          "thumbnail": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Thumbnail of the source video"
+          },
+          "duration": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Length of the source video in seconds"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Clipping": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "description": "The YouTube URL that was clipped"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "analysing",
+              "transcribing",
+              "picking",
+              "rendering",
+              "completed",
+              "failed"
+            ],
+            "description": "The step the clipping is on. `completed` and `failed` are final"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Why the clipping failed. A completed clipping can also carry an error when something after the rendering (like the draft posts) went wrong"
+          },
+          "title": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Title of the source video, known after the analysing step"
+          },
+          "thumbnail": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Thumbnail of the source video"
+          },
+          "duration": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "Length of the source video in seconds"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "clips": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClippingClip"
+            }
           }
         }
       }

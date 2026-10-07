@@ -2924,6 +2924,10 @@
           },
           "path": {
             "type": "string"
+          },
+          "thumbnailTimestamp": {
+            "type": "number",
+            "description": "Milliseconds into the video to use as the cover/thumbnail frame. Supported by Instagram, Instagram Standalone, TikTok Business, and TikTok (Direct Post only, not the UPLOAD/inbox flow); other providers ignore it. For TikTok, in our testing the cover was applied only to public posts (privacy_level PUBLIC_TO_EVERYONE)."
           }
         }
       },

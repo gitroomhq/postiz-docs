@@ -29,6 +29,20 @@ Before re-submitting, strip the server-managed fields from the fetched object, r
 
 Then set a fresh `type` (`now`, `schedule`, or `draft`) and `date`, and `POST` the cleaned object.
 
+## Video cover frame (`thumbnailTimestamp`)
+
+Each media object in a post's `image` array accepts an optional `thumbnailTimestamp` field: the number of milliseconds into the video to use as the cover/thumbnail frame.
+
+```json
+{
+  "image": [{ "id": "vid-123", "path": "https://uploads.postiz.com/video.mp4", "thumbnailTimestamp": 3000 }]
+}
+```
+
+Supported providers: Instagram, Instagram Standalone, TikTok Business, and TikTok (Direct Post only: the `UPLOAD`/inbox flow does not support cover selection). Other providers ignore the field.
+
+For TikTok, in our testing the cover was applied only to public posts (`privacy_level: "PUBLIC_TO_EVERYONE"`); posts published with a restricted privacy level kept the first frame as the cover.
+
 ## Provider-Specific Settings
 
 When creating posts, each social media platform requires different settings. The `settings` object must include a `__type` field that identifies the platform.

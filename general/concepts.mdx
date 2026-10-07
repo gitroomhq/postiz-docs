@@ -47,9 +47,14 @@ of their own. See [Client groups and invite links](/general/channels/customers).
 ## Post and post group
 
 When you schedule one piece of content to five channels, Postiz stores five
-**posts** that share a **group**. That is why the API has both `deletePost` and
-`deletePostsFromGroup`, and why deleting from the calendar removes the whole
-set by default.
+**posts**, one per channel. Each post keeps its own thread items or comments
+under a **group**, so a group always belongs to one channel: deleting by group,
+from a calendar card or the API, removes that channel's post and nothing else.
+
+Posts created together, in one composer save or one API request, stay linked.
+Click any of them on the calendar and the composer opens with all of their
+channels, each with its own content and date. See
+[Editing an existing post](/general/composer/global-vs-per-channel#editing-an-existing-post).
 
 Inside a single post you can have multiple parts: a thread on X, a post plus
 comments on LinkedIn. Part one is the post, the rest are thread items or

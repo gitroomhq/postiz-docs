@@ -327,6 +327,7 @@
               "public-api/integrations/trigger",
               "public-api/integrations/delete",
               "public-api/integrations/is-connected",
+              "public-api/integrations/me",
               "public-api/integrations/find-slot"
             ]
           },

@@ -460,6 +460,77 @@
         }
       }
     },
+    "/me": {
+      "get": {
+        "tags": [
+          "Integrations"
+        ],
+        "summary": "Get connected account",
+        "description": "Returns the workspace these credentials act on. With an OAuth app token it also returns the Postiz user who approved the app, so your integration can show who is connected. API keys belong to the whole workspace, so `user` is `null`.",
+        "operationId": "getMe",
+        "responses": {
+          "200": {
+            "description": "Connected workspace and user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "organization": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "user": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "description": "Only set for OAuth app tokens",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "picture": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "description": "Absolute URL of the user's avatar"
+                        }
+                      }
+                    }
+                  }
+                },
+                "example": {
+                  "organization": {
+                    "id": "cm4ean69r0003w8w1cdomox9n",
+                    "name": "My Company"
+                  },
+                  "user": {
+                    "id": "cm4eamz9f0001w8w1k2b7x0ab",
+                    "name": "Nevo David",
+                    "picture": "https://uploads.postiz.com/avatar.jpg"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/find-slot/{id}": {
       "get": {
         "tags": [

@@ -32,6 +32,23 @@ icon: 'linkedin'
     </Warning>
   </Step>
 
+  <Step title="Check the granted scopes">
+    Under the Auth tab of your app, the "OAuth 2.0 scopes" section must list all of the scopes Postiz requests:
+    - `openid`
+    - `profile`
+    - `w_member_social`
+    - `r_basicprofile`
+    - `rw_organization_admin`
+    - `w_organization_social`
+    - `r_organization_social`
+
+    The last four come from the Advertising API product, `w_member_social` from Share on LinkedIn, and `openid` / `profile` from Sign In with LinkedIn using OpenID Connect.
+
+    <Warning>
+    If a scope is missing, LinkedIn does not fail the login. It issues a token without that scope, and Postiz rejects the connection with a `NotEnoughScopes` error. If you get that error, this Auth tab list is the first place to check.
+    </Warning>
+  </Step>
+
   <Step title="Configure OAuth2 Redirect URI">
     <Snippet file="oauth2redirect.mdx" />
 

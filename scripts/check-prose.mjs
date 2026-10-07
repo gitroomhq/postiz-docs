@@ -20,10 +20,14 @@
  *
  * or a whole file with `docs-lint-ignore-file: rule-id, rule-id` anywhere in it.
  *
- * Usage: node scripts/check-prose.mjs [file ...]
+ * Usage: node scripts/check-prose.mjs [file ...] [--changed [--base <ref>]]
+ *
+ * --changed only fails on lines the current branch touched. Findings elsewhere
+ * are printed as context.
  */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative, resolve, dirname } from 'node:path';
+import { Report, loadScope, parseArgs } from './lib/checks.mjs';
 
 const root = resolve(new URL('..', import.meta.url).pathname);
 const skipDirs = new Set(['.git', 'node_modules', '.idea', '.vscode', 'scripts', 'images', 'logo']);
@@ -200,17 +204,13 @@ function maskProse(line, mask = blank) {
 
 /* ---------------------------------------------------------------- reports */
 
-const problems = [];
-let checked = 0;
-
-function report(file, line, col, rule, message) {
-  problems.push({ file: relative(root, file), line, col, rule, message });
-}
+const options = parseArgs(process.argv, root);
+const report = new Report({ root, scope: loadScope(root, options), name: 'prose check' });
 
 /* ------------------------------------------------------------------ check */
 
 function checkFile(file) {
-  checked += 1;
+  report.checked += 1;
   const raw = readFileSync(file, 'utf8');
   const lines = raw.split('\n');
 
@@ -225,10 +225,16 @@ function checkFile(file) {
     if (m) lineIgnores.set(i + 2, new Set(m[1].split(',').map((s) => s.trim())));
   });
 
+  // say() takes a zero-based line index. sayFile() reports a whole-file
+  // problem, which counts whenever the branch touched the file at all.
   const say = (i, col, rule, message) => {
     if (fileIgnores.has(rule)) return;
     if (lineIgnores.get(i + 1)?.has(rule)) return;
-    report(file, i + 1, col, rule, message);
+    report.add(file, i + 1, rule, message, col);
+  };
+  const sayFile = (rule, message) => {
+    if (fileIgnores.has(rule)) return;
+    report.add(file, 0, rule, message);
   };
 
   // frontmatter and fenced code regions
@@ -250,12 +256,12 @@ function checkFile(file) {
       if (new RegExp(`^\\s*${fence === '`' ? '```+' : '~~~+'}\\s*$`).test(lines[i])) fence = null;
     }
   }
-  if (fence !== null) say(lines.length - 1, 1, 'markdown', 'unclosed code fence');
+  if (fence !== null) sayFile('markdown', 'unclosed code fence');
 
   /* frontmatter, except in snippets which are partials */
   const isSnippet = relative(root, file).startsWith('snippets/');
   if (fmEnd === -1) {
-    if (!isSnippet) say(0, 1, 'frontmatter', 'missing frontmatter block');
+    if (!isSnippet) sayFile('frontmatter', 'missing frontmatter block');
   } else {
     const fm = Object.fromEntries(
       lines.slice(1, fmEnd)
@@ -266,7 +272,7 @@ function checkFile(file) {
     const at = (key) => lines.findIndex((l) => l.startsWith(`${key}:`));
     const required = fm.openapi ? ['title', 'icon'] : ['title', 'description', 'icon'];
     for (const key of required) {
-      if (!fm[key]) say(0, 1, 'frontmatter', `frontmatter is missing "${key}"`);
+      if (!fm[key]) sayFile('frontmatter', `frontmatter is missing "${key}"`);
     }
     if (fm.title?.endsWith('.')) say(at('title'), 1, 'frontmatter', 'title ends with a period');
     if (fm.description?.endsWith('.')) say(at('description'), 1, 'frontmatter', 'description ends with a period');
@@ -416,31 +422,17 @@ function checkFile(file) {
     say(open.line - 1, 1, 'markdown', `<${open.name}> is never closed`);
   }
 
-  if (!raw.endsWith('\n')) say(lines.length - 1, 1, 'spacing', 'file does not end with a newline');
-  if (raw.endsWith('\n\n')) say(lines.length - 1, 1, 'spacing', 'file ends with a blank line');
+  if (!raw.endsWith('\n')) sayFile('spacing', 'file does not end with a newline');
+  if (raw.endsWith('\n\n')) sayFile('spacing', 'file ends with a blank line');
 }
 
 /* ------------------------------------------------------------------- main */
 
-const args = process.argv.slice(2).filter((a) => !a.startsWith('-'));
-const files = args.length ? args.map((a) => resolve(a)) : listMdx(root);
+const files = options.files.length ? options.files : listMdx(root);
 
 for (const file of files) {
   if (!file.endsWith('.mdx') || !existsSync(file)) continue;
   checkFile(file);
 }
 
-if (!problems.length) {
-  console.log(`prose check passed: ${checked} files, no issues.`);
-  process.exit(0);
-}
-
-const byRule = problems.reduce((acc, p) => ({ ...acc, [p.rule]: (acc[p.rule] ?? 0) + 1 }), {});
-problems.sort((a, b) => a.file.localeCompare(b.file) || a.line - b.line || a.col - b.col);
-
-console.error(`prose check failed: ${problems.length} issues in ${new Set(problems.map((p) => p.file)).size} of ${checked} files\n`);
-for (const p of problems) {
-  console.error(`  ${p.file}:${p.line}:${p.col}  ${p.rule.padEnd(11)} ${p.message}`);
-}
-console.error(`\n${Object.entries(byRule).sort((a, b) => b[1] - a[1]).map(([r, n]) => `${r}: ${n}`).join(', ')}`);
-process.exit(1);
+report.finish();

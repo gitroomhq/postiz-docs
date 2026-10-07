@@ -1,0 +1,153 @@
+---
+title: Video clipping
+sidebarTitle: Clipping
+description: 'Turn a long YouTube video into captioned vertical clips and draft posts'
+icon: 'scissors'
+---
+
+**Where:** the Agent section, any client connected through [MCP](/mcp/introduction), the [Public API](/public-api/clipping/create) and the [CLI](/cli/clipping)
+
+<Note>
+**Availability:** Postiz Cloud, Standard plan and above, once the trial has
+converted. Self-hosted installs need clipping configured on the instance.
+</Note>
+
+Clipping takes a long YouTube video, picks the parts that work on their own,
+and renders each one as a short vertical video with captions burned in. Every
+clip lands in the [media library](/general/media-library), and if you name
+channels, a draft post is created for every clip on every channel.
+
+Nothing is scheduled or published for you. The drafts wait on the calendar
+until you review them.
+
+## Starting a clipping
+
+There is no clipping screen. You ask for it in a chat (or start it [from code](#from-the-public-api-and-the-cli)):
+
+- In the [AI agent](/general/agents), paste the YouTube link and say what you
+  want, for example "clip this video into 5 shorts and draft them for my TikTok
+  and Instagram".
+- From Claude, ChatGPT, Cursor or another MCP client, say the same thing. The
+  client calls the [clipping tools](/mcp/tools#clippingtool) for you.
+
+You can set three things:
+
+| Option | Default | What it does |
+|---|---|---|
+| **Channels** | None | The channels to create draft posts for, 20 at most. Without any, the clips only go to the media library |
+| **Number of clips** | 5 | The most clips to make, from 1 to 10. A video with fewer good moments gives fewer clips |
+| **Fit** | Blur | How the horizontal picture fills the vertical clip, see below |
+
+### Blur or crop
+
+A YouTube video is horizontal and a clip is vertical (1080 by 1920), so the
+picture has to be fitted.
+
+- **Blur** keeps the whole picture, centred over a blurred copy of itself. It
+  never cuts anything out, which is why it is the default.
+- **Crop** fills the clip with the middle of the picture and cuts the sides
+  away. There is no face tracking, so a speaker who is not in the centre is cut
+  out of the clip. Ask for it only when the subject stays in the middle.
+
+## What happens next
+
+Clipping takes several minutes. The chat tells you it started, and you can ask
+how it is going at any point. Some MCP clients show a progress widget with the
+finished clips instead.
+
+| Step | What Postiz is doing |
+|---|---|
+| **Analysing** | Reading the video's details and captions, and checking its length against your minutes |
+| **Transcribing** | Transcribing the audio, only when the video has no usable captions |
+| **Picking** | Choosing the clips and writing a title and a post text for each |
+| **Rendering** | Cutting each clip, fitting it to vertical and burning in the captions |
+| **Completed** | The clips are in the media library and the drafts are on the calendar |
+
+Each clip is between 10 and 90 seconds, and two clips never overlap.
+
+## What you get
+
+- A vertical MP4 per clip, in the media library, named after the clip's title.
+- A thumbnail per clip.
+- A title and a post text per clip, written from what is said in the video.
+- When you named channels, one draft per clip per channel, placed on your next
+  free time slots, with the post text as the content and the clip attached.
+
+The drafts are ordinary drafts. Open one from the
+[calendar](/general/calendar/overview) to edit the text, fill in the channel's
+settings and schedule it.
+
+A clipping can finish with some clips failed. The clips that rendered are kept,
+and the chat tells you which ones did not make it.
+
+## Clipping minutes
+
+On Postiz Cloud, clipping is metered in minutes of source video: a 42 minute
+video costs 42 minutes, however many clips come out of it. The allowance is
+part of your plan and resets monthly on the anniversary of your subscription.
+See [Plans](/cloud/plans).
+
+- The minutes are charged once the real length of the video is known, before
+  any clip is rendered.
+- A video longer than the minutes you have left is refused, and nothing is
+  charged.
+- A clipping that fails without producing a single clip gives the minutes back.
+
+<Note>
+**On self-hosted Postiz:** there are no clipping minutes. The only length limit
+is the 180 minute cap below.
+</Note>
+
+## Limits
+
+| Limit | Value |
+|---|---|
+| Source | YouTube links only. Live streams, private, removed, age restricted and region restricted videos cannot be clipped |
+| Longest video | 180 minutes, and no longer than the clipping minutes you have left |
+| Clips per video | 10 |
+| Clip length | 10 to 90 seconds |
+| Channels per clipping | 20 |
+| At the same time | One clipping per organisation |
+| Per day | 20 clippings per organisation |
+
+## When it fails
+
+| Message | What it means |
+|---|---|
+| Only YouTube videos can be clipped | The link is not a `youtube.com` or `youtu.be` address |
+| Clipping is not available in trial mode | Clipping starts once the trial converts, see [The free trial](/cloud/trial) |
+| No clipping minutes are left on this account for this month | Wait for the monthly reset or [upgrade](/cloud/plans) |
+| This video is N minutes long, more than the clipping minutes left | Pick a shorter video, or upgrade |
+| A clipping is already running, wait for it to finish | One clipping runs at a time |
+| Too many clippings were started today, try again tomorrow | The daily cap of 20 was reached |
+| This video is private, removed, or restricted by age or region | Postiz cannot read the video |
+| No speech was found in this video | Clips are picked from what is said, so a video without speech cannot be clipped |
+| No part of this video works as a short clip | Nothing in the video stands on its own for 10 to 90 seconds |
+
+## From the Public API and the CLI
+
+The same clipping can be started from code. The [Public API](/public-api/clipping/create)
+has an endpoint to start a clipping, one to read its status and clips, and one
+to list them, and the [CLI](/cli/clipping) wraps them as `clipping:create`,
+`clipping:status` and `clipping:list`. The options, the clipping minutes and the
+limits are the ones on this page.
+
+The URL of a finished clip works as an attachment anywhere a media URL does,
+including [Create Post](/public-api/posts/create).
+
+## Related
+
+<CardGroup cols={2}>
+  <Card title="Clipping tools" icon="wrench" href="/mcp/tools#clippingtool">
+    The MCP tools and their parameters.
+  </Card>
+  <Card title="Public API" icon="plug" href="/public-api/clipping/create">
+    Start a clipping and read its clips over HTTP.
+  </Card>
+  <Card title="CLI" icon="terminal" href="/cli/clipping">
+    The `clipping:*` commands.
+  </Card>
+  <Card title="Clipping example" icon="code" href="/mcp/examples#clip-a-youtube-video-into-draft-posts">
+    The tool calls behind a clipping, step by step.
+  </Card>
+</CardGroup>

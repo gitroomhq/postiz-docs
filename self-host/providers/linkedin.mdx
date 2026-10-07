@@ -14,12 +14,36 @@ icon: 'linkedin'
   </Step>
 
   <Step title="Add required products">
-    Fill in all the details, once created head over to Products and make sure you add all the required products.
+    Fill in all the details, once created head over to Products and make sure you add all the required products:
+    - Share on LinkedIn
+    - Advertising API
+    - Sign In with LinkedIn using OpenID Connect
 
     ![LinkedIn](/images/providers/linkedin/linkedin-002.png)
 
     <Warning>
     It is important to request the Advertising API permissions and fill up the request form, or you will not have the ability to refresh your tokens.
+    </Warning>
+  </Step>
+
+  <Step title="Check the granted scopes">
+    Under the Auth tab of your app, the "OAuth 2.0 scopes" section must list all of the scopes Postiz requests:
+    - `openid`
+    - `profile`
+    - `w_member_social`
+    - `r_basicprofile`
+    - `rw_organization_admin`
+    - `w_organization_social`
+    - `r_organization_social`
+
+    The last four come from the Advertising API product, `w_member_social` from Share on LinkedIn, and `openid` / `profile` from Sign In with LinkedIn using OpenID Connect.
+
+    <Note>
+    The organization scopes are required for the regular LinkedIn provider too, not only for LinkedIn Page. Both providers use the same app and the same scope set.
+    </Note>
+
+    <Warning>
+    If a scope is missing, LinkedIn does not fail the login. It issues a token without that scope, and Postiz rejects the connection with a `NotEnoughScopes` error. If you get that error, this Auth tab list is the first place to check.
     </Warning>
   </Step>
 

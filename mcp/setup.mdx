@@ -16,7 +16,7 @@ Add the following to your Claude Desktop MCP configuration file:
     {
       "mcpServers": {
         "postiz": {
-          "url": "https://api.postiz.com/mcp/your-api-key"
+          "url": "https://mcp.postiz.com/mcp/your-api-key"
         }
       }
     }
@@ -29,7 +29,7 @@ Add the following to your Claude Desktop MCP configuration file:
     {
       "mcpServers": {
         "postiz": {
-          "url": "https://api.postiz.com/mcp/your-api-key"
+          "url": "https://mcp.postiz.com/mcp/your-api-key"
         }
       }
     }
@@ -44,7 +44,7 @@ Add the following to your Claude Desktop MCP configuration file:
 The fastest way is the CLI:
 
 ```bash
-claude mcp add postiz --transport http --url https://api.postiz.com/mcp/your-api-key
+claude mcp add postiz --transport http --url https://mcp.postiz.com/mcp/your-api-key
 ```
 
 Or add it to your Claude Code config directly:
@@ -53,7 +53,7 @@ Or add it to your Claude Code config directly:
 {
   "mcpServers": {
     "postiz": {
-      "url": "https://api.postiz.com/mcp/your-api-key"
+      "url": "https://mcp.postiz.com/mcp/your-api-key"
     }
   }
 }
@@ -63,7 +63,7 @@ The Bearer-token transport works too, pick whichever your client supports better
 
 ```bash
 claude mcp add postiz --transport http \
-  --url https://api.postiz.com/mcp \
+  --url https://mcp.postiz.com/mcp \
   --header "Authorization: Bearer your-api-key"
 ```
 
@@ -73,18 +73,18 @@ In Cursor, go to **Settings > MCP** and add a new server:
 
 - **Name:** Postiz
 - **Type:** HTTP
-- **URL:** `https://api.postiz.com/mcp/your-api-key`
+- **URL:** `https://mcp.postiz.com/mcp/your-api-key`
 
 ## Other MCP Clients
 
 Any MCP-compatible client can connect to Postiz. Use the streamable HTTP transport:
 
-- **URL:** `https://api.postiz.com/mcp/your-api-key`
+- **URL:** `https://mcp.postiz.com/mcp/your-api-key`
 - **Transport:** Streamable HTTP
 
 Or, if your client supports Bearer token authentication:
 
-- **URL:** `https://api.postiz.com/mcp`
+- **URL:** `https://mcp.postiz.com/mcp`
 - **Transport:** Streamable HTTP
 - **Authorization:** `Bearer your-api-key`
 

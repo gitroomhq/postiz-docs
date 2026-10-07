@@ -15,6 +15,7 @@ icon: 'triangle-exclamation'
 | Channels | Connecting or enabling one past the cap | 5 | 10 | 30 | 100 |
 | AI images per month | Generating an image with no credits left | 20 | 100 | 300 | 500 |
 | AI videos per month | Generating a video with no credits left | 3 | 10 | 30 | 60 |
+| Clipping minutes per month | Clipping a video longer than the minutes left | 60 | 120 | 300 | 600 |
 | Webhooks | Saving one past the cap | 2 | 10 | 30 | 10,000 |
 {/* /GENERATED:limits */}
 
@@ -45,6 +46,21 @@ the month, so a subscription started on the 12th resets on the 12th.
 When you are out, image generation stops returning results and video generation
 returns an error pointing at billing. Waiting for the reset or upgrading are
 the two options.
+
+## Clipping minutes
+
+> No clipping minutes are left on this account for this month
+
+[Video clipping](/general/clipping) spends one minute for every minute of the
+source video. A video longer than the minutes you have left is refused before
+anything is charged, and a clipping that fails without producing a clip gives
+its minutes back.
+
+The minutes reset on the same monthly anniversary as the AI credits. Waiting
+for the reset, clipping a shorter video or upgrading are the options.
+
+Three caps are the same on every plan: one clipping at a time, 20 clippings a
+day, and 180 minutes for a single video.
 
 ## Webhooks
 

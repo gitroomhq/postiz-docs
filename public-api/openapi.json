@@ -2048,9 +2048,6 @@
                       "name": "6fba0ef5febb4400ae8778a5b854224d.png",
                       "originalName": "cover-cyan.png",
                       "path": "https://uploads.postiz.com/6fba0ef5febb4400ae8778a5b854224d.png",
-                      "thumbnail": null,
-                      "alt": null,
-                      "thumbnailTimestamp": null,
                       "createdAt": "2024-12-14T08:18:54.274Z"
                     }
                   ]
@@ -2372,19 +2369,6 @@
           "path": {
             "type": "string",
             "description": "Public file URL, usable as a post attachment"
-          },
-          "thumbnail": {
-            "type": "string",
-            "nullable": true,
-            "description": "Thumbnail URL (videos)"
-          },
-          "alt": {
-            "type": "string",
-            "nullable": true
-          },
-          "thumbnailTimestamp": {
-            "type": "integer",
-            "nullable": true
           },
           "createdAt": {
             "type": "string",

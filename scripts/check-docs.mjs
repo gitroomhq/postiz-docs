@@ -33,14 +33,14 @@ const tabPrefixes = {
   'Self-Hosting': ['self-host/'],
   'Public API': ['public-api/'],
   Agents: ['cli/', 'mcp/'],
-  'Add Postiz to your app': ['public-api/'],
+  'Add Postiz to your app': ['oauth'],
   Contributing: ['contributing/'],
 };
 
 // Deliberate cross-listings: the URL prefix still decides the audience, this
 // only moves where the page appears in the sidebar.
 //   self-host/cli-auth-server is self-hosting work that only CLI users do, so
-//   it sits in the Automation tab while keeping its /self-host/ URL.
+//   it sits in the Agents tab while keeping its /self-host/ URL.
 const tabPrefixExceptions = new Set(['self-host/cli-auth-server']);
 
 // Pages that are allowed to mention self-hosting mechanics despite living in a

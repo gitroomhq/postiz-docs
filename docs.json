@@ -10,6 +10,11 @@
   "favicon": "/favicon.ico",
   "redirects": [
     {
+      "source": "/public-api/oauth",
+      "destination": "/oauth",
+      "permanent": true
+    },
+    {
       "source": "/introduction",
       "destination": "/general/introduction",
       "permanent": true
@@ -453,7 +458,7 @@
           {
             "group": "OAuth2",
             "pages": [
-              "public-api/oauth"
+              "oauth"
             ]
           }
         ]

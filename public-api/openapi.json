@@ -2051,8 +2051,6 @@
                       "thumbnail": null,
                       "alt": null,
                       "thumbnailTimestamp": null,
-                      "type": "image",
-                      "fileSize": 48213,
                       "createdAt": "2024-12-14T08:18:54.274Z"
                     }
                   ]
@@ -2387,14 +2385,6 @@
           "thumbnailTimestamp": {
             "type": "integer",
             "nullable": true
-          },
-          "type": {
-            "type": "string",
-            "description": "Media type. Currently always \"image\" regardless of the file; use the extension of path to tell images from videos."
-          },
-          "fileSize": {
-            "type": "integer",
-            "description": "Size in bytes"
           },
           "createdAt": {
             "type": "string",

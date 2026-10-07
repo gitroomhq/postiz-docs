@@ -32,7 +32,8 @@ const tabPrefixes = {
   Cloud: ['cloud/'],
   'Self-Hosting': ['self-host/'],
   'Public API': ['public-api/'],
-  Automation: ['cli/', 'mcp/'],
+  Agents: ['cli/', 'mcp/'],
+  'Add Postiz to your app': ['public-api/'],
   Contributing: ['contributing/'],
 };
 

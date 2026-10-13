@@ -3,3 +3,14 @@ title: 'Post Analytics'
 openapi: 'GET /analytics/post/{postId}'
 icon: 'chart-simple'
 ---
+
+## Which platforms return data
+
+Only the platforms listed under
+[Per-post metrics](/general/analytics#per-post-metrics) report per-post
+statistics. For any other platform the endpoint returns an empty array (`[]`).
+
+## Common errors
+
+- Empty array (`[]`): the platform does not report per-post metrics, or the post has no platform ID yet. That is the case while the post is not published and when `releaseId` is `"missing"`, see [Update release ID](/public-api/posts/update-release-id).
+- Empty array on TikTok: TikTok only exposes the video ID after its [moderation pass](https://developers.tiktok.com/doc/content-posting-api-reference-get-video-status), usually within a minute but sometimes hours after publishing. Postiz resolves the ID the first time per-post analytics are requested after moderation has finished, so a request before that returns `[]`. Retry later.

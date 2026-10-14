@@ -44,6 +44,34 @@ Optional name for the carousel document. Only used when `post_as_images_carousel
 
 ---
 
+## Mentioning a Company Page
+
+To tag a company page, look up its id with the [trigger endpoint](/public-api/integrations/trigger)
+and the `mention` tool, passing the page's vanity name (the part after `linkedin.com/company/`):
+
+```bash
+curl -X POST https://api.postiz.com/public/v1/integration-trigger/{integrationId} \
+  -H "Authorization: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{"methodName": "mention", "data": {"query": "microsoft"}}'
+```
+
+The response contains `{ output: [{ id, label, image }] }`, or an empty array when no page
+has that exact vanity name. Put the result in the post content as a span:
+
+```html
+<p>Built with <span data-mention-id="{id}" data-mention-label="{label}">@{label}</span></p>
+```
+
+The mention renders as a link to the company page once the post is published.
+
+<Note>
+Only company pages can be looked up, by their exact vanity name. LinkedIn restricts
+member search to approved partners, so people can't be tagged this way.
+</Note>
+
+---
+
 ## Complete Example
 
 ### Text Post

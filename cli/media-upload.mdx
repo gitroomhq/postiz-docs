@@ -25,6 +25,17 @@ The command returns a JSON response with the uploaded file's URL:
 You must upload media files to Postiz before using them in posts. Many platforms (TikTok, Instagram, YouTube) require verified URLs and will reject external links.
 </Warning>
 
+## Adjusting Media to Platform Limits
+
+Platforms reject media that is too large, too small or in an encoding they don't accept. Add `--adjust` (off by default) to adjust the file after the upload: videos are scaled to 1080p and re-encoded to MP4, oversized images are scaled down. See [Upload File](/public-api/uploads/upload-file#adjusting-media-to-platform-limits) for the details.
+
+```bash
+postiz upload video.mp4 --adjust
+postiz media:status <id>
+```
+
+The returned `path` is usable right away, and the adjusted file replaces the original at the same `path` when it's done. A post published before that uses the original. Poll `media:status` only while the status is `processing`. If the adjustment fails, the original file is kept and used for publishing, and the status is `ready` with a `warning`.
+
 ## Upload and Post Workflow
 
 ```bash

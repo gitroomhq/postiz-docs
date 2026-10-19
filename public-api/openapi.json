@@ -1997,6 +1997,15 @@
                     "type": "string",
                     "format": "binary",
                     "description": "The file to upload"
+                  },
+                  "adjust": {
+                    "type": "string",
+                    "default": "false",
+                    "description": "Adjust the file to the platforms' limits after the upload: videos are scaled to a 1080 px short side (long side at most 1920 px) and re-encoded to H.264 MP4 with AAC audio, images larger than that are scaled down. Runs in the background, poll GET /media/{id}/status for the result. Defaults to false.",
+                    "enum": [
+                      "true",
+                      "false"
+                    ]
                   }
                 },
                 "required": [
@@ -2039,6 +2048,11 @@
                     "type": "string",
                     "format": "uri",
                     "description": "URL of the file to upload"
+                  },
+                  "adjust": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Adjust the file to the platforms' limits after the upload: videos are scaled to a 1080 px short side (long side at most 1920 px) and re-encoded to H.264 MP4 with AAC audio, images larger than that are scaled down. Runs in the background, poll GET /media/{id}/status for the result. Defaults to false."
                   }
                 },
                 "required": [
@@ -2061,6 +2075,71 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/media/{id}/status": {
+      "get": {
+        "tags": [
+          "Uploads"
+        ],
+        "summary": "Get media status",
+        "description": "Check whether a file uploaded with adjust set to true finished adjusting. A failed adjustment returns status \"ready\" with a warning: the original file was kept and is used for publishing.",
+        "operationId": "getMediaStatus",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The media id returned by the upload",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Media status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "path": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "processing",
+                        "ready",
+                        "failed"
+                      ]
+                    },
+                    "warning": {
+                      "type": "string",
+                      "description": "Present when the adjustment failed and the original file was kept"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "Present with status \"failed\", only when the adjustment failed and the original file's format cannot be published as is"
+                    }
+                  }
+                },
+                "example": {
+                  "id": "e639003b-f727-4a1e-87bd-74a2c48ae41e",
+                  "path": "https://uploads.postiz.com/video.mp4",
+                  "status": "ready"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Media not found"
           }
         }
       }
@@ -2722,6 +2801,14 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "ready",
+              "processing"
+            ],
+            "description": "\"processing\" while an upload with adjust set to true is being adjusted, otherwise \"ready\""
           }
         },
         "example": {

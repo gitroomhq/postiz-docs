@@ -1,0 +1,34 @@
+---
+title: 'Media Status'
+openapi: 'GET /media/{id}/status'
+icon: 'spinner'
+---
+
+Check whether a file uploaded with `adjust` set to `true` (on [Upload File](/public-api/uploads/upload-file) or [Upload from URL](/public-api/uploads/upload-from-url)) finished adjusting to the platforms' limits. Uploads without `adjust` are `ready` as soon as the upload call returns and don't need this endpoint.
+
+## Example
+
+```bash
+curl "https://api.postiz.com/public/v1/media/01HXYZ123ABCDEF/status" \
+  -H "Authorization: your-api-key"
+```
+
+Response:
+
+```json
+{
+  "id": "01HXYZ123ABCDEF",
+  "path": "https://uploads.postiz.com/video.mp4",
+  "status": "ready"
+}
+```
+
+## Statuses
+
+| Status | Meaning |
+|---|---|
+| `processing` | The adjustment is still running. The `path` is already usable, a post published now uses the original file. Call again in a few seconds. |
+| `ready` | The adjusted file is in place at the same `path`. |
+| `ready` with a `warning` | The adjustment failed. The original file was kept at the same `path` and is used for publishing. |
+
+An unknown `id`, or one from another organization, returns `404`.

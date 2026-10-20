@@ -23,6 +23,8 @@ curl -X POST "https://api.postiz.com/public/v1/upload-from-url" \
 
 Response shape matches [Upload File](/public-api/uploads/upload-file).
 
+Add `"adjust": true` to the body to adjust the file to the platforms' limits after the upload. It works the same as on [Upload File](/public-api/uploads/upload-file#adjusting-media-to-platform-limits).
+
 ## When to prefer multipart upload
 
 If your source URLs are slow or unreliable, the round-trip through Postiz can fail or take a long time. For best results:

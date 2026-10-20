@@ -36,9 +36,33 @@ Example response:
 ```json
 {
   "id": "01HXYZ123ABCDEF",
-  "path": "https://uploads.postiz.com/photo.jpg"
+  "path": "https://uploads.postiz.com/photo.jpg",
+  "status": "ready"
 }
 ```
+
+## Adjusting media to platform limits
+
+Platforms reject media that is too large, too small or in an encoding they don't accept. Send the optional `adjust` field as `true` to adjust the file after the upload. It defaults to `false`, which stores the file as uploaded.
+
+- Videos get their short side scaled to 1080 px, up or down, with the long side at most 1920 px. They are re-encoded to H.264 MP4 (yuv420p, at most 60 fps) with AAC audio (128 kbps, 48 kHz) and the metadata moved to the start of the file for streaming.
+- Images are only scaled down, to a short side of at most 1080 px and a long side of at most 1920 px, and keep their format.
+- GIF, AVIF, BMP and TIFF files are stored as uploaded.
+
+```bash
+curl -X POST "https://api.postiz.com/public/v1/upload" \
+  -H "Authorization: your-api-key" \
+  -F "adjust=true" \
+  -F "file=@video.mp4"
+```
+
+The adjustment runs in the background, so the response comes back with `"status": "processing"`. The adjusted file replaces the original at the same `path`, usually within seconds. Poll [Media Status](/public-api/uploads/media-status) every few seconds and wait until the status is `ready` before publishing a post with this `path`: a post published while it is `processing` uses the original, unadjusted file. Without `adjust` the upload is synchronous and the `path` is ready immediately.
+
+If the adjustment fails, the original file is kept and used for publishing, and Media Status returns `"status": "ready"` with a `warning`.
+
+<Note>
+On self-hosted instances without the media processor configured, `adjust` has no effect and the file is stored as uploaded with `"status": "ready"`.
+</Note>
 
 ## Usage in a post
 

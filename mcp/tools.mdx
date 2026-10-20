@@ -256,6 +256,51 @@ Use an item's `path` in the `attachments` array when scheduling a post.
 
 ---
 
+## uploadFromUrlTool
+
+Upload a remote image or video into the media library from a public http(s) URL. Local or private files can't be fetched, upload those with the [CLI](/cli/media-upload) or the [public API](/public-api/uploads/upload-file).
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `url` | string | Yes | Public http(s) URL of the image or video |
+| `adjust` | boolean | No | Adjust the media to the platforms' limits after the upload (default false), see [Upload File](/public-api/uploads/upload-file#adjusting-media-to-platform-limits) for what it changes |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Media ID |
+| `path` | string | URL of the uploaded file, to use as an attachment |
+| `status` | string | `ready`, or `processing` while an upload with `adjust` is being adjusted |
+
+With `adjust`, the status is `processing` until the adjusted file replaces the original at the same `path`, usually within seconds. Wait until `mediaStatusTool` returns `ready` before publishing a post with this `path`: a post published while it is `processing` uses the original, unadjusted file. Without `adjust` the `path` is ready immediately.
+
+---
+
+## mediaStatusTool
+
+Check whether a media uploaded with `adjust` set to true finished adjusting, using the `id` returned by `uploadFromUrlTool`, the public API or the CLI. Files uploaded through the upload widget (in clients that display MCP Apps) are checked with `uploadWidgetStatusTool` instead.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | Yes | The media ID returned by the upload |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Media ID |
+| `path` | string | URL of the file |
+| `status` | string | `processing` while the adjustment runs, `ready` once the file is ready to publish: adjusted, or unchanged when it was already within the limits or its format isn't adjusted |
+| `warning` | string | Present with `ready` when the adjustment failed: the original file was kept and is used for publishing |
+| `error` | string | Returned instead of the fields above when the lookup failed, e.g. an unknown `id` |
+
+---
+
 ## generateImageTool
 
 Generate an AI image to use as a post attachment.

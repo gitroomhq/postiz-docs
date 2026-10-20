@@ -42,7 +42,9 @@ A few things to know:
 
 **Disable** takes a channel out of service. Its posts and history stay, and you
 can enable it again at any time. This is the right choice when you want to stop
-posting to a client's account, or, on cloud, when you need to free a slot.
+posting to a client's account. On cloud, a disabled channel still counts
+against your plan's channel cap, so disabling does not free a slot; only
+deleting does.
 
 **Delete** is permanent. Postiz refuses to delete a channel that still has
 posts attached:
@@ -53,8 +55,8 @@ posts attached:
 Delete those posts first, or disable the channel instead.
 
 <Note>
-**On self-hosted Postiz:** there is no channel cap, so disabling is only about
-taking a channel out of service.
+**On self-hosted Postiz:** there is no channel cap, so the difference is only
+whether the channel stays around for later.
 </Note>
 
 ## Bot picture and nickname

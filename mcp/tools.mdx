@@ -272,10 +272,10 @@ Upload a remote image or video into the media library from a public http(s) URL.
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | string | Media ID |
-| `path` | string | URL of the uploaded file, usable as an attachment right away |
+| `path` | string | URL of the uploaded file, to use as an attachment |
 | `status` | string | `ready`, or `processing` while an upload with `adjust` is being adjusted |
 
-With `adjust`, the adjusted file replaces the original at the same `path` when it's done, and a post published before that uses the original. Use `mediaStatusTool` to know when it's in place.
+With `adjust`, the status is `processing` until the adjusted file replaces the original at the same `path`, usually within seconds. Wait until `mediaStatusTool` returns `ready` before publishing a post with this `path`: a post published while it is `processing` uses the original, unadjusted file. Without `adjust` the `path` is ready immediately.
 
 ---
 

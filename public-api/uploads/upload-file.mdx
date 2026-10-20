@@ -56,7 +56,7 @@ curl -X POST "https://api.postiz.com/public/v1/upload" \
   -F "file=@video.mp4"
 ```
 
-The adjustment runs in the background, so the response comes back with `"status": "processing"`. The `path` is usable right away: the adjusted file replaces the original at the same `path` when it's done, and a post published before that uses the original. If you need to know when the adjusted file is in place, poll [Media Status](/public-api/uploads/media-status) every few seconds until the status is no longer `processing`. Without `adjust` the upload is synchronous and there is nothing to poll.
+The adjustment runs in the background, so the response comes back with `"status": "processing"`. The adjusted file replaces the original at the same `path`, usually within seconds. Poll [Media Status](/public-api/uploads/media-status) every few seconds and wait until the status is `ready` before publishing a post with this `path`: a post published while it is `processing` uses the original, unadjusted file. Without `adjust` the upload is synchronous and the `path` is ready immediately.
 
 If the adjustment fails, the original file is kept and used for publishing, and Media Status returns `"status": "ready"` with a `warning`.
 

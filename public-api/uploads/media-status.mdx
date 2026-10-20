@@ -27,7 +27,7 @@ Response:
 
 | Status | Meaning |
 |---|---|
-| `processing` | The adjustment is still running. The `path` is already usable, a post published now uses the original file. Call again in a few seconds. |
+| `processing` | The adjustment is still running. Don't publish a post with this `path` yet, it would use the original file. Call again in a few seconds. |
 | `ready` | The adjusted file is in place at the same `path`. |
 | `ready` with a `warning` | The adjustment failed. The original file was kept at the same `path` and is used for publishing. |
 

@@ -28,7 +28,7 @@ Response:
 | Status | Meaning |
 |---|---|
 | `processing` | The adjustment is still running. Don't publish a post with this `path` yet, it would use the original file. Call again in a few seconds. |
-| `ready` | The adjusted file is in place at the same `path`. |
+| `ready` | The file is ready to publish at the same `path`: adjusted, or unchanged when it was already within the limits or its format isn't adjusted. |
 | `ready` with a `warning` | The adjustment failed. The original file was kept at the same `path` and is used for publishing. |
 
 An unknown `id`, or one from another organization, returns `404`.

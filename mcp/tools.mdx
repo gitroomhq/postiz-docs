@@ -295,8 +295,9 @@ Check whether a media uploaded with `adjust` set to true finished adjusting, usi
 |-------|------|-------------|
 | `id` | string | Media ID |
 | `path` | string | URL of the file |
-| `status` | string | `processing` while the adjustment runs, `ready` once the adjusted file is in place |
+| `status` | string | `processing` while the adjustment runs, `ready` once the file is ready to publish: adjusted, or unchanged when it was already within the limits or its format isn't adjusted |
 | `warning` | string | Present with `ready` when the adjustment failed: the original file was kept and is used for publishing |
+| `error` | string | Returned instead of the fields above when the lookup failed, e.g. an unknown `id` |
 
 ---
 

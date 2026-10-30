@@ -39,6 +39,8 @@ Use `__type: "instagram"` for Facebook Business-linked accounts and `__type: "in
 | `collaborators` | `array` | No | List of collaborator usernames |
 | `audio` | `object` | No | Audio to attach to a Reel (single video only) |
 
+Alt text is not a setting: set [`alt`](/public-api/posts/create#image-alt-text-alt) on the media object in `image`. Instagram receives it as `alt_text` on images (single images and carousel items, up to 1000 characters); it is not sent for videos or stories.
+
 ### `post_type`
 
 | Value | Description |

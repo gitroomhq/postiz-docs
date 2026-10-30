@@ -116,6 +116,22 @@ postiz posts:create \
   -i "instagram-id"
 ```
 
+### Image with Alt Text
+
+`--alt` pairs with `-m` in the same order. Instagram applies it to images in posts and carousels only, not to videos or stories:
+
+```bash
+IMAGE_2=$(postiz upload beach.jpg)
+IMAGE_URL_2=$(echo "$IMAGE_2" | jq -r '.path')
+postiz posts:create \
+  -c "Beautiful day! #photography" \
+  -m "$IMAGE_URL,$IMAGE_URL_2" \
+  --alt "A sunset over the sea,A sandy beach" \
+  -s "2025-01-15T10:00:00Z" \
+  --settings '{"post_type":"post"}' \
+  -i "instagram-id"
+```
+
 ### Story
 
 ```bash

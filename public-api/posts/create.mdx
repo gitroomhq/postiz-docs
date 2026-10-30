@@ -29,6 +29,18 @@ Before re-submitting, strip the server-managed fields from the fetched object, r
 
 Then set a fresh `type` (`now`, `schedule`, or `draft`) and `date`, and `POST` the cleaned object.
 
+## Image alt text (`alt`)
+
+Each media object in a post's `image` array accepts an optional `alt` field: a text description of the image for accessibility.
+
+```json
+{
+  "image": [{ "id": "img-123", "path": "https://uploads.postiz.com/sunset.jpg", "alt": "A sunset over the sea" }]
+}
+```
+
+Providers that support alt text (Instagram, Instagram Standalone, Bluesky, Mastodon, Slack, Tumblr) send it with the image; other providers ignore the field. Instagram applies it to images only (single images and carousel items, up to 1000 characters), not to videos or stories.
+
 ## Video cover frame (`thumbnailTimestamp`)
 
 Each media object in a post's `image` array accepts an optional `thumbnailTimestamp` field: the number of milliseconds into the video to use as the cover/thumbnail frame.

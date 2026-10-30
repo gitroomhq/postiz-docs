@@ -121,6 +121,8 @@ postiz posts:create \
 `--alt` pairs with `-m` in the same order. Instagram applies it to images in posts and carousels only, not to videos or stories:
 
 ```bash
+IMAGE_2=$(postiz upload beach.jpg)
+IMAGE_URL_2=$(echo "$IMAGE_2" | jq -r '.path')
 postiz posts:create \
   -c "Beautiful day! #photography" \
   -m "$IMAGE_URL,$IMAGE_URL_2" \

@@ -121,15 +121,11 @@ Optional team URL. If you're part of a Dribbble team and want to post on behalf 
       },
       "value": [
         {
-          "content": "Fitness tracking app concept with focus on clean data visualization and motivational design elements.\n\nSwipe to see all screens →\n\n#mobileapp #fitness #appdesign #ios",
+          "content": "Fitness tracking app concept with focus on clean data visualization and motivational design elements.\n\n#mobileapp #fitness #appdesign #ios",
           "image": [
             {
               "id": "app-screen-1",
               "path": "https://uploads.postiz.com/fitness-1.png"
-            },
-            {
-              "id": "app-screen-2",
-              "path": "https://uploads.postiz.com/fitness-2.png"
             }
           ]
         }
@@ -144,9 +140,22 @@ Optional team URL. If you're part of a Dribbble team and want to post on behalf 
 }
 ```
 
+## Image Requirements
+
+Dribbble's API only accepts shots that are **exactly 400×300 or 800×600 pixels**. Any other
+dimensions are rejected before the post is scheduled, with the error
+`Invalid image size. Requires 400x300 or 800x600 px images.` This is a limit of the
+[Dribbble API](https://developer.dribbble.com/v2/shots/#create-a-shot), not of Postiz:
+larger uploads are only possible through the Dribbble website itself.
+
+- Exactly one image per shot
+- Exactly 400×300 or 800×600 pixels (800×600 is the larger option and is what Dribbble serves as its HiDPI image)
+- GIF, JPG or PNG, up to 8 MB
+- Videos are not supported
+
 <Note>
 **Dribbble Tips:**
-- Use high-quality images (800×600 or larger recommended)
+- Export at 800×600 for the sharpest result
 - Include relevant tags in your description
 - Add context about your design process in the content
 </Note>

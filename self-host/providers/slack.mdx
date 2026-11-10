@@ -29,8 +29,10 @@ This integration requires that you have a Slack Workspace
        - `chat:write`
        - `channels:read`
        - `users:read`
-       - `groups:read`
        - `channels:join`
+       - `chat:write.customize`
+
+    Postiz only lists public channels, so it does not need `groups:read`.
   </Step>
 
   <Step title="Set an App Icon">

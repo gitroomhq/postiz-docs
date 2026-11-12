@@ -328,6 +328,7 @@
               "public-api/integrations/list",
               "public-api/integrations/groups",
               "public-api/integrations/connect",
+              "public-api/integrations/connect-link",
               "public-api/integrations/settings",
               "public-api/integrations/trigger",
               "public-api/integrations/delete",

@@ -41,6 +41,30 @@ List all groups (customers) for your organization. Use a group's `id` with `inte
 
 ---
 
+## integrationConnectTool
+
+Get a link for connecting a new social media account. The link opens a Postiz page that explains what connecting the account means, and the user continues from there to the platform to sign in and approve. The channel is added only after they finish, and then shows up in `integrationList`. The link works for one hour.
+
+It is the same link as the [Connect Channel (Link)](/public-api/integrations/connect-link) API endpoint, without a `redirectUrl`: a user who is signed in to Postiz lands on their calendar afterwards.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `platform` | string | Yes | Platform identifier (e.g., `x`, `linkedin`, `youtube`). Only platforms that connect through a sign-in redirect, see [supported platforms](/public-api/integrations/connect-link#supported-platforms) |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `url` | string | The link to open in a browser |
+
+If the link cannot be created, returns `{ errors: string }` with the reason (e.g., a platform that needs an API key, an instance URL, a wallet or the browser extension, which is connected from the Postiz app instead).
+
+It cannot reconnect a channel that is already connected. On Postiz Cloud the plan's channel limit is checked when the user continues from the page, not when the link is created.
+
+---
+
 ## integrationSchema
 
 Get the posting rules, character limits, required settings, and available helper tools for a specific platform. Call this before scheduling a post to understand what the platform expects.

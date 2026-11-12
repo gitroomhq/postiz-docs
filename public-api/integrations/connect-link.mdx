@@ -1,0 +1,69 @@
+---
+title: 'Connect Channel (Link)'
+openapi: 'POST /integrations/connect'
+icon: 'link'
+---
+
+Create a link that lets someone connect a social account to your Postiz workspace. Unlike [Connect Channel (OAuth)](/public-api/integrations/connect), the link does not go straight to the platform. It opens a Postiz page that tells the person what they are agreeing to, and sends them to the platform only after they choose to continue.
+
+Use it when the person connecting the account is not you: a client, a customer of your own product, or a teammate without a Postiz login.
+
+## Example
+
+```bash
+curl -X POST "https://api.postiz.com/public/v1/integrations/connect" \
+  -H "Authorization: your-api-key" \
+  -H "Content-Type: application/json" \
+  -d '{"integration": "linkedin", "redirectUrl": "https://app.example.com/connected"}'
+```
+
+```json
+{
+  "url": "https://platform.postiz.com/integrations/connect/5f0c1e7a9b2d4c68..."
+}
+```
+
+Send the person to `url`. It points at the frontend of the Postiz instance you called. The link works for one hour and can be opened again within that hour, so someone who cancels on the platform can retry. They do not need a Postiz account, and they do not need to be signed in.
+
+## What the person sees
+
+1. A Postiz page titled "Postiz wants to connect to your LinkedIn", with the name of the platform you asked for. It tells them to continue only if they trust whoever sent the link, that Postiz will be able to schedule and publish posts on the account, and that the account is added to a Postiz workspace and managed from there. When you passed a `redirectUrl`, it also names the website they are sent to afterwards.
+2. After they press **Continue**, the platform's own sign-in and approval screen.
+3. On platforms where one login manages several pages or channels, a Postiz screen to pick the one to connect. This applies to Facebook, Instagram, LinkedIn Page, YouTube, Google My Business and Tumblr.
+
+Nothing is connected if they close the page before approving on the platform.
+
+## Where they land afterwards
+
+With a `redirectUrl`, the browser is sent there once the channel is connected, with two query parameters added:
+
+| Parameter | Value |
+|---|---|
+| `added` | The integration identifier, for example `linkedin` |
+| `msg` | A short status text, `Channel Updated` or `Channel Added` |
+
+A `redirectUrl` that already has a query string keeps it. The URL must use `http` or `https` and cannot contain a `#fragment`.
+
+Without a `redirectUrl`, a person who is signed in to Postiz lands on their calendar. Anyone else sees a confirmation that the channel is connected and that they can close the window.
+
+<Warning>
+The query parameters arrive through the person's browser, so they can be forged. A failed connection does not redirect at all: the person sees the error on Postiz. Confirm the result with [List Integrations](/public-api/integrations/list) before treating the account as connected.
+</Warning>
+
+## Supported platforms
+
+Only integrations that connect through a sign-in redirect can be linked:
+
+`x`, `linkedin`, `linkedin-page`, `facebook`, `instagram`, `instagram-standalone`, `threads`, `youtube`, `tiktok`, `tiktok-business`, `pinterest`, `reddit`, `discord`, `slack`, `mastodon`, `gmb`, `twitch`, `kick`, `dribbble`, `vk`, `tumblr`, `whop`, `mewe`
+
+Platforms where the person types in credentials or an instance address, signs with a wallet, or needs the browser extension return `400`. Those are Bluesky, Lemmy, Nostr, Medium, Dev.to, Hashnode, WordPress, ListMonk, Telegram, Warpcast, Moltbook and Skool. Connect them from the Postiz app.
+
+An integration that the instance hides from its Add Channel screen is refused as well.
+
+## Channel limits
+
+The request returns `402` when the plan has no channels left. The limit is checked a second time when the person presses **Continue**, so a link created earlier stops working once the workspace is full. The person is told that the workspace has to be upgraded before another channel can be added.
+
+<Note>
+On self-hosted Postiz: there is no channel limit unless billing is set up, so neither check applies.
+</Note>

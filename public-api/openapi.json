@@ -239,6 +239,71 @@
         }
       }
     },
+    "/integrations/connect": {
+      "post": {
+        "tags": [
+          "Integrations"
+        ],
+        "summary": "Create a connect link for a channel",
+        "description": "Create a link to a Postiz page where someone can connect a new channel. The page explains what connecting the account to Postiz means, and the person is sent to the platform to sign in and approve only after they choose to continue. The link works for one hour and the person opening it does not need a Postiz account. Only integrations that connect through a sign-in redirect are supported.",
+        "operationId": "createConnectLink",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "integration": {
+                    "type": "string",
+                    "description": "The integration identifier (e.g. x, linkedin, facebook, instagram, youtube, reddit, etc.)"
+                  },
+                  "redirectUrl": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "Where the person is sent once the channel is connected. An http or https URL without a fragment. When omitted, they stay on Postiz."
+                  }
+                },
+                "required": [
+                  "integration"
+                ]
+              },
+              "example": {
+                "integration": "linkedin",
+                "redirectUrl": "https://app.example.com/connected"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Connect link",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "url": {
+                      "type": "string",
+                      "description": "The Postiz page to send the person to"
+                    }
+                  }
+                },
+                "example": {
+                  "url": "https://platform.postiz.com/integrations/connect/5f0c1e7a9b2d4c68a1f3e5d7c9b0a2e4f6d8c0b1a3e5f7d9c1b3a5e7f9d0c2b4"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Integration not allowed, an integration that cannot be connected with a link, or an invalid redirectUrl"
+          },
+          "402": {
+            "description": "The plan has no channels left"
+          }
+        }
+      }
+    },
     "/integration-settings/{id}": {
       "get": {
         "tags": [

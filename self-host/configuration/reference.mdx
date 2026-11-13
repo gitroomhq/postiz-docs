@@ -206,7 +206,7 @@ ships with one). See the [Temporal migration guide](/self-host/installation/migr
 
 | Variable | Purpose |
 |---|---|
-| `MCP_URL` | URL the frontend uses to advertise the MCP endpoint to clients. |
+| `MCP_URL` | Public URL your MCP server is reached at, including `https://`. The frontend shows it as the MCP endpoint. Set on the backend too, it turns on OAuth issuer identification (RFC 9207), which Codex CLI needs to sign in to the MCP server when `FRONTEND_URL` and `NEXT_PUBLIC_BACKEND_URL` differ in domain or port. In a standard install use your backend URL; do not set it to a different hostname that proxies to the same backend, or MCP clients that validate the issuer will reject the sign-in. An invalid value is ignored and reported at startup. Leave it unset to keep issuer identification off. |
 | `AGENT_API_KEY` | Shared secret used by the agent runtime to call privileged endpoints. |
 | `AGENT_MEDIA_SSO_KEY` | Signing key for short-lived agent-media SSO tokens. |
 | `BACKEND_URL` | Legacy alias for `NEXT_PUBLIC_BACKEND_URL` in a few server contexts. |

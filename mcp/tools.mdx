@@ -45,13 +45,14 @@ List all groups (customers) for your organization. Use a group's `id` with `inte
 
 Get a link for connecting a new social media account. The link opens a Postiz page that explains what connecting the account means, and the user continues from there to the platform to sign in and approve. The channel is added only after they finish, and then shows up in `integrationList`. The link works for one hour.
 
-It is the same link as the [Connect Channel (Link)](/public-api/integrations/connect-link) API endpoint, without a `redirectUrl`: a user who is signed in to Postiz lands on their calendar afterwards.
+It is the same link as the [Connect Channel (Link)](/public-api/integrations/connect-link) API endpoint. With a `redirectUrl` the browser is sent there once the channel is connected, see [where they land afterwards](/public-api/integrations/connect-link#where-they-land-afterwards). Without one, a user who is signed in to Postiz lands on their calendar.
 
 **Parameters:**
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `platform` | string | Yes | Platform identifier (e.g., `x`, `linkedin`, `youtube`). Only platforms that connect through a sign-in redirect, see [supported platforms](/public-api/integrations/connect-link#supported-platforms) |
+| `redirectUrl` | string | No | Where the browser is sent once the channel is connected. Must use `http` or `https` and cannot contain a `#fragment` |
 
 **Returns:**
 
@@ -59,7 +60,7 @@ It is the same link as the [Connect Channel (Link)](/public-api/integrations/con
 |-------|------|-------------|
 | `url` | string | The link to open in a browser |
 
-If the link cannot be created, returns `{ errors: string }` with the reason (e.g., a platform that needs an API key, an instance URL, a wallet or the browser extension, which is connected from the Postiz app instead).
+If the link cannot be created, returns `{ errors: string }` with the reason (e.g., a `redirectUrl` that is refused, or a platform that needs an API key, an instance URL, a wallet or the browser extension, which is connected from the Postiz app instead).
 
 It cannot reconnect a channel that is already connected. On Postiz Cloud the plan's channel limit is checked when the user continues from the page, not when the link is created.
 

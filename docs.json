@@ -245,6 +245,7 @@
               "self-host/configuration/uploads",
               "self-host/configuration/r2",
               "self-host/configuration/oauth",
+              "self-host/configuration/token-encryption",
               "self-host/configuration/polotno",
               "self-host/configuration/clipping",
               "self-host/configuration/chrome-extension"

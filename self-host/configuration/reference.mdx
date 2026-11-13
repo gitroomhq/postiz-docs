@@ -165,6 +165,22 @@ See also: [Email configuration](/self-host/configuration/emails).
 
 ---
 
+## Token encryption
+
+See also: [Token Encryption](/self-host/configuration/token-encryption).
+
+| Variable | Purpose |
+|---|---|
+| `ENCRYPTION_PROVIDER` | `local` or `aws-kms`. Unset means the access tokens of connected channels are stored as plain text. |
+| `ENCRYPTION_KEY` | The key for `local`: 32 bytes in base64 (`openssl rand -base64 32`). |
+| `ENCRYPTION_KMS_REGION` | AWS region of the KMS key, required when `ENCRYPTION_PROVIDER=aws-kms`. |
+| `ENCRYPTION_KMS_DATA_KEY` | The data key, encrypted by the KMS key. Required when `ENCRYPTION_PROVIDER=aws-kms`. |
+| `ENCRYPTION_KMS_ACCESS_KEY` | Optional AWS access key ID for KMS. Without it the default AWS credential chain is used. |
+| `ENCRYPTION_KMS_SECRET_ACCESS_KEY` | AWS secret access key, required when `ENCRYPTION_KMS_ACCESS_KEY` is set. |
+| `ENCRYPTION_READ_ONLY` | `true` reads encrypted tokens but stores new ones plain. Used while turning encryption on across several instances. |
+
+---
+
 ## OAuth sign-in (OIDC)
 
 See also: [OAuth configuration](/self-host/configuration/oauth).

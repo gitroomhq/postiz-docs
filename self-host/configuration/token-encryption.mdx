@@ -1,0 +1,235 @@
+---
+title: Token Encryption
+description: 'Encrypt the access tokens of connected channels in the database'
+icon: 'lock'
+---
+
+When a channel is connected, Postiz stores its access token and refresh token
+in the database. By default they are stored as plain text. With an encryption
+provider, Postiz encrypts both tokens (AES-256-GCM) before they are written,
+and decrypts them only when it needs to call the platform.
+
+Encryption is optional. Without `ENCRYPTION_PROVIDER` nothing changes.
+
+```env
+ENCRYPTION_PROVIDER="local|aws-kms"
+```
+
+- `local`: the key is an environment variable. The simplest setup.
+- `aws-kms`: the key is protected by a key in AWS KMS and is never stored in
+  a readable form.
+
+<Warning>
+  Keep the key safe and backed up. Without it the encrypted tokens cannot be
+  read, and every channel has to be connected again.
+</Warning>
+
+## How it works
+
+- An encrypted token is stored as `enc:v1:<key id>:<data>`. A token without
+  that prefix is a plain token and is used as it is, so the channels you
+  connected before keep working.
+- New connections and refreshed tokens are stored encrypted from the moment
+  the provider is set.
+- Tokens that were stored before stay plain until they are refreshed, or until
+  you [encrypt them all at once](#encrypt-the-tokens-that-are-already-stored).
+- The key is loaded once when Postiz starts. If the key cannot be loaded, or
+  `ENCRYPTION_PROVIDER` has an unknown value, Postiz does not start.
+
+The backend and the orchestrator both need the same variables. In the official
+Docker image they run in one container, so you set them once.
+
+## Local key
+
+<Steps>
+  <Step title="Create a key">
+    The key is 32 random bytes in base64:
+
+```bash
+openssl rand -base64 32
+```
+  </Step>
+  <Step title="Edit your .env file">
+
+```env
+ENCRYPTION_PROVIDER="local"
+ENCRYPTION_KEY="<the-key-you-created>"
+```
+  </Step>
+  <Step title="Restart Postiz">
+    The log shows `Encryption provider: local` when it starts.
+  </Step>
+</Steps>
+
+## AWS KMS
+
+With `aws-kms` the tokens are still encrypted by Postiz itself, with a 256-bit
+data key. The difference is where that key lives: you store it only in its
+encrypted form, and Postiz asks KMS to decrypt it when it starts (one KMS
+request per start). The key is then kept in memory only.
+
+<Steps>
+  <Step title="Create a KMS key">
+    Create a symmetric encryption key (the default key type) in the AWS region
+    of your choice:
+
+```bash
+aws kms create-key --description "Postiz token encryption"
+```
+
+    Note the `KeyId` of the result.
+  </Step>
+  <Step title="Create the data key">
+    Run this once and keep the output. It is the data key, encrypted by your
+    KMS key:
+
+```bash
+aws kms generate-data-key-without-plaintext \
+  --key-id <your-key-id> \
+  --key-spec AES_256 \
+  --query CiphertextBlob \
+  --output text
+```
+  </Step>
+  <Step title="Allow Postiz to decrypt it">
+    Postiz needs `kms:Decrypt` on the KMS key, and nothing else:
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": {
+    "Effect": "Allow",
+    "Action": "kms:Decrypt",
+    "Resource": "arn:aws:kms:<region>:<account-id>:key/<your-key-id>"
+  }
+}
+```
+
+    Attach it to the role Postiz runs with (ECS task role, EC2 instance
+    profile), or to an IAM user whose access key you give to Postiz in the
+    next step.
+  </Step>
+  <Step title="Edit your .env file">
+
+```env
+ENCRYPTION_PROVIDER="aws-kms"
+ENCRYPTION_KMS_REGION="us-east-1"
+ENCRYPTION_KMS_DATA_KEY="<the-output-of-the-data-key-command>"
+
+# Only when Postiz does not already run with AWS credentials
+ENCRYPTION_KMS_ACCESS_KEY="<access-key-id>"
+ENCRYPTION_KMS_SECRET_ACCESS_KEY="<secret-access-key>"
+```
+
+    Without `ENCRYPTION_KMS_ACCESS_KEY` the default AWS credential chain is
+    used: the `AWS_*` environment variables, an ECS task role or an EC2
+    instance profile.
+  </Step>
+  <Step title="Restart Postiz">
+    The log shows `Encryption provider: aws-kms` when it starts.
+  </Step>
+</Steps>
+
+<Warning>
+  Create the data key only once and keep a copy of it. A new data key is a
+  different key: it cannot read the tokens that were encrypted with the first
+  one. For the same reason, never delete the KMS key. Automatic rotation of the
+  KMS key is fine, AWS keeps the older key material and the data key stays
+  readable.
+</Warning>
+
+## Encrypt the tokens that are already stored
+
+Setting the provider only affects tokens that are stored from then on. To
+encrypt the ones that are already in the database, start the
+`encryptTokensWorkflow` once, by hand.
+
+<Steps>
+  <Step title="Open the Temporal UI">
+    With the bundled docker-compose it is at `http://localhost:8080`.
+  </Step>
+  <Step title="Start the workflow">
+    Click **Start Workflow** and fill in:
+
+    | Field | Value |
+    |---|---|
+    | Workflow ID | anything, for example `encrypt-tokens` |
+    | Task Queue | `main` |
+    | Workflow Type | `encryptTokensWorkflow` |
+    | Input | leave empty |
+  </Step>
+  <Step title="Read the result">
+    When the workflow completes, its result shows how many channels were
+    encrypted and how many could not be:
+
+```json
+{ "changed": 42, "failed": 0 }
+```
+
+    A channel that failed is named in the Postiz log
+    (`Could not encrypt the stored tokens of integration <id>`).
+  </Step>
+</Steps>
+
+The same from the Temporal CLI:
+
+```bash
+temporal workflow start \
+  --type encryptTokensWorkflow \
+  --task-queue main \
+  --workflow-id encrypt-tokens
+```
+
+The workflow only changes tokens that are still plain, so it is safe to run it
+again. Only channel ids and counters pass through it, never a token.
+
+<Note>
+  Database backups that were made before this step still contain the plain
+  tokens.
+</Note>
+
+## Running more than one instance
+
+A service that does not have the key yet cannot use a token another service
+already encrypted. If your backend and orchestrator instances do not all
+restart at the same moment, turn encryption on in two steps:
+
+<Steps>
+  <Step title="Read only">
+    Set the provider and the key on every instance, together with:
+
+```env
+ENCRYPTION_READ_ONLY="true"
+```
+
+    In this mode Postiz can read encrypted tokens, but still stores new ones
+    plain. Restart every instance.
+  </Step>
+  <Step title="On">
+    Once every instance runs with the key, remove `ENCRYPTION_READ_ONLY` and
+    restart them again. New tokens are now stored encrypted.
+  </Step>
+  <Step title="Encrypt the stored tokens">
+    Start the `encryptTokensWorkflow` as described above. It refuses to run
+    while `ENCRYPTION_READ_ONLY` is set.
+  </Step>
+</Steps>
+
+With a single container you can skip this and set everything at once.
+
+## Good to know
+
+- **Do not change the key.** Changing `ENCRYPTION_KEY` or
+  `ENCRYPTION_KMS_DATA_KEY` after tokens were encrypted makes those tokens
+  unreadable. Replacing the key is not supported yet.
+- **Do not remove the provider.** Once tokens are encrypted, Postiz needs
+  `ENCRYPTION_PROVIDER` and the key to use them. If you want to stop
+  encrypting new tokens, set `ENCRYPTION_READ_ONLY="true"` instead.
+- **Do not go back to an older version.** A Postiz version from before token
+  encryption cannot read an encrypted token.
+- **Only the two tokens are encrypted with this key.** Channels that connect
+  with a URL, a username and a password keep those details in a separate
+  field, which is encrypted with `JWT_SECRET` as before.
+
+See the [configuration reference](/self-host/configuration/reference#token-encryption)
+for the list of variables.

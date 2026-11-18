@@ -326,6 +326,54 @@ Check whether a media uploaded with `adjust` set to true finished adjusting, usi
 
 ---
 
+## integrationAnalyticsTool
+
+Get the analytics of one channel, for example followers, impressions and engagement. It returns the same data as the [Platform Analytics](/public-api/analytics/platform) API endpoint. The metrics differ per platform.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | Yes | The channel ID from `integrationList` |
+| `days` | number | No | How many days back to load, e.g. `7`, `30` or `90`. Defaults to `7` |
+
+**Returns:**
+
+An object with an `analytics` array. Each item is one metric:
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `label` | string | The metric name (e.g. `Follower Count`, `Reach`) |
+| `percentageChange` | number | Change over the period, when the platform provides it |
+| `data` | array | Data points, each with a `total` (string) and a `date` |
+
+The data is loaded from the platform and kept for up to an hour, so a second call within the hour returns the same numbers. An empty `analytics` array means the platform has no analytics, returned nothing for the period, or the channel has to be reconnected. An unknown channel ID returns `{ errors: string }`.
+
+Like `triggerTool`, this tool is not marked read-only: when the channel's access token has expired it is refreshed first, and the channel is marked as needing to be reconnected if that fails. MCP clients may therefore ask for approval before each call.
+
+---
+
+## postAnalyticsTool
+
+Get the analytics of one published post, for example views, likes and comments. It returns the same data as the [Post Analytics](/public-api/analytics/post) API endpoint. Find the post with `postsListTool` first and pass its `id`: a post created for several channels has a separate ID on each channel.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | Yes | The post ID |
+| `days` | number | No | How many days back to load, e.g. `7`, `30` or `90`. Defaults to `7` |
+
+**Returns:**
+
+An object with an `analytics` array, in the same shape as `integrationAnalyticsTool`: each item has a `label`, a `percentageChange` and a `data` array of `total` and `date` points.
+
+An empty `analytics` array means the post was not found, was not published yet, the platform has no post analytics, returned nothing for the period, or the channel has to be reconnected. If the post is published but Postiz does not know its ID on the platform, the tool returns `{ errors: string }`: link the post from its statistics in the Postiz app first.
+
+This tool is not marked read-only for the same reason as `integrationAnalyticsTool`, so MCP clients may ask for approval before each call.
+
+---
+
 ## generateImageTool
 
 Generate an AI image to use as a post attachment.

@@ -1891,6 +1891,87 @@
         }
       }
     },
+    "/posts/{id}/attachments": {
+      "put": {
+        "tags": [
+          "Posts"
+        ],
+        "summary": "Update post attachments",
+        "description": "Replaces the attachments (media) of the post with the given list. The list replaces all the existing attachments, so pass the full list the post should have; an empty list removes them all. Only the attachments of the main post change: the attachments of its comments, the content, the settings and the publish date are untouched, so a running publishing workflow is not restarted. The post is re-validated with the new attachments. Works only on not-yet-published posts (scheduled or draft).",
+        "operationId": "updatePostAttachments",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Post ID",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "attachments"
+                ],
+                "properties": {
+                  "attachments": {
+                    "type": "array",
+                    "description": "The full new list of attachments of the post. An empty array removes all the attachments.",
+                    "items": {
+                      "$ref": "#/components/schemas/Media"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "attachments": [
+                  {
+                    "id": "img-1",
+                    "path": "https://uploads.postiz.com/photo.jpg"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Post attachments updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "postId": {
+                      "type": "string"
+                    },
+                    "publishDate": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "example": {
+                  "postId": "post-123",
+                  "publishDate": "2026-08-01T10:00:00"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The id belongs to a comment (pass the root post id), the post is already published or its publish time passed, an attachment is invalid, or the post failed validation with the new attachments (for example a platform that requires at least one media)"
+          },
+          "404": {
+            "description": "Post not found"
+          }
+        }
+      }
+    },
     "/analytics/{integration}": {
       "get": {
         "tags": [

@@ -344,7 +344,7 @@ An object with an `analytics` array. Each item is one metric:
 | Field | Type | Description |
 |-------|------|-------------|
 | `label` | string | The metric name (e.g. `Follower Count`, `Reach`) |
-| `percentageChange` | number | Change over the period, when the platform provides it |
+| `percentageChange` | number | Change over the period. It is `0` when the platform does not provide one, so `0` does not always mean no change |
 | `data` | array | Data points, each with a `total` (string) and a `date` |
 
 The data is loaded from the platform and kept for up to an hour, so a second call within the hour returns the same numbers. An empty `analytics` array means the platform has no analytics, returned nothing for the period, or the channel has to be reconnected. An unknown channel ID returns `{ errors: string }`.

@@ -259,6 +259,28 @@ If the update fails, returns `{ errors: string }` with details (e.g., post not f
 
 ---
 
+## postAttachmentsTool
+
+Replace the attachments (media) of a not-yet-published post (scheduled or draft). The list you pass replaces all the existing attachments of the main post, and an empty list removes them all. Content, settings, publish date and the attachments of the post's comments are unchanged.
+
+**Parameters:**
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | Yes | The post ID |
+| `attachments` | array | Yes | The full new list of attachments. Each item is an uploaded media URL, or an object with `path` and optional `alt`, `thumbnail` and `thumbnailTimestamp` |
+
+**Returns:**
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `postId` | string | The updated post ID |
+| `publishDate` | string | The post's publish date (unchanged) |
+
+If the update fails, returns `{ errors: string }` with details (e.g., post not found, already published, a comment id was passed instead of the root post, or the post failed validation with the new attachments, such as a platform that requires at least one media).
+
+---
+
 ## mediaListTool
 
 List the media files already uploaded to your media library, newest first, 18 per page. Use it to reuse an existing image or video instead of uploading it again.

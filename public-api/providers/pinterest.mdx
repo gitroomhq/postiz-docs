@@ -32,10 +32,10 @@ When creating a Pin on Pinterest, use the following settings schema:
 
 ### `board`
 
-The board ID where the pin will be saved. This is required and must be a valid board ID from your Pinterest account.
+The numeric board ID where the pin will be saved. This is required and must be the board's ID, not its name: a board name (for example `"Travel Tips"`) is rejected with a `400` validation error when the post is scheduled.
 
 <Note>
-Get board IDs by using Postiz's UI to view your boards, or by using Pinterest's API directly.
+Get board IDs from the channel's `boards` tool through the integration settings and trigger endpoints, or by viewing your boards in the Postiz UI.
 </Note>
 
 ### `title`

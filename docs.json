@@ -348,7 +348,8 @@
               "public-api/posts/missing-content",
               "public-api/posts/update-release-id",
               "public-api/posts/change-status",
-              "public-api/posts/settings"
+              "public-api/posts/settings",
+              "public-api/posts/attachments"
             ]
           },
           {

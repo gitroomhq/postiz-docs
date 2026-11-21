@@ -126,7 +126,7 @@ Each item in `dataSchema`:
 
 ---
 
-## schedulePostTool
+## integrationSchedulePostTool
 
 Schedule, draft, or immediately publish posts to social media platforms. This is the main tool for creating content.
 
@@ -232,14 +232,15 @@ An object with a `posts` array. Each item has:
 
 ## postSettingsTool
 
-Update only the provider settings of a not-yet-published post (scheduled or draft). Merges the given keys into the post's existing settings. Content and publish date are unchanged.
+Update the provider settings and / or the media of a not-yet-published post (scheduled or draft). Only what you pass changes: the given settings keys are merged into the post's existing settings, and the given attachments replace the post's media. Content and publish date are unchanged.
 
 **Parameters:**
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `id` | string | Yes | The post ID |
-| `settings` | array | Yes | The settings keys to change (only those are updated). Get valid keys from `integrationSchema` |
+| `settings` | array | No | The settings keys to change (only those are updated). Get valid keys from `integrationSchema`. Leave it out to keep the settings as they are |
+| `attachments` | array | No | The new media of the post, in the same format as the `attachments` of `integrationSchedulePostTool`. It replaces all the media the post has now, so pass the full list. Leave it out (or empty) to keep the media as it is |
 
 Each item in `settings`:
 
@@ -254,8 +255,9 @@ Each item in `settings`:
 |-------|------|-------------|
 | `postId` | string | The updated post ID |
 | `publishDate` | string | The post's publish date (unchanged) |
+| `attachments` | array | The media the post has now |
 
-If the update fails, returns `{ errors: string }` with details (e.g., post not found, already published, a comment id was passed instead of the root post, or the merged settings failed validation).
+If the update fails, returns `{ errors: string }` with details (e.g., post not found, already published, a comment id was passed instead of the root post, or the merged settings or the new media failed validation).
 
 ---
 

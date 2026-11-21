@@ -68,10 +68,10 @@ When creating posts, each social media platform requires different settings. The
     | X (Twitter) | `x` | `who_can_reply_post` (optional: `community`, `made_with_ai`, `paid_partnership`) |
     | LinkedIn | `linkedin` | - |
     | LinkedIn Page | `linkedin-page` | - |
-    | Facebook | `facebook` | - (optional: `url`) |
-    | Instagram (FB-linked) | `instagram` | `post_type` |
-    | Instagram Standalone | `instagram-standalone` | `post_type` |
-    | Threads | `threads` | - |
+    | Facebook | `facebook` | - (optional: `url`, `made_with_ai`) |
+    | Instagram (FB-linked) | `instagram` | `post_type` (optional: `made_with_ai`) |
+    | Instagram Standalone | `instagram-standalone` | `post_type` (optional: `made_with_ai`) |
+    | Threads | `threads` | - (optional: `made_with_ai`) |
     | Bluesky | `bluesky` | - |
     | Mastodon | `mastodon` | - |
     | Warpcast (Farcaster) | `warpcast` | - (optional: `subreddit[]` for channels) |
@@ -81,7 +81,7 @@ When creating posts, each social media platform requires different settings. The
   <Tab title="Video Platforms">
     | Platform | `__type` | Required Settings |
     |----------|----------|-------------------|
-    | YouTube | `youtube` | `title`, `type` |
+    | YouTube | `youtube` | `title`, `type` (optional: `made_with_ai`) |
     | TikTok | `tiktok` | `privacy_level`, `duet`, `stitch`, `comment`, `autoAddMusic`, `brand_content_toggle`, `brand_organic_toggle`, `content_posting_method` |
 
     TikTok honors these settings only when `content_posting_method` is `DIRECT_POST`, with `UPLOAD` it keeps only the post content/title. `duet`, `stitch`, and `video_made_with_ai` apply to video posts only; `autoAddMusic` to photo posts only. See [TikTok settings](/public-api/providers/tiktok).

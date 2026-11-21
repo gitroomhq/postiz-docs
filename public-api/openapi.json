@@ -3094,6 +3094,9 @@
                 "$ref": "#/components/schemas/GmbSettings"
               },
               {
+                "$ref": "#/components/schemas/ThreadsSettings"
+              },
+              {
                 "$ref": "#/components/schemas/WarpcastSettings"
               },
               {
@@ -3273,6 +3276,10 @@
                 }
               }
             }
+          },
+          "made_with_ai": {
+            "type": "boolean",
+            "description": "Label the post as AI-generated (Instagram shows the AI info label)"
           }
         }
       },
@@ -3323,6 +3330,10 @@
             "items": {
               "$ref": "#/components/schemas/Tag"
             }
+          },
+          "made_with_ai": {
+            "type": "boolean",
+            "description": "Disclose that the video has realistic altered or AI-generated content (YouTube shows its altered or synthetic content label)"
           }
         }
       },
@@ -3924,6 +3935,30 @@
             "type": "string",
             "format": "uri",
             "description": "Optional link URL to include in the post"
+          },
+          "made_with_ai": {
+            "type": "boolean",
+            "description": "Label the post as AI-generated. Text, link and photo posts only, ignored for video posts and stories"
+          }
+        }
+      },
+      "ThreadsSettings": {
+        "title": "Threads",
+        "type": "object",
+        "required": [
+          "__type"
+        ],
+        "description": "Threads post settings",
+        "properties": {
+          "__type": {
+            "type": "string",
+            "enum": [
+              "threads"
+            ]
+          },
+          "made_with_ai": {
+            "type": "boolean",
+            "description": "Label the post as AI-generated (Threads shows the AI info label)"
           }
         }
       },
@@ -3965,7 +4000,7 @@
         }
       },
       "EmptySettings": {
-        "title": "Other Platforms (Threads, Mastodon, Bluesky, etc.)",
+        "title": "Other Platforms (Mastodon, Bluesky, etc.)",
         "type": "object",
         "required": [
           "__type"
@@ -3975,7 +4010,6 @@
           "__type": {
             "type": "string",
             "enum": [
-              "threads",
               "mastodon",
               "bluesky",
               "telegram",

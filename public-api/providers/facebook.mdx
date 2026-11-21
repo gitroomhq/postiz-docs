@@ -27,6 +27,7 @@ Facebook integration allows you to post to Facebook pages. You can optionally in
 | `post_type` | string | ❌ | `post` (default) or `story` |
 | `text_format_preset_id` | string | ❌ | Background preset for a text-only post |
 | `title` | string | ❌ | Title of the video, used only for video posts |
+| `made_with_ai` | boolean | ❌ | Label the post as AI-generated. Text, link and photo posts only |
 
 ### `post_type`
 
@@ -55,6 +56,17 @@ ID over the API.
 Sets the title of the published video. It applies only to a `post` whose first
 attachment is an mp4 video, and is ignored for stories, photo posts and
 text-only posts.
+
+### `made_with_ai`
+
+When set to `true`, Postiz adds Facebook's AI-generated disclosure to the post.
+Facebook accepts the disclosure only as an edit of a published post, so Postiz
+sets it right after the post goes live.
+
+- **Text, link and photo posts only.** Facebook offers no AI disclosure for the
+  video posts and stories Postiz publishes, so the setting is ignored for them.
+- **Best effort.** If Facebook rejects the disclosure, the post stays published
+  without it.
 
 ## Examples
 

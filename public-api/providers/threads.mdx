@@ -11,15 +11,15 @@ When creating a post for Threads, use the following settings schema:
 ```json
 {
   "settings": {
-    "__type": "threads"
+    "__type": "threads",
+    "made_with_ai": false
   }
 }
 ```
 
 <Note>
-Threads has no provider-specific settings beyond `__type`. Post content,
-images, and the schedule are configured at the post level - see the
-[Create Post](/public-api/posts/create) reference.
+Post content, images, and the schedule are configured at the post level - see
+the [Create Post](/public-api/posts/create) reference.
 </Note>
 
 ## Fields
@@ -27,6 +27,17 @@ images, and the schedule are configured at the post level - see the
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `__type` | `string` | Yes | Must be `threads` |
+| `made_with_ai` | `boolean` | No | Label the post as AI-generated. Defaults to `false` |
+
+### `made_with_ai`
+
+When set to `true`, the post is disclosed as AI-generated and Threads shows its
+**AI info** label on it. It applies to text, image, video and carousel posts,
+and to every reply of a thread post. A carousel is labeled as a whole, not per
+item.
+
+Leaving it `false` does not stop Threads from adding the label by itself when
+it detects AI-generated content.
 
 ---
 

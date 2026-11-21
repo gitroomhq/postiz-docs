@@ -16,7 +16,8 @@ When uploading a video to YouTube, use the following settings schema:
     "type": "public",
     "selfDeclaredMadeForKids": "no",
     "thumbnail": null,
-    "tags": []
+    "tags": [],
+    "made_with_ai": false
   }
 }
 ```
@@ -31,6 +32,7 @@ When uploading a video to YouTube, use the following settings schema:
 | `selfDeclaredMadeForKids` | `string` | No | Made for kids declaration |
 | `thumbnail` | `object` | No | Custom thumbnail |
 | `tags` | `array` | No | Video tags |
+| `made_with_ai` | `boolean` | No | Disclose realistic altered or AI-generated content. Defaults to `false` |
 
 ### `title`
 
@@ -78,6 +80,20 @@ Array of tag objects for video SEO:
   ]
 }
 ```
+
+### `made_with_ai`
+
+When set to `true`, the video is disclosed as having realistic altered or
+AI-generated content and YouTube shows its altered or synthetic content label
+on it.
+
+YouTube asks for this disclosure only when the content looks realistic: a real
+person appearing to say or do something they did not, altered footage of a real
+event or place, or a realistic scene that did not happen. Animation and clearly
+unrealistic content do not need it.
+
+Leaving it `false` does not stop YouTube from adding the label by itself when
+it detects AI-generated content.
 
 ---
 

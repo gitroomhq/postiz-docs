@@ -15,6 +15,7 @@ When creating a post for Instagram, use the following settings schema:
     "post_type": "post",
     "is_trial_reel": false,
     "collaborators": [],
+    "made_with_ai": false,
     "audio": {
       "id": "587784541076604",
       "audio_volume": 100,
@@ -37,6 +38,7 @@ Use `__type: "instagram"` for Facebook Business-linked accounts and `__type: "in
 | `is_trial_reel` | `boolean` | No | Whether to post as a trial reel |
 | `graduation_strategy` | `string` | No | Graduation strategy for trial reels |
 | `collaborators` | `array` | No | List of collaborator usernames |
+| `made_with_ai` | `boolean` | No | Label the post as AI-generated. Defaults to `false` |
 | `audio` | `object` | No | Audio to attach to a Reel (single video only) |
 
 Alt text is not a setting: set [`alt`](/public-api/posts/create#image-alt-text-alt) on the media object in `image`. Instagram receives it as `alt_text` on images (single images and carousel items, up to 1000 characters); it is not sent for videos or stories.
@@ -73,6 +75,13 @@ Array of collaborator objects. Each collaborator will receive an invite to be ad
   ]
 }
 ```
+
+### `made_with_ai`
+
+When set to `true`, the post is disclosed as AI-generated and Instagram shows
+its **AI info** label on it. It applies to feed posts, Reels, carousels and
+Stories, on both `instagram` and `instagram-standalone` channels. A carousel is
+labeled as a whole, not per item.
 
 ### `audio`
 

@@ -42,7 +42,7 @@ A typical flow to schedule a post to X (Twitter):
     ```
   </Step>
   <Step title="Schedule the post">
-    The agent calls `schedulePostTool`:
+    The agent calls `integrationSchedulePostTool`:
 
     ```json
     {
@@ -308,7 +308,7 @@ API requires Facebook Login.
     Returns the video URL.
   </Step>
   <Step title="Schedule with the video">
-    The agent uses the video URL as an attachment when calling `schedulePostTool`.
+    The agent uses the video URL as an attachment when calling `integrationSchedulePostTool`.
   </Step>
 </Steps>
 
@@ -379,7 +379,7 @@ API requires Facebook Login.
     }
     ```
 
-    The clips are already in the media library, and a draft per clip was created on each of the two channels. To publish one somewhere else, the agent passes its `url` in `attachments` when calling `schedulePostTool`.
+    The clips are already in the media library, and a draft per clip was created on each of the two channels. To publish one somewhere else, the agent passes its `url` in `attachments` when calling `integrationSchedulePostTool`.
   </Step>
 </Steps>
 

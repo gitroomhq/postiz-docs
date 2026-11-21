@@ -10,7 +10,7 @@ This means you can connect Claude, ChatGPT, Cursor, or any MCP-compatible client
 
 ## How It Works
 
-Postiz exposes an MCP server that provides **13 tools** to AI agents. The agent discovers these tools, understands their schemas, and calls them on your behalf.
+Postiz exposes an MCP server that provides the tools below to AI agents. The agent discovers these tools, understands their schemas, and calls them on your behalf.
 
 ```mermaid
 sequenceDiagram
@@ -35,25 +35,56 @@ sequenceDiagram
 | `integrationConnectTool` | Get a link for connecting a new social media account |
 | `integrationSchema` | Get platform-specific posting rules and settings schema |
 | `triggerTool` | Execute platform-specific helpers (e.g., list Discord channels) |
-| `schedulePostTool` | Schedule, draft, or immediately publish posts |
+| `integrationSchedulePostTool` | Schedule, draft, or immediately publish posts |
 | `postsListTool` | List the organization's posts scheduled between two dates (with their current settings) |
-| `postSettingsTool` | Update the provider settings of a scheduled post or draft that was not published yet |
+| `postSettingsTool` | Update the provider settings and the media of a scheduled post or draft that was not published yet |
+| `postAttachmentsTool` | Replace the media of a scheduled post or draft that was not published yet |
+| `deletePostTool` | Delete a post from Postiz (a post that was already published stays live on the channel) |
+| `integrationAnalyticsTool` | Read the analytics of a connected channel |
+| `postAnalyticsTool` | Read the analytics of a published post |
+| `mediaListTool` | List the images and videos in the media library |
+| `uploadFromUrlTool` | Upload an image or video to the media library from a URL |
+| `mediaStatusTool` | Check whether an uploaded media finished processing |
 | `generateImageTool` | Generate AI images for posts |
 | `generateVideoOptions` | List available video generation options |
 | `videoFunctionTool` | Get video generator settings (e.g., available voices) |
 | `generateVideoTool` | Generate videos for posts |
+| `videoStatusTool` | Check the status of a video generation |
 | `clippingTool` | Turn a long YouTube video into captioned vertical clips and draft posts |
 | `clippingStatusTool` | Check a clipping and get the finished clips |
 
 ## Authentication
 
-There are two ways to authenticate with the MCP server:
+There are three ways to authenticate with the MCP server:
 
 ### API Key
 
 <Snippet file="api-key-where.mdx" />
 
 Use it directly in the MCP endpoint URL, or as a Bearer token.
+
+### Sign in with Postiz (OAuth)
+
+MCP clients that support OAuth can connect without an API key. Point the client at the OAuth-protected endpoint:
+
+```text
+URL: https://mcp.postiz.com/mcp-oauth-dynamic
+```
+
+The client discovers the authorization server from that endpoint, registers itself ([RFC 7591](https://www.rfc-editor.org/rfc/rfc7591) dynamic client registration) and opens a Postiz page where you authorize the access.
+
+| | |
+|---|---|
+| Protected resource metadata | `https://mcp.postiz.com/.well-known/oauth-protected-resource/mcp-oauth-dynamic` |
+| Authorization server metadata | `https://mcp.postiz.com/.well-known/oauth-authorization-server/mcp-oauth-dynamic` |
+| Scopes | `mcp:read`, `mcp:write` |
+| Client type | Public client with PKCE (`S256`), or a confidential client |
+| Grant | `authorization_code` |
+
+- The token works for the organization that is active in Postiz when you authorize.
+- Tokens don't expire. To cut a client off, revoke it in Postiz under **Settings → Apps → Approved Apps**.
+- Registration accepts loopback callbacks (`http://localhost`, `http://127.0.0.1`) and private-scheme callbacks (for example `cursor://`) from any client. A web (`https`) callback works only for hosts that Postiz has verified.
+- This endpoint has the same tools as `/mcp`, without the `ask_postiz` agent tool.
 
 ### OAuth Token
 
@@ -72,6 +103,13 @@ If you're building an app for other Postiz users, use [OAuth2](/oauth) to obtain
 
     This method supports both API keys and OAuth tokens (prefixed with `pos_`).
   </Tab>
+  <Tab title="Sign in with Postiz">
+    Use the `/mcp-oauth-dynamic` endpoint with a client that supports OAuth. No API key is needed, the client opens a Postiz page where you authorize it:
+
+    ```text
+    URL: https://mcp.postiz.com/mcp-oauth-dynamic
+    ```
+  </Tab>
   <Tab title="API Key in URL">
     Use the `/mcp/:apiKey` endpoint with your API key embedded in the URL:
 
@@ -89,7 +127,7 @@ Here's what a typical interaction looks like when an AI agent uses Postiz MCP:
 
 1. **Agent calls `integrationList`**, gets back your connected accounts (X, LinkedIn, etc.)
 2. **Agent calls `integrationSchema`** with `platform: "x"` and learns X's character limits, settings, and rules
-3. **Agent calls `schedulePostTool`**, schedules your post with the correct format
+3. **Agent calls `integrationSchedulePostTool`**, schedules your post with the correct format
 
 All of this happens automatically when you tell your AI agent something like:
 
@@ -107,7 +145,7 @@ Postiz API keys don't auto-rotate, but if you regenerate one in Settings → Dev
 
 ### Self-hosted: how do I expose the MCP endpoint?
 
-The MCP server starts as part of the Postiz backend and is reachable at `/mcp` (Bearer auth), `/mcp/:apiKey` (key in URL), and `/mcp-oauth` (OAuth-protected). Your reverse proxy must forward these paths to the backend and support streaming HTTP (`Transfer-Encoding: chunked`). See [Reverse Proxies](/self-host/reverse-proxies/caddy).
+The MCP server starts as part of the Postiz backend and is reachable at `/mcp` (Bearer auth), `/mcp/:apiKey` (key in URL), and `/mcp-oauth-dynamic` (OAuth-protected, with its discovery documents under `/.well-known/`). Your reverse proxy must forward these paths to the backend and support streaming HTTP (`Transfer-Encoding: chunked`). See [Reverse Proxies](/self-host/reverse-proxies/caddy).
 
 ### Can MCP read or reply to comments?
 

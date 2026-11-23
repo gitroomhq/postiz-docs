@@ -111,8 +111,10 @@ This disables SSRF protection globally, not per provider. Only set it if your Po
 
 ### `NOT_SECURED`
 
+By default Postiz sets its login cookies as `Secure`, `HttpOnly` and `SameSite=None`, and browsers only store `Secure` cookies over HTTPS (or on `localhost`). If you reach Postiz over plain HTTP on any other host, the login cookie is dropped and you land back on the login page with no error. Set to `true` to send the cookies without those flags and to also return the session token in a response header, so login works over HTTP.
+
 <Warning>
-Dev only. Never set in production: it disables security checks that exist for a reason.
+Prefer HTTPS through a reverse proxy instead. Only use this when HTTPS is not possible, such as a development machine or a trusted private network: it weakens cookie protection for every user of the instance.
 </Warning>
 
 ### `MAIN_URL`

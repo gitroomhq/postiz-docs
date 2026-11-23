@@ -63,7 +63,9 @@ password just reloads the login page. You are accessing Postiz over plain
 HTTP on a host other than `localhost`, so the browser drops the `Secure`
 login cookie.
 
-**Fix:** serve Postiz over HTTPS through a reverse proxy, or set
+**Fix:** serve Postiz over HTTPS through a reverse proxy and change
+`MAIN_URL`, `FRONTEND_URL` and `NEXT_PUBLIC_BACKEND_URL` to their
+`https://` URLs, or set
 [`NOT_SECURED`](/self-host/configuration/reference#not_secured) to `true`
 on the Postiz container and recreate it.
 

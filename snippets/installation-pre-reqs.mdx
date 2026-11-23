@@ -14,6 +14,11 @@ If you cannot use a certificate (HTTPS), add the following environment variable 
 ```env
 NOT_SECURED=true
 ```
+In `docker-compose.yml`:
+```yaml
+environment:
+  NOT_SECURED: 'true'
+```
 <Warning>
 **Security Warning**: Setting `NOT_SECURED=true` disables secure cookie requirements. This should only be used in development environments or when you fully understand the security implications. Not recommended for production use.
 </Warning>

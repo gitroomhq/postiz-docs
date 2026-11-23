@@ -56,6 +56,19 @@ the host. **Do not commit it to version control**, including "private"
 deploy repos, since anyone with repo access then holds the signing key for
 every session token Postiz has ever issued.
 
+## Login returns to the login page with no error
+
+Registration works and a wrong password shows an error, but a correct
+password just reloads the login page. You are accessing Postiz over plain
+HTTP on a host other than `localhost`, so the browser drops the `Secure`
+login cookie.
+
+**Fix:** serve Postiz over HTTPS through a reverse proxy and change
+`MAIN_URL`, `FRONTEND_URL` and `NEXT_PUBLIC_BACKEND_URL` to their
+`https://` URLs, or set
+[`NOT_SECURED`](/self-host/configuration/reference#not_secured) to `true`
+on the Postiz container and recreate it.
+
 ## "Origin not allowed" on the calendar
 
 The backend's CORS allowlist is built from `FRONTEND_URL`, plus `MAIN_URL`

@@ -6,13 +6,18 @@ This section will ask you to install & configure several services explained belo
 
 #### HTTPS / HTTP Requirement
 
-Postiz marks it's login cookies as Secure, this is called "secure context" in modern web browsers.
+Postiz marks its login cookies as Secure, this is called "secure context" in modern web browsers. Over plain HTTP (except on `localhost`) the browser drops them, and login just returns you to the login page.
 
 If you want to use a secure Login Process, you need to set up a Certificate, which can be done via Reverse Proxy like Caddy or Nginx.
 
-If you cannot use a certificate (HTTPS), add the following environment variable to your `.env` file:
+If you cannot use a certificate (HTTPS), add the following environment variable to your `.env` file (or to the Postiz service's `environment:` block in `docker-compose.yml`):
 ```env
 NOT_SECURED=true
+```
+In `docker-compose.yml`:
+```yaml
+environment:
+  NOT_SECURED: 'true'
 ```
 <Warning>
 **Security Warning**: Setting `NOT_SECURED=true` disables secure cookie requirements. This should only be used in development environments or when you fully understand the security implications. Not recommended for production use.
